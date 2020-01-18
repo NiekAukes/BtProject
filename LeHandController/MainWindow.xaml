@@ -1,0 +1,38 @@
+﻿<Window x:Class="LeHandController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LeHandController"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="154*"/>
+            <RowDefinition Height="265*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.RowSpan="2" Margin="409,0,0,90" x:Name="SelectionOptions">
+            <Canvas Height="252">
+                <Image Source="f/Hand.png" Height="248" Margin="80,20,80,-16" Width="247"/>
+                <Label Content="Tippoint:" Canvas.Left="12" Canvas.Top="228"/>
+                <TextBox Name="Tippoint" Height="19" Width="71" Canvas.Left="80" Canvas.Top="233" RenderTransformOrigin="0.03,0.501"/>
+
+            </Canvas>
+            <StackPanel>
+                <!--For Accelerometer-->
+
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Margin="0,0,0,85" Grid.RowSpan="2" HorizontalAlignment="Left" Width="404" x:Name="ListPanel">
+            <ListBox Height="333" x:Name="RuleList">
+                <ListBoxItem>double</ListBoxItem>
+                <ListBoxItem>double2</ListBoxItem>
+            </ListBox>
+        </StackPanel>
+        <Grid Margin="0,180,0,0" Grid.Row="1">
+            <Button Content="Add Rule" Margin="91,26,528,25" Height="34"/>
+            <Button Content="Rename Rule" Margin="309,26,310,25" Height="34"/>
+            <Button Content="Remove Rule" Margin="545,26,74,25" Height="34"/>
+        </Grid>
+    </Grid>
+</Window>
