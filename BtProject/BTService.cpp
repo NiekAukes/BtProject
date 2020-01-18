@@ -138,7 +138,7 @@
 			Data.push(0x0001);
 			Data.push(n - 3);
 			//Data
-			double val = partdata;
+			double val = (rand() % 1) * 124.57809245982;
 			for (int i = 0; i < n - 3; i++)
 			{
 				Data.push(*((short*)&val + i));
