@@ -13,24 +13,10 @@
 //#include <windows.devices.bluetooth.rfcomm.h>
 
 #include "BTService.h"
-typedef int condition;
-std::string strcondit[6] = { "==", ">=", ">", "<", "<=", "!=" };
-//enum condition
-//{
-//	equal,
-//	greaterOrEqual,
-//	greater,
-//	fewer,
-//	fewerOrEqual,
-//	notEqual
-//};
-class Rule
-{
-public:
-	int id = -1;
-	double value = 0.5;
-	condition condit;
-};
+#include "Keysender.h"
+#include <thread>
+//std::string strcondit[6] = { "==", ">=", ">", "<", "<=", "!=" };
+Keysender* keysend;
 
 int main()
 {
@@ -66,25 +52,63 @@ int main()
 		}
 		else if (command._Equal("rule"))
 		{
-			std::cout << "add rem edit list: ";
+			if (std::cin.peek() == 10)
+				std::cout << "specify action: add rem edit list\n";
 			std::string arg1;
 			std::cin >> arg1;
 			if (arg1._Equal("add"))
 			{
 				int arg2;
 				double arg3;
-				int Condition;
-
-				std::cout << "id: ";
+				char getcondit[2];
+				int Condition = 0;
+				if (std::cin.peek() == 10)
+					std::cout << "id: ";
 				std::cin >> arg2;
-				std::cout << "value: ";
+				if (std::cin.peek() == 10)
+					std::cout << "value: ";
 				std::cin >> arg3;
-				std::cout << "condition: ";
-				std::cin >> Condition;
-				std::cout << "\nrule created succesfully\n\n";
+				if (std::cin.peek() == 10)
+					std::cout << "condition: ";
+				std::cin >> getcondit;
+				if (getcondit[1] == 0) //chars ended there
+				{
+					if (getcondit[0] == '>')
+						Condition = 2;
+					else if (getcondit[0] == '<')
+						Condition = 3;
+					else std::cout << "invalid argument: condition";
+				}
+				else
+				{
+					if (getcondit[0] == '=')
+						Condition = 0;
+					else if (getcondit[0] == '>')
+						Condition = 1;
+					else if (getcondit[0] == '<')
+						Condition = 4;
+					else if (getcondit[0] == '!')
+						Condition = 5;
+					else std::cout << "invalid argument: condition";
+				}
+				
+				
+				for (int i = 0; i < ruleset.size(); i++)
+				{
+					if (ruleset[i].id == arg2)
+					{
+						//check if ruleset exists
+						std::cout << "failed to create rule, there was already a rule there";
+						return 1;
+					}
+				}
 
-				Rule r = { arg2, arg3, (condition)Condition };
-				ruleset.push_back(r);
+				Rulepart r = { arg2, arg3, (condition)Condition };
+				Rule rule;
+				rule.id = arg2;
+				rule.parts.push_back(r);
+				ruleset.push_back(rule); 
+				std::cout << "\nrule created succesfully\n\n";
 			}
 			if (arg1._Equal("rem"))
 			{
@@ -102,30 +126,30 @@ int main()
 						tmp.push_back(newRule);
 					}
 				}
-				if (tmp.size() > 1)
-				{
-					//ask wich one to remove
-					std::cout << "there were more rules set on this id, which one do you want to remove? \n\n";
-					int ans = 0;
-					for (int i = 0; i < tmp.size(); i++)
-					{
-						std::cout << i + 1 << '\n';
-						std::cout << "Value: " << tmp[i].value << "\n Condition: " << strcondit[tmp[i].condit] << "\n";
-					}
-					std::cin >> ans;
-					ans--;
+				//if (tmp.size() > 1)
+				//{
+				//	//ask wich one to remove
+				//	std::cout << "there were more rules set on this id, which one do you want to remove? \n\n";
+				//	int ans = 0;
+				//	for (int i = 0; i < tmp.size(); i++)
+				//	{
+				//		std::cout << i + 1 << '\n';
+				//		std::cout << "Value: " << tmp[i].value << "\n Condition: " << strcondit[tmp[i].condit] << "\n";
+				//	}
+				//	std::cin >> ans;
+				//	ans--;
 
-					ruleset.erase(ruleset.begin() + tmp[ans].id);
-					std::cout << "rule succesfully removed\n";
-				}
-				else if (tmp.size() == 1)
+				//	ruleset.erase(ruleset.begin() + tmp[ans].id);
+				//	std::cout << "rule succesfully removed\n";
+				//}
+				if (tmp.size() == 1)
 				{
 					//just remove
 				}
 				else
 				{
 					//does not exist, so do nothing
-					std::cout << "rule does not exist";
+					std::cout << "rule does not exist or multiple rules were found";
 				}
 			}
 			else if (arg1._Equal("edit"))
@@ -144,11 +168,23 @@ int main()
 				std::cout << '\n';
 				for (int i = 0; i < ruleset.size(); i++)
 				{
-					std::cout << i + 1 << '\n';
-					std::cout << "Id: " << ruleset[i].id << "\nValue: " << ruleset[i].value << "\nCondition: " << strcondit[ruleset[i].condit] << "\n\n";
+					std::cout << "Rule: " << i + 1 << '\n';
+					for (int j = 0; j < ruleset[i].parts.size(); j++)
+					{
+						std::cout << "\trulepart: " << j + 1 << '\n';
+						std::cout << "\t\tId: " << ruleset[i].parts[j].id << "\n\t\tValue: " << ruleset[i].parts[j].value << "\n\t\tCondition: " << Keysender::strcondit[ruleset[i].parts[j].condit] << "\n\n";
+					}
 				}
 			}
 
+		}
+		else if (command._Equal("start"))
+		{
+		keysend = new Keysender();
+		}
+		else if (command._Equal("quit"))
+		{
+		return 0;
 		}
 		else
 		{
