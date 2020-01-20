@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BTService.cpp" />
+    <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="Keysender.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -132,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BTService.h" />
+    <ClInclude Include="CommandManager.h" />
     <ClInclude Include="Keysender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
