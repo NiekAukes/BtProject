@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BTSERVICE_H
+#define BTSERVICE_H
 #include <WinSock2.h>
 #include <ws2bth.h>
 #include <bthsdpdef.h>
@@ -15,6 +16,7 @@
 #include <queue>
 #include <Windows.h>
 
+#pragma comment(lib, "bthprops.lib")
 struct DeviceDetails
 {
 	bool valid = false;
@@ -42,8 +44,22 @@ enum class Expectedtype
 };
 class BTService
 {
-
+private:
+	double values[11]; //values bound to protocol
 public:
+	enum valuetype : int
+	{
+		Little_Finger,
+		Ring_Finger,
+		Middle_Finger,
+		ForeFinger,
+		Thumb,
+		Acceleration_X,
+		Acceleration_Y,
+		Acceleration_Z,
+		Rotation_Y
+	};
+
 	std::queue<short> Data;
 	double partdata = 0;
 	Expectedtype expected = Expectedtype::Protocol;
@@ -57,6 +73,9 @@ public:
 	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
 	void DataGenerator();
 
+	double* getDoubleDataFromBT(int* length);
+
 
 };
 
+#endif

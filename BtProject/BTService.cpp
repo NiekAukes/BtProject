@@ -153,3 +153,9 @@
 			std::cout << returnad->finger->val << '\n';
 		}
 	}
+
+	double* BTService::getDoubleDataFromBT(int* length)
+	{
+		length = new int(11);
+		return values;
+	}

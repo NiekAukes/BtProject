@@ -129,23 +129,10 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BTService.h" />
     <ClInclude Include="CommandManager.h" />
     <ClInclude Include="Keysender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\nl.cqm.Qt5Core.redist.5.9.6\build\native\nl.cqm.Qt5Core.redist.targets" Condition="Exists('..\packages\nl.cqm.Qt5Core.redist.5.9.6\build\native\nl.cqm.Qt5Core.redist.targets')" />
-    <Import Project="..\packages\nl.cqm.Qt5Core.5.9.6\build\native\nl.cqm.Qt5Core.targets" Condition="Exists('..\packages\nl.cqm.Qt5Core.5.9.6\build\native\nl.cqm.Qt5Core.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\nl.cqm.Qt5Core.redist.5.9.6\build\native\nl.cqm.Qt5Core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nl.cqm.Qt5Core.redist.5.9.6\build\native\nl.cqm.Qt5Core.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\nl.cqm.Qt5Core.5.9.6\build\native\nl.cqm.Qt5Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nl.cqm.Qt5Core.5.9.6\build\native\nl.cqm.Qt5Core.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

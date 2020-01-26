@@ -11,6 +11,7 @@
 //#include <windows.devices.bluetooth.background.h>
 ////#include <windows.devices.bluetooth.genericattributeprofile.h>
 //#include <windows.devices.bluetooth.rfcomm.h>
+//#define WINVER 0x0500
 
 #include "BTService.h"
 #include "Keysender.h"

@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "BTService.h"
 
 typedef int condition;
 
@@ -16,9 +17,11 @@ struct Rulepart
 class Rule
 {
 public:
+
 	int id = -1;
+	char key = '\0';
 	std::vector<Rulepart> parts;
-	bool operator==(Rule& other) //compares values and conditions
+	/*bool operator==(Rule& other) //compares values and conditions
 	{
 		//for fingers
 		for (int i = 0; i < parts.size(); i++)
@@ -78,12 +81,14 @@ public:
 			}
 		}
 		return true;
-	}
+	}*/
 };
 
 class Keysender
 {
 public:
+	static std::vector<Rule> ruleset;
+
 	static std::string strcondit[6];
 	static bool keysendActive;
 	std::thread* keythread;
