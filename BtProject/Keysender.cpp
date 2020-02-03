@@ -1,5 +1,4 @@
 #include "Keysender.h"
-#include <sstream>
 
 std::vector<Rule> Keysender::ruleset;
 std::string Keysender::strcondit[] = { "==", ">=", ">", "<", "<=", "!=" };
@@ -106,17 +105,26 @@ void Keysender::Keythreading()
 		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		screen[nScreenHeight * nScreenWidth - 1] = '\0';
 		WriteConsoleOutputCharacterW(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);
+		INPUT_RECORD record;
+		DWORD numm;
+		ReadConsoleInput(hConsole, &record, 1, &numm);
+		record.Event.KeyEvent.wVirtualKeyCode
 	}
 	//close consolebuffer
+	HANDLE stdh = GetStdHandle(STD_INPUT_HANDLE);
+	SetConsoleActiveScreenBuffer(stdh);
+
+	//system("cls");
 }
 
-Keysender::Keysender()
+Keysender::Keysender(bool* f)
 {
 	keysendActive = true;
 	keythread = new std::thread(Keythreading);
 	
-	char c;
+	/*std::cin.clear();
+	char c[100];
 	std::cin >> c;
 	
-	keysendActive = false;
+	keysendActive = false;*/
 }

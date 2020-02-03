@@ -7,7 +7,7 @@
 #include <windows.devices.bluetooth.h>
 #include <windows.devices.bluetooth.advertisement.h>
 
-#include <bluetoothapis.h>
+//#include <bluetoothapis.h>
 #include <bluetoothleapis.h>
 #include <windows.devices.bluetooth.background.h>
 #include <windows.devices.bluetooth.genericattributeprofile.h>
@@ -16,7 +16,7 @@
 #include <queue>
 #include <Windows.h>
 
-#pragma comment(lib, "bthprops.lib")
+//#pragma comment(lib, "bthprops.lib")
 struct DeviceDetails
 {
 	bool valid = false;

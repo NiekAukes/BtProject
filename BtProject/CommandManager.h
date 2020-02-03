@@ -2,6 +2,7 @@
 #include <thread>
 #include <vector>
 #include <iostream>
+#include <limits>
 #include "Keysender.h"
 #include "BTService.h"
 class CommandManager
@@ -19,13 +20,12 @@ public:
 		if (inst == nullptr)
 		{
 			inst = new CommandManager();
-			inst->commandthread = new std::thread(&CommandManager::starter, inst);
 			inst->active = true;
 		}
 		return inst;
 		
 	}
-	void startcommander();
+	void startcommander(bool intro);
 	void stopcommander();
 };
 

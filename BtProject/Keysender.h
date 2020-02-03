@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "BTService.h"
 
 typedef int condition;
@@ -94,7 +95,7 @@ public:
 	std::thread* keythread;
 
 	static void Keythreading();
-	Keysender();
+	Keysender(bool* f);
 
 };
 

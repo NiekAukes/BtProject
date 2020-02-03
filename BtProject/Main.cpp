@@ -20,11 +20,10 @@
 
 //std::string strcondit[6] = { "==", ">=", ">", "<", "<=", "!=" };
 bool active = true;
-int main()
+int main(int argc, char* argv[])
 {
 	CommandManager* cmdMgr = CommandManager::GetInst();
-	cmdMgr->startcommander();
-	while (cmdMgr->active) {}
+	cmdMgr->startcommander(!(argc > 0 && argv[0] == "-res"));
 	return 0;
 }
 

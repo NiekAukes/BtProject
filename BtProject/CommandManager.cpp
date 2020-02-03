@@ -1,5 +1,36 @@
 #include "CommandManager.h"
+#include <limits>
+#undef min
+#undef max
 CommandManager* CommandManager::inst = nullptr;
+
+VOID startup(LPCTSTR lpApplicationName, std::string args = "")
+{
+	// additional information
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	// set the size of the structures
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+	char* f = (char*)args.c_str();
+	// start the program up
+	CreateProcess(lpApplicationName,   // the path
+		f,       // Command line
+		NULL,           // Process handle not inheritable
+		NULL,           // Thread handle not inheritable
+		FALSE,          // Set handle inheritance to FALSE
+		0,              // No creation flags
+		NULL,           // Use parent's environment block
+		NULL,           // Use parent's starting directory 
+		&si,            // Pointer to STARTUPINFO structure
+		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+	);
+	// Close process and thread handles. 
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+}
 
 int convchar2int(char c[2])
 {
@@ -27,16 +58,16 @@ int convchar2int(char c[2])
 
 void CommandManager::starter()
 {
-	startcommander();
+	startcommander(true);
 	active = false;
 }
 
-void CommandManager::startcommander()
+void CommandManager::startcommander(bool intro)
 {
-	if (std::this_thread::get_id() == commandthread->get_id())
+	if (true || std::this_thread::get_id() == commandthread->get_id())
 	{
-
-		std::cout << "hi \n";
+		if (intro)
+			std::cout << "hi \n";
 		BTService service;
 
 		DeviceDetails* devices = nullptr;
@@ -46,6 +77,15 @@ void CommandManager::startcommander()
 
 		while (1)
 		{
+			if (std::cin.fail()) {
+				auto state = std::cin.rdstate();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				std::cin.clear();
+				state = std::cin.rdstate();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			}
+			char f = std::cin.peek();
 			std::cin >> command;
 
 			if (command._Equal("rule"))
@@ -100,7 +140,7 @@ void CommandManager::startcommander()
 						rule.key = key;
 						rule.parts.push_back(r);
 						Keysender::ruleset.push_back(rule);
-						std::cout << "\nrule created succesfully\n\n";
+						std::cout << "\nrule created succesfully\n";
 					}
 				}
 				if (arg1._Equal("rem"))
@@ -151,14 +191,21 @@ void CommandManager::startcommander()
 				else if (arg1._Equal("edit"))
 				{
 					int arg2; //rule Id
-					int arg3; //rulepart Id
-					double arg4; //value
-					char Condition[2];
+					double arg3; //value
+					char Condition[2]; 
+					int arg4; //rulepart Id
 
+					if (std::cin.peek() == 10)
+						std::cout << "rule Id: ";
 					std::cin >> arg2;
+					if (std::cin.peek() == 10)
+						std::cout << "condition: ";
 					std::cin >> arg3;
-					std::cin >> arg4;
+					if (std::cin.peek() == 10)
+						std::cout << "new condition, [rulepart-Id]: ";
 					std::cin >> Condition;
+					if (std::cin.peek() != 10) //optional var
+						std::cin >> arg4;
 
 					//todo
 
@@ -198,6 +245,7 @@ void CommandManager::startcommander()
 						{
 							std::cout << "\trulepart: " << j + 1 << '\n';
 							std::cout << "\t\tId: " << Keysender::ruleset[i].parts[j].id << "\n\t\tValue: " << Keysender::ruleset[i].parts[j].value << "\n\t\tCondition: " << Keysender::strcondit[Keysender::ruleset[i].parts[j].condit] << "\n\n";
+						
 						}
 					}
 				}
@@ -233,8 +281,35 @@ void CommandManager::startcommander()
 			}
 			else if (command._Equal("start"))
 			{
-				keysend = new Keysender();
-				std::cin.clear();
+				keysend = new Keysender(&active);
+				command = "";
+				
+				//gets the current filename
+				//char filename[256];
+				//int bytes = GetModuleFileNameA(NULL, filename, sizeof(filename));
+
+				////replaces current file with restarter
+				//std::string real(filename);
+				//char endstr[14] = "Restarter.exe";
+				//real.erase(real.end() - 13, real.end());
+				//real.append(endstr);
+
+				////fire up restarter with current file as arg
+				//if (bytes != 0) {
+				//	startup(real.c_str(), filename);
+				//}
+				//std::exit(0);
+
+				/*std::cin.ignore(1000, '\n');
+				while (1) {
+					if (std::cin.eof()) {
+						break;
+					}
+					
+					system("cls"); 
+					std::cout << rand();
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+				}*/
 			}
 			else if (command._Equal("quit"))
 			{
@@ -244,9 +319,10 @@ void CommandManager::startcommander()
 			{
 				//todo
 				std::cout << "Command\t\t | Args\t\t\t\t\t | Description\n";
-				std::cout << "rule add\t | <Id> <Value> <Condit>\t\t | creates new rule\n";
+				std::cout << "help\t\t | None \t\t\t\t | provides help\n";
+				std::cout << "rule add\t | <Id> <Value> <key> <Condit>\t | creates new rule\n";
 				std::cout << "rule rem\t | <Id> \t\t\t\t | removes rule\n";
-				std::cout << "rule edit\t | <Id> <Part-Id> <NewValue> <NewCondit> | edit rule\n";
+				std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 0] | edit rule\n";
 				std::cout << "rule list\t | None\t\t\t\t\t | lists rules\n";
 				std::cout << "device discover\t | <Amount> \t\t\t\t | Discovers BTDevices\n";
 				std::cout << "device connect\t | <Id> \t\t\t\t | Connects to the device\n";
@@ -254,7 +330,8 @@ void CommandManager::startcommander()
 			}
 			else
 			{
-				std::cout << "command not recognized\n";
+				//std::cout << "command not recognized\n";
+				system(command.c_str());
 			}
 			std::cout << "\n";
 		}
