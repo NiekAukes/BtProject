@@ -22,8 +22,11 @@
 bool active = true;
 int main(int argc, char* argv[])
 {
+	if (argc > 1) {
+		std::cout << "loaded file: " << argv[1] << '\n';
+	}
 	CommandManager* cmdMgr = CommandManager::GetInst();
-	cmdMgr->startcommander(!(argc > 0 && argv[0] == "-res"));
+	cmdMgr->startcommander(false, argc > 1 ? argv[1] : "");
 	return 0;
 }
 

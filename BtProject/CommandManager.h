@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <limits>
+#include <fstream>
 #include "Keysender.h"
 #include "BTService.h"
 class CommandManager
@@ -25,7 +26,8 @@ public:
 		return inst;
 		
 	}
-	void startcommander(bool intro);
+	void loadbtdfile(std::string arg1);
+	void startcommander(bool intro, std::string loadfile = "");
 	void stopcommander();
 };
 

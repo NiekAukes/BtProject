@@ -3,15 +3,15 @@
 std::vector<Rule> Keysender::ruleset;
 std::string Keysender::strcondit[] = { "==", ">=", ">", "<", "<=", "!=" };
 std::string protocStr[] = {
-	"Little_Finger",
-	"Ring_Finger",
-	"Middle_Finger",
-	"ForeFinger",
-	"Thumb",
+	"Little_Finger ",
+	"Ring_Finger   ",
+	"Middle_Finger ",
+	"ForeFinger    ",
+	"Thumb         ",
 	"Acceleration_X",
 	"Acceleration_Y",
 	"Acceleration_Z",
-	"Rotation_Y"
+	"Rotation_Y    "
 };
 bool Keysender::keysendActive = false;
 int nScreenWidth = 120;
@@ -39,42 +39,9 @@ void SetProtocolValue(int Protocol, double value, wchar_t* screen)
 }
 void Keysender::Keythreading()
 {
+	system("cls");
 	//setup monitoring
-	wchar_t* screen = new wchar_t[nScreenWidth * nScreenHeight];
-	for (int i = 0; i < nScreenWidth * nScreenHeight; i++)
-	{
-		if (!(i > nScreenWidth - 1 && i < nScreenWidth + 60))
-		{
-			if (i % nScreenWidth == 40 || i % nScreenWidth == 15)
-				*(screen + i) = '|';
-			else
-				*(screen + i) = ' ';
-		}
-		else
-		{
-			if (i % nScreenWidth == 40 || i % nScreenWidth == 15)
-				*(screen + i) = '+';
-			else
-				*(screen + i) = '-';
-		}
-	}
-	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleActiveScreenBuffer(hConsole);
-	DWORD dwBytesWritten = 0;
-	
-	InsertStrInScreen(screen, "Protocol", 0);
-	InsertStrInScreen(screen, "Description", 17);
-	InsertStrInScreen(screen, "Value", 45);
-	for (int i = 0; i < 9; i++)
-	{
-		SetProtocolValue(i+1, (rand()%1000)/1000.0 , screen);
-	}
-
-	screen[nScreenHeight * nScreenWidth - 1] = '\0';
-	WriteConsoleOutputCharacterW(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);
-
 	//get current conditions (BtService)
-	
 	while (keysendActive)
 	{
 		//configure keysender
@@ -98,33 +65,34 @@ void Keysender::Keythreading()
 			ip.ki.wVk = toupper(currRule.key);
 			//SendInput(1, &ip, sizeof(INPUT));
 		}
+		std::cout << "Protocol            | Description                              | value\n";
+		std::cout << "--------------------+------------------------------------------+----------------------------\n";
+
 		for (int i = 0; i < 9; i++)
 		{
-			SetProtocolValue(i + 1, (rand() % 1000) / 1000.0, screen);
+			std::cout << " " << i + 1 << "                  | " << protocStr[i] << "                           | " << (rand() % 1000) / 1000.0 << "\n";
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		screen[nScreenHeight * nScreenWidth - 1] = '\0';
-		WriteConsoleOutputCharacterW(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);
-		INPUT_RECORD record;
-		DWORD numm;
-		ReadConsoleInput(hConsole, &record, 1, &numm);
-		record.Event.KeyEvent.wVirtualKeyCode
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		system("cls");
 	}
-	//close consolebuffer
-	HANDLE stdh = GetStdHandle(STD_INPUT_HANDLE);
-	SetConsoleActiveScreenBuffer(stdh);
 
-	//system("cls");
+	system("cls");
 }
 
 Keysender::Keysender(bool* f)
 {
 	keysendActive = true;
 	keythread = new std::thread(Keythreading);
+	while (true) {
+		//end states, now only enter press
+		if (GetKeyState(VK_RETURN) & 0x8000) {
+			break;
+		}
+	}
+	keysendActive = false;
+	system("cls");
+	std::cout << "cancelled monitoring";
+	//setup monitoring
+	//get current conditions (BtService)
 	
-	/*std::cin.clear();
-	char c[100];
-	std::cin >> c;
-	
-	keysendActive = false;*/
 }

@@ -61,13 +61,68 @@ void CommandManager::starter()
 	startcommander(true);
 	active = false;
 }
+int pos;
+void getval(std::string file, char* out, int len) {
+	std::string dat = file.substr(pos, len);
+	pos += len;
+	for (int i = 0; i < len; i++) {
+		*(out + i) = dat[i];
+	}
+}
 
-void CommandManager::startcommander(bool intro)
+void CommandManager::loadbtdfile(std::string arg1) {
+	std::ifstream sav;
+	sav.open(arg1, std::ios::binary);
+	Keysender::ruleset.clear();
+	pos = 0;
+	std::string save((std::istreambuf_iterator<char>(sav)),
+		std::istreambuf_iterator<char>());
+	
+	size_t rulesize;
+	getval(save, (char*)&rulesize, 4);
+	for (int i = 0; i < rulesize; i++) {
+		Rule f;
+		int partsize;
+		getval(save, (char*)&partsize, 4);
+		getval(save, (char*)&f.id, 4);
+		getval(save, (char*)&f.key, 1);
+		for (int j = 0; j < partsize; j++) {
+			Rulepart rP;
+			getval(save, (char*)&rP.id, 4);
+			getval(save, (char*)&rP.condit, 4);
+			getval(save, (char*)&rP.value, 8);
+			short corrector;
+			getval(save, (char*)&corrector, 2);
+			if (corrector != 0x0200) {//bad thing
+				std::cout << "bad thing happend with rulepart";
+				Keysender::ruleset.clear();
+				break;
+			}
+			f.parts.push_back(rP);
+		}
+		short rulecorrector;
+		getval(save, (char*)&rulecorrector, 2);
+		if (rulecorrector != 0x0100) {//bad thing
+			std::cout << "bad thing happend with rule";
+			Keysender::ruleset.clear();
+			break;
+		}
+		Keysender::ruleset.push_back(f);
+	}
+	sav.close();
+	return;
+}
+
+void CommandManager::startcommander(bool intro, std::string loadfile)
 {
 	if (true || std::this_thread::get_id() == commandthread->get_id())
 	{
 		if (intro)
 			std::cout << "hi \n";
+
+		if (loadfile != "") {
+			loadbtdfile(loadfile);
+		}
 		BTService service;
 
 		DeviceDetails* devices = nullptr;
@@ -193,13 +248,13 @@ void CommandManager::startcommander(bool intro)
 					int arg2; //rule Id
 					double arg3; //value
 					char Condition[2]; 
-					int arg4; //rulepart Id
+					int arg4 = 1; //rulepart Id
 
 					if (std::cin.peek() == 10)
 						std::cout << "rule Id: ";
 					std::cin >> arg2;
 					if (std::cin.peek() == 10)
-						std::cout << "condition: ";
+						std::cout << "value: ";
 					std::cin >> arg3;
 					if (std::cin.peek() == 10)
 						std::cout << "new condition, [rulepart-Id]: ";
@@ -212,10 +267,10 @@ void CommandManager::startcommander(bool intro)
 					//search Rule and Rulepart
 					if (Keysender::ruleset.size() >= arg2)
 					{
-						if (Keysender::ruleset[arg2 - 1].parts.size() >= arg3)
+						if (Keysender::ruleset[arg2 - 1].parts.size() >= arg4)
 						{
-							Rulepart* part = &Keysender::ruleset[arg2 - 1].parts[arg3 - 1];
-							part->value = arg4;
+							Rulepart* part = &Keysender::ruleset[arg2 - 1].parts[arg4 - 1];
+							part->value = arg3;
 							part->condit = convchar2int(Condition);
 							std::cout << "Edited Rulepart\n";
 						}
@@ -284,32 +339,48 @@ void CommandManager::startcommander(bool intro)
 				keysend = new Keysender(&active);
 				command = "";
 				
-				//gets the current filename
-				//char filename[256];
-				//int bytes = GetModuleFileNameA(NULL, filename, sizeof(filename));
+				//std::this_thread::sleep_for(std::chrono::microseconds(500));
+				std::cout << "commandline active\n";
+			}
+			else if (command._Equal("save")) {
+				std::string skip;
+				std::string arg1;
+				if (std::cin.peek() != 10) //optional var
+					std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
 
-				////replaces current file with restarter
-				//std::string real(filename);
-				//char endstr[14] = "Restarter.exe";
-				//real.erase(real.end() - 13, real.end());
-				//real.append(endstr);
-
-				////fire up restarter with current file as arg
-				//if (bytes != 0) {
-				//	startup(real.c_str(), filename);
-				//}
-				//std::exit(0);
-
-				/*std::cin.ignore(1000, '\n');
-				while (1) {
-					if (std::cin.eof()) {
-						break;
-					}
+				std::ofstream save;
+				if (arg1.empty()) {
+					save.open("newsave.btd", std::ios::binary | std::ios::out | std::ios::trunc);
+				}
+				else {
 					
-					system("cls"); 
-					std::cout << rand();
-					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-				}*/
+					save.open(arg1.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
+				}
+				size_t siz = Keysender::ruleset.size();
+				save.write((char*)&siz, 4);
+				for (int i = 0; i < Keysender::ruleset.size(); i++) {
+					Rule f = Keysender::ruleset[i];
+					siz = f.parts.size();
+					save.write((char*)&siz, 4);
+					save.write((char*)&f.id, 4);
+					save.write((char*)&f.key, 1);
+					for (int j = 0; j < f.parts.size(); j++) {
+						save.write((char*)&f.parts[j].id, 4);
+						save.write((char*)&f.parts[j].condit, 4);
+						save.write((char*)&f.parts[j].value, 8);
+						save.put(0x00); save.put(0x02);
+					}
+					save.put(0x00); save.put(0x01);
+				}
+				save.close();
+			}
+			else if (command._Equal("load")) {
+				std::string skip;
+				std::string arg1;
+				std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
+
+				loadbtdfile(arg1);
+
 			}
 			else if (command._Equal("quit"))
 			{
@@ -322,8 +393,10 @@ void CommandManager::startcommander(bool intro)
 				std::cout << "help\t\t | None \t\t\t\t | provides help\n";
 				std::cout << "rule add\t | <Id> <Value> <key> <Condit>\t | creates new rule\n";
 				std::cout << "rule rem\t | <Id> \t\t\t\t | removes rule\n";
-				std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 0] | edit rule\n";
+				std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 1] | edit rule\n";
 				std::cout << "rule list\t | None\t\t\t\t\t | lists rules\n";
+				std::cout << "save\t\t | [filename]\t\t\t\t | saves file\n";
+				std::cout << "load\t\t | <filename>\t\t\t\t | loads file\n";
 				std::cout << "device discover\t | <Amount> \t\t\t\t | Discovers BTDevices\n";
 				std::cout << "device connect\t | <Id> \t\t\t\t | Connects to the device\n";
 				std::cout << "device auto\t | None \t\t\t\t | Discovers and connects automatically with the device\n";
