@@ -11,6 +11,8 @@ class CommandManager
 private:
 	CommandManager() {}
 	Keysender* keysend = nullptr;
+	int deviceLen = 0;
+	DeviceDetails* devices;
 	std::thread* commandthread = nullptr;
 	static CommandManager* inst;
 	void starter();
@@ -22,6 +24,7 @@ public:
 		{
 			inst = new CommandManager();
 			inst->active = true;
+
 		}
 		return inst;
 		

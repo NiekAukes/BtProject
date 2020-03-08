@@ -1,17 +1,234 @@
 #include "BTService.h"
 
-	int BTService::Discover(DeviceDetails* out)
+
+typedef DeviceDetails* lpDeviceDetails;
+	int BTService::Discover(DeviceDetails** out)
 	{
-		DeviceDetails* dd = new DeviceDetails();
-		
 		std::cout << "discovering\n";
-		DataGenerator();
-		out = dd;
-		return 1;
+
+		
+		//WSADATA wsadat;
+		//DWORD dwresult = WSAStartup(2.2, &wsadat);
+		//ZeroMemory(&wsaqs, sizeof(wsaqs));
+		//wsaqs.dwSize = sizeof(WSAQUERYSETW);
+		//wsaqs.dwNameSpace = NS_BTH;
+		//wsaqs.lpcsaBuffer = NULL;
+		//wsaqs.dwNumberOfCsAddrs = 0;
+		//GUID guid = SVCID_HOSTNAME;
+		//wsaqs.lpServiceClassId = &guid;
+		//WSASetServiceW(&wsaqs, RNRSERVICE_REGISTER, SERVICE_MULTIPLE);
+		//HANDLE hLookup;
+		//dwresult = WSALookupServiceBeginW(&wsaqs, LUP_CONTAINERS | LUP_FLUSHCACHE | LUP_RETURN_ADDR, &hLookup);
+		//
+		//
+
+		//if (dwresult != SOCKET_ERROR) {
+		//	do {
+		//		char buf[4096];
+		//		LPWSAQUERYSETW pwsaResults = (LPWSAQUERYSETW)buf;
+		//		ZeroMemory(pwsaResults, sizeof(WSAQUERYSET));
+		//		pwsaResults->dwSize = sizeof(WSAQUERYSET);
+		//		pwsaResults->dwNameSpace = NS_BTH;
+		//		pwsaResults->lpBlob = NULL;
+
+		//		DWORD dwSize = sizeof(buf);
+		//		dwresult = WSALookupServiceNextW(hLookup, LUP_RETURN_NAME | LUP_RETURN_ADDR, &dwSize, pwsaResults);
+		//		if (dwresult != 0) {
+		//			dwresult = WSAGetLastError();
+		//			if ((dwresult == WSA_E_NO_MORE) || (dwresult == WSAENOMORE))
+		//			{
+
+		//				std::cout << "No more record found!\n";
+
+		//				break;
+
+		//			}
+		//				std::cout << "WSALookupServiceNext() failed with error code \n" << WSAGetLastError();
+		//			
+		//		}
+		//		else {
+		//			dwresult = 0;
+		//			std::cout << "WSALookupServiceNext() looks fine!\n";
+		//		}
+		//		if (dwresult == WSAEFAULT) {
+		//			//invalid pointer
+		//			std::cout << "invalid pointer\n";
+		//			return 0;
+		//		}
+
+		//		
+		//	} while ((dwresult != WSA_E_NO_MORE) && (dwresult != WSAENOMORE));
+		//	WSALookupServiceEnd(hLookup);
+		/*}
+		else {
+			dwresult = WSAGetLastError();
+			std::cout << "WSALookupServiceNext() failed with error code \n" << WSAGetLastError();
+		}
+
+		SOCKET sock = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);*/
+
+		BLUETOOTH_FIND_RADIO_PARAMS bltFrp;
+		bltFrp.dwSize = sizeof(bltFrp);
+		HBLUETOOTH_RADIO_FIND hBltRf = BluetoothFindFirstRadio(&bltFrp, &Radio);
+		BOOL hasNext;
+		int RadioAmount = 0;
+		do {
+			if (hBltRf != NULL) 
+				RadioAmount++;
+			hasNext = BluetoothFindNextRadio(hBltRf, &Radio);
+		} while (hasNext);
+		BluetoothFindRadioClose(hBltRf);
+
+		BLUETOOTH_RADIO_INFO bltRi;
+		bltRi.dwSize = sizeof(bltRi);
+		DWORD info = BluetoothGetRadioInfo(Radio, &bltRi);
+
+		if (RadioAmount == 1) {
+			BLUETOOTH_DEVICE_SEARCH_PARAMS bltDsp;
+			bltDsp.hRadio = Radio;
+			bltDsp.fIssueInquiry = true;
+			bltDsp.fReturnAuthenticated = true;
+			bltDsp.fReturnConnected = false;
+			bltDsp.fReturnRemembered = true;
+			bltDsp.fReturnUnknown = true;
+			bltDsp.cTimeoutMultiplier = 2;
+			bltDsp.dwSize = sizeof(bltDsp);
+			BLUETOOTH_DEVICE_INFO_STRUCT bltDis[20];
+			for (int i = 0; i < 20; i++) {
+				(bltDis + i)->dwSize = sizeof(*(bltDis + i));
+			}
+			HBLUETOOTH_DEVICE_FIND hBltDf = BluetoothFindFirstDevice(&bltDsp, bltDis);
+			int DeviceAmount = 0;
+			std::vector<DeviceDetails> Devicelist;
+			if (hBltDf != NULL) {
+				do {
+					hasNext = BluetoothFindNextDevice(hBltDf, (bltDis + DeviceAmount));
+
+					DeviceAmount++;
+
+					//print device name
+					char str[248];
+					size_t* s = new size_t(249);
+					wcstombs_s(s, str, (bltDis + DeviceAmount - 1)->szName, 248);
+					delete s;
+					std::cout << DeviceAmount << ": " << str << '\n';
+
+					//register device to BTService
+					DeviceDetails details;
+					details.address = (bltDis + DeviceAmount)->Address.ullLong;
+					details.inheritData = *(bltDis + DeviceAmount);
+					details.name = str;
+					details.valid = true;
+					Devicelist.push_back(details);
+
+					
+				
+				} while (hasNext && DeviceAmount < 20);
+
+				BluetoothFindDeviceClose(hBltDf);
+
+				DeviceDetails* devicels = new DeviceDetails[Devicelist.size()];
+				for (int i = 0; i < Devicelist.size(); i++) {
+					*(devicels + i) = Devicelist[i];
+				}
+				*out = devicels;
+				return DeviceAmount;
+			}
+			else {
+				DWORD dwError = GetLastError();
+				if (dwError != ERROR_NO_MORE_ITEMS)
+					std::cout << dwError;
+				else //nothing to worry about
+					std::cout << "no devices found\n";
+			}
+		}
+
+
+		return 0;
 	}
-	int BTService::Connect(DeviceDetails)
+
+	bool receivedCallback = false;
+	BOOL CALLBACK bluetoothAuthCallback(LPVOID param, PBLUETOOTH_AUTHENTICATION_CALLBACK_PARAMS params)
+	{
+		BLUETOOTH_AUTHENTICATE_RESPONSE response;
+		::ZeroMemory(&response, sizeof(BLUETOOTH_AUTHENTICATE_RESPONSE));
+		response.authMethod = params->authenticationMethod;
+		response.bthAddressRemote = params->deviceInfo.Address;
+		response.negativeResponse = FALSE;
+		DWORD error = ::BluetoothSendAuthenticationResponseEx(nullptr, &response);
+
+		std::cout << "callback happened" << '\n';
+		receivedCallback = true;
+		return TRUE;
+	}
+
+	int BTService::Connect(DeviceDetails dd)
 	{
 		std::cout << "attempting to connect to device\n";
+		/*HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;
+		DWORD dwResult = BluetoothRegisterForAuthenticationEx(
+			&dd.inheritData,
+			&hCallbackHandle,
+			(PFN_AUTHENTICATION_CALLBACK_EX)&bluetoothAuthCallback,
+			NULL);
+		if (dwResult != ERROR_SUCCESS) {
+			std::cout << "failed callback " << GetLastError() << '\n';
+			return 1;
+		}
+
+		dwResult = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionNotRequired);
+		switch (dwResult)
+		{
+		case ERROR_SUCCESS:
+			std::cout << "pair device success" << std::endl;
+			break;
+
+		case ERROR_CANCELLED:
+			std::cout << "pair device failed, user cancelled" << std::endl;
+			break;
+
+		case ERROR_INVALID_PARAMETER:
+			std::cout << "pair device failed, invalid parameter" << std::endl;
+			break;
+
+		case ERROR_NO_MORE_ITEMS:
+			std::cout << "pair device failed, device appears paired already" << std::endl;
+			break;
+
+		default:
+			std::cout << "pair device failed, unknown error, code " << (unsigned int)dwResult << std::endl;
+			break;
+		}
+		dwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
+		*/
+
+		WSADATA wsadat;
+		WSAQUERYSETW wsaqs;
+		ZeroMemory(&wsadat, sizeof(wsadat));
+		ZeroMemory(&wsaqs, sizeof(wsaqs));
+		wsaqs.dwNameSpace = NS_BTH;
+		wsaqs.dwSize = sizeof(WSAQUERYSETW);
+
+		DWORD dwResult = WSAStartup(2.2, &wsadat);
+		if (dwResult != SOCKET_ERROR) {
+
+			SOCKET s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
+			SOCKADDR_BTH sAddrBth;
+			sAddrBth.addressFamily = AF_BTH;
+			sAddrBth.btAddr = dd.inheritData.Address.ullLong;
+			sAddrBth.port = 1;
+			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH));
+			if (dwResult != SOCKET_ERROR) {
+				//succeeded in connected
+				std::cout << "now connected to the device";
+			}
+			else {
+				std::cout << WSAGetLastError();
+			}
+
+		}
+
+		
 		return 0;
 	}
 

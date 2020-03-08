@@ -125,7 +125,6 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		}
 		BTService service;
 
-		DeviceDetails* devices = nullptr;
 
 		std::string command;
 
@@ -314,7 +313,8 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				std::cin >> arg2;
 				if (arg2._Equal("discover"))
 				{
-					service.Discover(devices);
+					int ndev = service.Discover(&devices);
+					deviceLen = ndev;
 				}
 
 				else if (arg2._Equal("connect"))
@@ -325,7 +325,19 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					}
 					else
 					{
-						service.Connect(*devices);
+						if (deviceLen == 1) {
+							service.Connect(*devices);
+						}
+						else {
+							int arg3;
+							if (std::cin.peek() == 10)
+								std::cout << "device: ";
+							std::cin >> arg3;
+							if (arg3 < deviceLen + 1)
+								service.Connect(*(devices + arg3));
+							else
+								std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
+						}
 					}
 				}
 				else if (arg2._Equal("list") || arg2._Equal("ls"))
