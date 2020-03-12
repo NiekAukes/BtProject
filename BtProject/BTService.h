@@ -19,6 +19,7 @@
 #include <windows.devices.bluetooth.rfcomm.h>
 #include <iostream>
 #include <queue>
+#include <thread>
 #include <cstdlib>
 #include <bthdef.h>
 #include <Windows.h>
@@ -85,7 +86,7 @@ public:
 	Expectedtype expected = Expectedtype::Protocol;
 
 
-	WSAQUERYSETW wsaqs;
+	SOCKET s;
 	BTService()
 	{
 		std::cout << "initiated service\n";
@@ -93,7 +94,7 @@ public:
 	}
 	int Discover(DeviceDetails** out); //lets you discover devices
 	int Connect(DeviceDetails dd); //allows you to connect with the device
-	int ReceiveData();
+	int ReceiveData(char* buf, int buflen);
 	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
 	void DataGenerator();
 

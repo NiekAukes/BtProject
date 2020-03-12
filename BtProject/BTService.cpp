@@ -103,25 +103,24 @@ typedef DeviceDetails* lpDeviceDetails;
 			if (hBltDf != NULL) {
 				do {
 					hasNext = BluetoothFindNextDevice(hBltDf, (bltDis + DeviceAmount));
+						DeviceAmount++;
 
-					DeviceAmount++;
+						//print device name
+						char str[248];
+						size_t* s = new size_t(249);
+						wcstombs_s(s, str, (bltDis + DeviceAmount - 1)->szName, 248);
+						delete s;
+						std::cout << DeviceAmount << ": " << str << "  |  ";
+						std::cout/* << std::hex*/ << (bltDis + DeviceAmount - 1)->Address.ullLong <<'\n';
 
-					//print device name
-					char str[248];
-					size_t* s = new size_t(249);
-					wcstombs_s(s, str, (bltDis + DeviceAmount - 1)->szName, 248);
-					delete s;
-					std::cout << DeviceAmount << ": " << str << '\n';
+						//register device to BTService
+						DeviceDetails details;
+						details.address = (bltDis + DeviceAmount - 1)->Address.ullLong;
+						details.inheritData = *(bltDis + DeviceAmount - 1);
+						details.name = str;
+						details.valid = true;
+						Devicelist.push_back(details);
 
-					//register device to BTService
-					DeviceDetails details;
-					details.address = (bltDis + DeviceAmount)->Address.ullLong;
-					details.inheritData = *(bltDis + DeviceAmount);
-					details.name = str;
-					details.valid = true;
-					Devicelist.push_back(details);
-
-					
 				
 				} while (hasNext && DeviceAmount < 20);
 
@@ -157,7 +156,7 @@ typedef DeviceDetails* lpDeviceDetails;
 		response.negativeResponse = FALSE;
 		DWORD error = ::BluetoothSendAuthenticationResponseEx(nullptr, &response);
 
-		std::cout << "callback happened" << '\n';
+		//std::cout << "callback happened" << '\n';
 		receivedCallback = true;
 		return TRUE;
 	}
@@ -165,7 +164,7 @@ typedef DeviceDetails* lpDeviceDetails;
 	int BTService::Connect(DeviceDetails dd)
 	{
 		std::cout << "attempting to connect to device\n";
-		/*HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;
+		HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;
 		DWORD dwResult = BluetoothRegisterForAuthenticationEx(
 			&dd.inheritData,
 			&hCallbackHandle,
@@ -192,7 +191,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			break;
 
 		case ERROR_NO_MORE_ITEMS:
-			std::cout << "pair device failed, device appears paired already" << std::endl;
+			std::cout << "device appears paired already" << std::endl;
 			break;
 
 		default:
@@ -200,7 +199,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			break;
 		}
 		dwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
-		*/
+		
 
 		WSADATA wsadat;
 		WSAQUERYSETW wsaqs;
@@ -209,18 +208,38 @@ typedef DeviceDetails* lpDeviceDetails;
 		wsaqs.dwNameSpace = NS_BTH;
 		wsaqs.dwSize = sizeof(WSAQUERYSETW);
 
-		DWORD dwResult = WSAStartup(2.2, &wsadat);
+		dwResult = WSAStartup(2.2, &wsadat);
 		if (dwResult != SOCKET_ERROR) {
 
-			SOCKET s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
+			s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
+
+			SOCKADDR_BTH name;
+			ZeroMemory(&name, sizeof(SOCKADDR_BTH));
+			name.addressFamily = AF_BTH;
+			name.btAddr = 0;
+			name.serviceClassId = GUID_NULL;
+			name.port = 0;
+			dwResult = bind(s, (sockaddr*)&name, sizeof(SOCKADDR_BTH));
+
+			if (dwResult != 0) {
+				std::cout << "something went wrong: " << WSAGetLastError();
+			}
+
+			
+
 			SOCKADDR_BTH sAddrBth;
+			ZeroMemory(&sAddrBth, sizeof(SOCKADDR_BTH));
 			sAddrBth.addressFamily = AF_BTH;
 			sAddrBth.btAddr = dd.inheritData.Address.ullLong;
-			sAddrBth.port = 1;
+			sAddrBth.serviceClassId = RFCOMM_PROTOCOL_UUID;
+			sAddrBth.port = 0;
 			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH));
 			if (dwResult != SOCKET_ERROR) {
 				//succeeded in connected
 				std::cout << "now connected to the device";
+				char sendstr[23] = "Oh wow I sent a string";
+				//send(s, sendstr, 23, 0);
+				ReceiveData(NULL, 0);
 			}
 			else {
 				std::cout << WSAGetLastError();
@@ -232,10 +251,27 @@ typedef DeviceDetails* lpDeviceDetails;
 		return 0;
 	}
 
-	int BTService::ReceiveData()
+	void receiver(bool* signal, SOCKET s) 
 	{
+		while (signal == nullptr ? false : *signal) 
+		{
+			char buf[512];
+			recv(s, buf, 512, 0);
+			std::cout << buf;
+		}
+		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
+	}
+
+	int BTService::ReceiveData(char* buf, int buflen)
+	{
+		bool* sig = new bool(true);
+		std::thread recvThread(receiver, sig, s);
+		char str[20];
+		std::cin >> str;
+		*sig = false;
 		return 0;
 	}
+
 
 	int BTService::ProcessData(NormalData* out)
 	{
