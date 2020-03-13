@@ -33,6 +33,7 @@ class BTService;
 struct DeviceDetails
 {
 public:
+	bool paired = false;
 	bool valid = false;
 	std::string name = "unnamed";
 	unsigned long long address;
@@ -94,6 +95,7 @@ public:
 	}
 	int Discover(DeviceDetails** out); //lets you discover devices
 	int Connect(DeviceDetails dd); //allows you to connect with the device
+	int LatestConnect(); //automatic connect on last connected device
 	int ReceiveData(char* buf, int buflen);
 	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
 	void DataGenerator();

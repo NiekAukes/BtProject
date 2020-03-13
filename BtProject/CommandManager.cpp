@@ -345,6 +345,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					//to do
 					std::cout << "Not yet implemented\n";
 				}
+				else if (arg2._Equal("auto")) {
+					int ret = service.LatestConnect();
+				}
 			}
 			else if (command._Equal("start"))
 			{

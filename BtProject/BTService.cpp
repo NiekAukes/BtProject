@@ -161,45 +161,58 @@ typedef DeviceDetails* lpDeviceDetails;
 		return TRUE;
 	}
 
+
+	/*
+		-Code 1: Callback Failed
+		-Code 2: Pairing failed due to error
+		-Code 3: Could not start WSA
+		-Code 4: Connecting failed
+		-Code 5: Socket binding failed
+	*/
 	int BTService::Connect(DeviceDetails dd)
 	{
-		std::cout << "attempting to connect to device\n";
-		HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;
-		DWORD dwResult = BluetoothRegisterForAuthenticationEx(
-			&dd.inheritData,
-			&hCallbackHandle,
-			(PFN_AUTHENTICATION_CALLBACK_EX)&bluetoothAuthCallback,
-			NULL);
-		if (dwResult != ERROR_SUCCESS) {
-			std::cout << "failed callback " << GetLastError() << '\n';
-			return 1;
+		DWORD dwResult;
+		if (!dd.paired) {
+			std::cout << "attempting to connect to device\n";
+			HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;
+			dwResult = BluetoothRegisterForAuthenticationEx(
+				&dd.inheritData,
+				&hCallbackHandle,
+				(PFN_AUTHENTICATION_CALLBACK_EX)&bluetoothAuthCallback,
+				NULL);
+			if (dwResult != ERROR_SUCCESS) {
+				std::cout << "failed callback " << GetLastError() << '\n';
+				return 1;
+			}
+
+			dwResult = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionNotRequired);
+			switch (dwResult)
+			{
+			case ERROR_SUCCESS:
+				std::cout << "pair device success" << std::endl;
+				break;
+
+			case ERROR_CANCELLED:
+				std::cout << "pair device failed, user cancelled" << std::endl;
+				return 2;
+				break;
+
+			case ERROR_INVALID_PARAMETER:
+				std::cout << "pair device failed, invalid parameter" << std::endl;
+				return 2;
+				break;
+
+			case ERROR_NO_MORE_ITEMS:
+				std::cout << "device appears paired already" << std::endl;
+				break;
+
+			default:
+				std::cout << "pair device failed, unknown error, code " << (unsigned int)dwResult << std::endl;
+				return 2;
+				break;
+			}
+			dwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
 		}
-
-		dwResult = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionNotRequired);
-		switch (dwResult)
-		{
-		case ERROR_SUCCESS:
-			std::cout << "pair device success" << std::endl;
-			break;
-
-		case ERROR_CANCELLED:
-			std::cout << "pair device failed, user cancelled" << std::endl;
-			break;
-
-		case ERROR_INVALID_PARAMETER:
-			std::cout << "pair device failed, invalid parameter" << std::endl;
-			break;
-
-		case ERROR_NO_MORE_ITEMS:
-			std::cout << "device appears paired already" << std::endl;
-			break;
-
-		default:
-			std::cout << "pair device failed, unknown error, code " << (unsigned int)dwResult << std::endl;
-			break;
-		}
-		dwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
-		
 
 		WSADATA wsadat;
 		WSAQUERYSETW wsaqs;
@@ -223,6 +236,7 @@ typedef DeviceDetails* lpDeviceDetails;
 
 			if (dwResult != 0) {
 				std::cout << "something went wrong: " << WSAGetLastError();
+				return 5;
 			}
 
 			
@@ -236,18 +250,69 @@ typedef DeviceDetails* lpDeviceDetails;
 			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH));
 			if (dwResult != SOCKET_ERROR) {
 				//succeeded in connected
-				std::cout << "now connected to the device";
-				char sendstr[23] = "Oh wow I sent a string";
-				//send(s, sendstr, 23, 0);
+				std::cout << "now connected to the device" << '\n';
+				
+				//register latest address
+				HKEY hkey;
+				DWORD Dispos;
+				//create key
+				LSTATUS stat = RegCreateKeyEx(HKEY_CURRENT_USER,
+					TEXT("Software\\LeHand"), 0, NULL, 0,
+					KEY_WRITE, 0, &hkey, &Dispos);
+
+				if (stat != ERROR_SUCCESS) {
+					std::cout << "failed to update key: " << stat;
+				}
+				else {
+					unsigned long long address = dd.inheritData.Address.ullLong;
+					RegSetValueEx(hkey,
+						"LastAddress", 0, REG_QWORD, (const BYTE*)&address, sizeof(address));
+					RegCloseKey(hkey);
+				}
+
+
 				ReceiveData(NULL, 0);
 			}
 			else {
-				std::cout << WSAGetLastError();
+				std::cout << "Failed to connect: " << WSAGetLastError() << '\n';
+				return 4;
 			}
 
 		}
+		else {
+			std::cout << "WSAStartUp Failed" << dwResult << '\n';
+			return 3;
+		}
 
 		
+		return 0;
+	}
+
+	int BTService::LatestConnect()
+	{
+		HKEY hkey;
+		LONG lRes = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\LeHand", 0, KEY_READ, &hkey);
+		if (lRes == ERROR_SUCCESS) {
+			//succeeded in opening key
+			ULONG64 address;
+			DWORD dwBufsize = sizeof(address);
+			lRes = RegQueryValueExA(hkey, "LastAddress", NULL, NULL, (LPBYTE)&address, &dwBufsize);
+			if (lRes == ERROR_SUCCESS) {
+				//success, proceed with connection
+				DeviceDetails devDet;
+				devDet.address = address;
+				devDet.inheritData.Address.ullLong = address;
+				devDet.paired = true;
+				devDet.valid = true;
+				Connect(devDet);
+			}
+		}
+		else {
+			if (lRes == ERROR_FILE_NOT_FOUND)
+				std::cout << "could not retrieve address, try connecting manually";
+			else
+				std::cout << "failed to open key: " << lRes;
+		}
 		return 0;
 	}
 
@@ -255,9 +320,9 @@ typedef DeviceDetails* lpDeviceDetails;
 	{
 		while (signal == nullptr ? false : *signal) 
 		{
-			char buf[512];
-			recv(s, buf, 512, 0);
-			std::cout << buf;
+			char buf[8];
+			recv(s, buf, 8, 0);
+			std::cout << buf << "\n";
 		}
 		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
 	}
