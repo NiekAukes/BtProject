@@ -127,12 +127,14 @@
     <ClCompile Include="BTService.cpp" />
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="Keysender.cpp" />
+    <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BTService.h" />
     <ClInclude Include="CommandManager.h" />
     <ClInclude Include="Keysender.h" />
+    <ClInclude Include="Logic.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

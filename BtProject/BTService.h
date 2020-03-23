@@ -21,6 +21,7 @@
 #include <queue>
 #include <thread>
 #include <cstdlib>
+#include <windows.devices.serialcommunication.h>
 #include <bthdef.h>
 #include <Windows.h>
 

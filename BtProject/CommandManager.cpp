@@ -4,34 +4,6 @@
 #undef max
 CommandManager* CommandManager::inst = nullptr;
 
-VOID startup(LPCTSTR lpApplicationName, std::string args = "")
-{
-	// additional information
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-
-	// set the size of the structures
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-	char* f = (char*)args.c_str();
-	// start the program up
-	CreateProcess(lpApplicationName,   // the path
-		f,       // Command line
-		NULL,           // Process handle not inheritable
-		NULL,           // Thread handle not inheritable
-		FALSE,          // Set handle inheritance to FALSE
-		0,              // No creation flags
-		NULL,           // Use parent's environment block
-		NULL,           // Use parent's starting directory 
-		&si,            // Pointer to STARTUPINFO structure
-		&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
-	);
-	// Close process and thread handles. 
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
-}
-
 int convchar2int(char c[2])
 {
 	if (c[1] == 0) //chars ended there

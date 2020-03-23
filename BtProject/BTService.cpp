@@ -320,9 +320,12 @@ typedef DeviceDetails* lpDeviceDetails;
 	{
 		while (signal == nullptr ? false : *signal) 
 		{
-			char buf[8];
+			char buf[8] = "       ";
 			recv(s, buf, 8, 0);
-			std::cout << buf << "\n";
+			for (int i = 0; i < 8; i++) {
+				if (buf[i] != ' ')
+					std::cout << buf[i];
+			}
 		}
 		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
 	}
