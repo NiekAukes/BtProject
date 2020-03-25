@@ -64,6 +64,7 @@ public:
 	void value() {
 		Logic* l1 = dynamic_cast<Logic*>(val1);
 		Logic* l2 = dynamic_cast<Logic*>(val2);
+		bool v = false;
 		switch (type)
 		{
 		case And:

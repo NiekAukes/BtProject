@@ -224,7 +224,7 @@ typedef DeviceDetails* lpDeviceDetails;
 		dwResult = WSAStartup(2.2, &wsadat);
 		if (dwResult != SOCKET_ERROR) {
 
-			s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
+			s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_L2CAP);
 
 			SOCKADDR_BTH name;
 			ZeroMemory(&name, sizeof(SOCKADDR_BTH));
