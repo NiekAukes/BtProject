@@ -316,28 +316,33 @@ typedef DeviceDetails* lpDeviceDetails;
 		return 0;
 	}
 
-	void receiver(bool* signal, SOCKET s) 
+	void receiver(bool* signal, SOCKET s, BTService* bts) 
 	{
 		while (signal == nullptr ? false : *signal) 
 		{
 			char buf[8] = "       ";
 			recv(s, buf, 8, 0);
 			for (int i = 0; i < 8; i++) {
-				if (buf[i] != ' ')
+				if (buf[i] != ' ') {
 					std::cout << buf[i];
+					bts->Data.push(buf[i]);
+				}
+				if (buf[i] == 0xff && buf[i + 1] == 0xff) {
+					bts->Data.push(buf[i]);
+					bts->Data.push(buf[i+1]);
+					bts->ProcessData(bts->dat);
+					i++;
+				}
 			}
 		}
 		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
 	}
 
-	int BTService::ReceiveData(char* buf, int buflen)
+	bool* BTService::ReceiveData(char* buf, int buflen)
 	{
 		bool* sig = new bool(true);
-		std::thread recvThread(receiver, sig, s);
-		char str[20];
-		std::cin >> str;
-		*sig = false;
-		return 0;
+		std::thread* recvThread = new std::thread(receiver, sig, s, this);
+		return sig;
 	}
 
 
@@ -448,6 +453,10 @@ typedef DeviceDetails* lpDeviceDetails;
 		return 0;
 	}
 
+	void BTService::ApplyData(NormalData* Datain)
+	{
+	}
+
 	void BTService::DataGenerator()
 	{
 		for (int k = 0; k < 1; k++)
@@ -477,6 +486,11 @@ typedef DeviceDetails* lpDeviceDetails;
 
 	double* BTService::getDoubleDataFromBT(int* length)
 	{
-		length = new int(11);
+		for (int i = 0; i < 11; i++) {
+			*(values + i) = rand();
+		}
+		*length = 11;
 		return values;
 	}
+
+	BTService* BTService::inst;

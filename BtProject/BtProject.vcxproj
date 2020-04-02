@@ -128,6 +128,7 @@
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="Keysender.cpp" />
     <ClCompile Include="Logic.cpp" />
+    <ClCompile Include="LuaFTF.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +136,7 @@
     <ClInclude Include="CommandManager.h" />
     <ClInclude Include="Keysender.h" />
     <ClInclude Include="Logic.h" />
+    <ClInclude Include="LuaFTF.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include "BTService.h"
-
+#include "LuaFTF.h"
 typedef int condition;
 
 struct Rulepart
@@ -92,6 +92,7 @@ public:
 
 	static std::string strcondit[6];
 	static bool keysendActive;
+	static std::string LuaFile;
 	std::thread* keythread;
 
 	static void Keythreading();

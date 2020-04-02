@@ -1,12 +1,13 @@
 #include "Keysender.h"
 
 std::vector<Rule> Keysender::ruleset;
+std::string Keysender::LuaFile;
 std::string Keysender::strcondit[] = { "==", ">=", ">", "<", "<=", "!=" };
 std::string protocStr[] = {
 	"Little_Finger ",
 	"Ring_Finger   ",
 	"Middle_Finger ",
-	"ForeFinger    ",
+	"Index_Finger  ",
 	"Thumb         ",
 	"Acceleration_X",
 	"Acceleration_Y",
@@ -42,41 +43,48 @@ void Keysender::Keythreading()
 	system("cls");
 	//setup monitoring
 	//get current conditions (BtService)
+
+	LuaFTF lu;
+	lu.start(LuaFile, BTService::inst);
 	while (keysendActive)
 	{
+
+
+
+
 		//configure keysender
 
 		//update Monitoring values
 		//screen
 
 		//construct keysend
-		INPUT ip;
-		ip.type = INPUT_KEYBOARD;
-		ip.ki.wScan = 0;
-		ip.ki.time = 0;
-		ip.ki.dwExtraInfo = 0;
-		ip.ki.dwFlags = 0;
+		//INPUT ip;
+		//ip.type = INPUT_KEYBOARD;
+		//ip.ki.wScan = 0;
+		//ip.ki.time = 0;
+		//ip.ki.dwExtraInfo = 0;
+		//ip.ki.dwFlags = 0;
 
-		for (int i = 0; i < ruleset.size(); i++)
-		{
-			Rule currRule = ruleset[i];
-			//check if conditions apply
-			//set key
-			ip.ki.wVk = toupper(currRule.key);
-			//SendInput(1, &ip, sizeof(INPUT));
-		}
-		std::cout << "Protocol            | Description                              | value\n";
-		std::cout << "--------------------+------------------------------------------+----------------------------\n";
+		//for (int i = 0; i < ruleset.size(); i++)
+		//{
+		//	Rule currRule = ruleset[i];
+		//	//check if conditions apply
+		//	//set key
+		//	ip.ki.wVk = toupper(currRule.key);
+		//	//SendInput(1, &ip, sizeof(INPUT));
+		//}
+		//std::cout << "Protocol            | Description                              | value\n";
+		//std::cout << "--------------------+------------------------------------------+----------------------------\n";
 
-		for (int i = 0; i < 9; i++)
-		{
-			std::cout << " " << i + 1 << "                  | " << protocStr[i] << "                           | " << (rand() % 1000) / 1000.0 << "\n";
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		system("cls");
+		//for (int i = 0; i < 9; i++)
+		//{
+		//	std::cout << " " << i + 1 << "                  | " << protocStr[i] << "                           | " << (rand() % 1000) / 1000.0 << "\n";
+		//}
+		//std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		//system("cls");
 	}
 
-	system("cls");
+	//system("cls");
 }
 
 Keysender::Keysender(bool* f)
@@ -85,12 +93,12 @@ Keysender::Keysender(bool* f)
 	keythread = new std::thread(Keythreading);
 	while (true) {
 		//end states, now only enter press
-		if (GetKeyState(VK_RETURN) & 0x8000) {
+		/*if (GetKeyState(VK_RETURN) & 0x8000) {
 			break;
-		}
+		}*/
 	}
 	keysendActive = false;
-	system("cls");
+	//system("cls");
 	std::cout << "cancelled monitoring";
 	//setup monitoring
 	//get current conditions (BtService)

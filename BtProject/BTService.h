@@ -68,14 +68,15 @@ class BTService
 private:
 	double values[11]; //values bound to protocol
 	HANDLE Radio;
+	SOCKET s;
 public:
-
+	static BTService* inst;
 	enum valuetype : int
 	{
 		Little_Finger,
 		Ring_Finger,
 		Middle_Finger,
-		ForeFinger,
+		Index_Finger,
 		Thumb,
 		Acceleration_X,
 		Acceleration_Y,
@@ -86,19 +87,21 @@ public:
 	std::queue<short> Data;
 	double partdata = 0;
 	Expectedtype expected = Expectedtype::Protocol;
+	NormalData* dat;
 
-
-	SOCKET s;
 	BTService()
 	{
 		std::cout << "initiated service\n";
+		inst = this;
 		
 	}
 	int Discover(DeviceDetails** out); //lets you discover devices
 	int Connect(DeviceDetails dd); //allows you to connect with the device
 	int LatestConnect(); //automatic connect on last connected device
-	int ReceiveData(char* buf, int buflen);
+	bool* ReceiveData(char* buf, int buflen);
 	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
+	void ApplyData(NormalData* Datain);
+
 	void DataGenerator();
 
 	double* getDoubleDataFromBT(int* length);
