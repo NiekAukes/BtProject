@@ -59,5 +59,15 @@ namespace LeHandUI.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Highlighting {
+            get {
+                object obj = ResourceManager.GetObject("Highlighting", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

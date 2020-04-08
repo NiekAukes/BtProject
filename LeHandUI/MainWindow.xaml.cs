@@ -11,8 +11,10 @@ using System.Xml;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
+
 
 namespace LeHandUI
 {
@@ -21,37 +23,29 @@ namespace LeHandUI
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+	//	public static IHighlightingDefinition LoadHighlightingDefinition(
+	//string resourceName)
+	//	{
+	//		var fullName = typeof(System.Reflection.Assembly).Namespace + "." + resourceName;
+	//		var stream = System.Reflection.Assembly.GetManifestResourceStream(fullName)
+	//		var reader = new XmlTextReader(stream)
+	//			return HighlightingLoader.Load(reader, HighlightingManager.Instance);
+	//	}
+
 		public MainWindow()
 		{
 
 			InitializeComponent();
+			//FileStream s = File.Open("";
+			//XmlReader reader = XmlReader.Create(s);
+			//XshdSyntaxDefinition highlightingDefinition = HighlightingLoader.LoadXshd(reader);
+			//highlightingDefinition.
+			
 
-            // Load our custom highlighting definition
-            IHighlightingDefinition customHighlighting;
-            using (Stream s = typeof(MainWindow).Assembly.GetManifestResourceStream("LeHandUI.Highlighting.xshd"))
-            {
-                if (s == null)
-                    throw new InvalidOperationException("Could not find embedded resource");
-                using (XmlReader reader = new XmlTextReader(s))
-                {
-                    customHighlighting = ICSharpCode.AvalonEdit.Highlighting.Xshd.
-                        HighlightingLoader.Load(reader, HighlightingManager.Instance);
-                }
-            }
-            // and register it in the HighlightingManager
-            HighlightingManager.Instance.RegisterHighlighting("Custom Highlighting", new string[] { ".cool" }, customHighlighting);
-
-            this.SetValue(TextOptions.TextFormattingModeProperty, TextFormattingMode.Display);
+			//textEditor.SyntaxHighlighting = LoadHighlightingDefinition("Highlighting.xshd");
 
 
-            textEditor.TextArea.SelectionBorder = null;
-
-            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
-            textEditor.SyntaxHighlighting = customHighlighting;
-            // initial highlighting now set by XAML
-
-
-        }
+		}
 
 
     }

@@ -12,7 +12,7 @@
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor"
-            SyntaxHighlighting="C#"
+            SyntaxHighlighting="Lua"
             FontFamily="Consolas"
             FontSize="10pt"/>
     </Grid>
