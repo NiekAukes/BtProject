@@ -48,18 +48,27 @@ static int lua_RecvVal(lua_State* L/*, short* val*/) {
 	}
 	return 1;
 }
+
 static void deb(lua_State* L) {
-	int button = lua_tonumber(L, 1);
-	int mode = lua_tonumber(L, 2);
+	int dx = lua_tonumber(L, 1);
+	int dy = lua_tonumber(L, 2);
+	int mode = lua_tonumber(L, 3);
 
 	INPUT ip;
 	ip.type = INPUT_MOUSE;
-	ip.mi.dx = 0; ip.mi.dy = 0;
+	ip.mi.dx = dx; ip.mi.dy = dy;
 	ip.mi.time = 0;
 	ip.mi.dwExtraInfo = 0;
 	ip.mi.mouseData = 0;
-	ip.mi.dwFlags = button; 
+	if (mode)
+		ip.mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_VIRTUALDESK | MOUSEEVENTF_ABSOLUTE;
+	else
+		ip.mi.dwFlags = MOUSEEVENTF_MOVE;
 	UINT ret = SendInput(1, &ip, sizeof(INPUT));
+}
+static int lua_MMove(lua_State* L) {
+	deb(L);
+	return 0;
 }
 static int lua_KPress(lua_State* L/*, char Key, int mode*/) {
 	size_t p = 0;
@@ -81,8 +90,24 @@ static int lua_KPress(lua_State* L/*, char Key, int mode*/) {
 	return 0;
 }
 static int lua_MPress(lua_State* L/*, int Button, int mode*/) {
-	deb(L);
+	int button = lua_tonumber(L, 1);
+	int mode = lua_tonumber(L, 2);
+
+	INPUT ip;
+	ip.type = INPUT_MOUSE;
+	ip.mi.dx = 0; ip.mi.dy = 0;
+	ip.mi.time = 0;
+	ip.mi.dwExtraInfo = 0;
+	ip.mi.mouseData = 0;
+	ip.mi.dwFlags = button;
+	UINT ret = SendInput(1, &ip, sizeof(INPUT));
 	return 0;
+}
+
+static int lua_Sys(lua_State* L) {
+	const char* comm = lua_tostring(L, 1);
+	system(comm);
+	return 1;
 }
 static int lua_Exit(lua_State* L) {
 	LuaFTF::running = false;

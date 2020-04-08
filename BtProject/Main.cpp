@@ -20,8 +20,10 @@
 
 
 bool active = true;
+DWORD currVersion = 0.7;
 int main(int argc, char* argv[])
 {
+	//check if new version is available
 	if (argc > 1) {
 		std::cout << "loaded file: " << argv[1] << '\n';
 	}

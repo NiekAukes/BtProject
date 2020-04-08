@@ -46,7 +46,7 @@ void Keysender::Keythreading()
 
 	LuaFTF lu;
 	lu.start(LuaFile, BTService::inst);
-	while (keysendActive)
+	while (lu.running)
 	{
 
 
@@ -93,9 +93,9 @@ Keysender::Keysender(bool* f)
 	keythread = new std::thread(Keythreading);
 	while (true) {
 		//end states, now only enter press
-		/*if (GetKeyState(VK_RETURN) & 0x8000) {
+		if (GetKeyState(VK_RETURN) & 0x8000) {
 			break;
-		}*/
+		}
 	}
 	keysendActive = false;
 	//system("cls");

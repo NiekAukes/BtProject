@@ -85,6 +85,9 @@ void CommandManager::loadbtdfile(std::string arg1) {
 	return;
 }
 
+
+
+
 void CommandManager::startcommander(bool intro, std::string loadfile)
 {
 	if (true || std::this_thread::get_id() == commandthread->get_id())
@@ -93,7 +96,11 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			std::cout << "hi \n";
 
 		if (loadfile != "") {
+#ifdef Obsolete
 			loadbtdfile(loadfile);
+#else
+			Keysender::LuaFile = loadfile;
+#endif
 		}
 		BTService service;
 
@@ -333,7 +340,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				//std::this_thread::sleep_for(std::chrono::microseconds(500));
 				std::cout << "commandline active\n";
 			}
+
 			else if (command._Equal("save")) {
+#ifdef Obsolete
 				std::string skip;
 				std::string arg1;
 				if (std::cin.peek() != 10) //optional var
@@ -364,14 +373,19 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					save.put(0x00); save.put(0x01);
 				}
 				save.close();
+#else std::cout << "Obsolete command";
+#endif
 			}
 			else if (command._Equal("load")) {
+
 				std::string skip;
 				std::string arg1;
 				std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
-
+#ifdef Obsolete
 				loadbtdfile(arg1);
-
+#else 
+				Keysender::LuaFile = arg1;
+#endif
 			}
 			else if (command._Equal("quit"))
 			{
