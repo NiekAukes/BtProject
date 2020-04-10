@@ -31,6 +31,7 @@ namespace LeHandUI
                             ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance));
                 }
             }
+            System.Diagnostics.Debug.WriteLine("app");
         }
  
     }
