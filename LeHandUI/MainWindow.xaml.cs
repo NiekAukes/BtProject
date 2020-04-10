@@ -48,6 +48,7 @@ namespace LeHandUI
 		{
 
 			InitializeComponent();
+			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon);
