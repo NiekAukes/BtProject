@@ -4,6 +4,24 @@
              xmlns:local="clr-namespace:LeHandController"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <Style x:Key="TranspButton" TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TitleText" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Futura Md Bt"/>
+        </Style>
+        
+        
     </Application.Resources>
 </Application>
