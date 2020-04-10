@@ -104,6 +104,12 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		}
 		BTService service;
 
+		//setup pipes
+		keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\LeHand\\Data"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
+		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\LeHand\\Error"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
+
 		std::string command;
 
 
@@ -334,9 +340,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			}
 			else if (command._Equal("start"))
 			{
-				keysend = new Keysender(&active);
+				keysend->startSender();
 				command = "";
-				
+
 				//std::this_thread::sleep_for(std::chrono::microseconds(500));
 				std::cout << "commandline active\n";
 			}
@@ -387,6 +393,20 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				Keysender::LuaFile = arg1;
 #endif
 			}
+			//else if (command._Equal("pipe")) {
+			//	std::string arg1; //pipeName
+			//	std::string arg2 = ""; //pipe function
+
+			//	if (arg2 == "error") {
+
+			//	}
+			//	else if (arg2 == "data") {
+
+			//	}
+			//	else {
+			//		std::cout << "function not found";
+			//	}
+			//}
 			else if (command._Equal("quit"))
 			{
 				return;

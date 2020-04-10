@@ -88,15 +88,27 @@ public:
 class Keysender
 {
 public:
+	HANDLE datapipe;
+	char databuffer[1024];
+	DWORD dwdataread;
+	HANDLE errorpipe;
+	char errorbuffer[1024];
+	DWORD dwerrorread;
+
+	HRESULT error = S_OK;
+
 	static std::vector<Rule> ruleset;
 
 	static std::string strcondit[6];
 	static bool keysendActive;
 	static std::string LuaFile;
+	static Keysender* inst;
+	
 	std::thread* keythread;
 
 	static void Keythreading();
-	Keysender(bool* f);
+	Keysender();
+	void startSender();
 
 };
 

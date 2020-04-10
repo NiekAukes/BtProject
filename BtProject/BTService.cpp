@@ -1,6 +1,5 @@
 #include "BTService.h"
 
-
 typedef DeviceDetails* lpDeviceDetails;
 	int BTService::Discover(DeviceDetails** out)
 	{

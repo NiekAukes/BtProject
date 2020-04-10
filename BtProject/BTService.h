@@ -89,6 +89,8 @@ public:
 	Expectedtype expected = Expectedtype::Protocol;
 	NormalData* dat;
 
+	std::string pipedata;
+
 	BTService()
 	{
 		std::cout << "initiated service\n";

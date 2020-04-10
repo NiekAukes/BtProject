@@ -2,6 +2,7 @@
 
 std::vector<Rule> Keysender::ruleset;
 std::string Keysender::LuaFile;
+Keysender* Keysender::inst;
 std::string Keysender::strcondit[] = { "==", ">=", ">", "<", "<=", "!=" };
 std::string protocStr[] = {
 	"Little_Finger ",
@@ -48,7 +49,20 @@ void Keysender::Keythreading()
 	lu.start(LuaFile, BTService::inst);
 	while (lu.running)
 	{
-
+		BTService::inst->pipedata.append("hello");
+		if (inst->datapipe != INVALID_HANDLE_VALUE) {
+			if (ConnectNamedPipe(inst->datapipe, NULL) != FALSE) {
+				if (BTService::inst->pipedata.size() > 0)
+					WriteFile(inst->datapipe, BTService::inst->pipedata.c_str(), BTService::inst->pipedata.size() + 1, &inst->dwdataread, NULL);
+				BTService::inst->pipedata.clear();
+			}
+		}
+		if (inst->errorpipe != INVALID_HANDLE_VALUE) {
+			if (ConnectNamedPipe(inst->errorpipe, NULL) != FALSE) {
+				if (inst->error != S_OK)
+					WriteFile(inst->errorpipe, &inst->error, 1, &inst->dwerrorread, NULL);
+			}
+		}
 
 
 
@@ -87,8 +101,11 @@ void Keysender::Keythreading()
 	//system("cls");
 }
 
-Keysender::Keysender(bool* f)
+Keysender::Keysender()
 {
+	inst = this;
+}
+void Keysender::startSender() {
 	keysendActive = true;
 	keythread = new std::thread(Keythreading);
 	while (true) {
@@ -102,5 +119,5 @@ Keysender::Keysender(bool* f)
 	std::cout << "cancelled monitoring";
 	//setup monitoring
 	//get current conditions (BtService)
-	
+
 }
