@@ -43,6 +43,7 @@ namespace LeHandUI
 			finally { DeleteObject(handle); }
 		}
 
+		
 		public MainWindow()
 		{
 
