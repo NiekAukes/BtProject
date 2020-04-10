@@ -32,8 +32,9 @@
         <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,0,0,0"
                    Text="Test1"/>
         <Button x:Name="Button1" Grid.Column="2" Grid.Row="2" Margin="20,0,0,0" FontWeight="Light"
-                   Content="Test press me" />
-        <avalonEdit:TextEditor
+                   Content="Test press me" >
+        </Button>
+            <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor"
             SyntaxHighlighting="Lua"

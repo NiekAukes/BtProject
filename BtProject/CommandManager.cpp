@@ -105,9 +105,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		BTService service;
 
 		//setup pipes
-		keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\LeHand\\Data"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+		keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandData"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
-		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\LeHand\\Error"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandError"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
 
 		std::string command;

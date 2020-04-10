@@ -36,13 +36,7 @@ namespace LeHandUI
 		{
 
 			InitializeComponent();
-			//FileStream s = File.Open("";
-			//XmlReader reader = XmlReader.Create(s);
-			//XshdSyntaxDefinition highlightingDefinition = HighlightingLoader.LoadXshd(reader);
-			//highlightingDefinition.
-			
-
-			//textEditor.SyntaxHighlighting = LoadHighlightingDefinition("Highlighting.xshd");
+			//Communicator.Init();
 
 
 		}

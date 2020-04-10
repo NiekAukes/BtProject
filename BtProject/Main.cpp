@@ -21,14 +21,31 @@
 
 bool active = true;
 DWORD currVersion = 0.7;
+std::string file;
 int main(int argc, char* argv[])
 {
 	//check if new version is available
 	if (argc > 1) {
-		std::cout << "loaded file: " << argv[1] << '\n';
+		if (*argv[1] == '-') {
+			for (int i = 0; i < argc; i++) {
+				if (argv[i] == "-raw") {
+					#ifndef DoRaw
+					#define DoRaw
+					#endif // !DoRaw
+
+				}
+				else if (argv[i] == "-file") {
+					file = argv[i + 1];
+				}
+			}
+		}
+		else {
+			std::cout << "loaded file: " << argv[1] << '\n';
+			file = argv[1];
+		}
 	}
 	CommandManager* cmdMgr = CommandManager::GetInst();
-	cmdMgr->startcommander(false, argc > 1 ? argv[1] : "");
+	cmdMgr->startcommander(false, file.size() > 1 ? file : "");
 	return 0;
 }
 
