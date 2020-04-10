@@ -54,23 +54,24 @@
         <!--Dat waren alle buttons-->
         <TextBlock Grid.Column="5" Grid.Row="2" HorizontalAlignment="Left" Margin="20,10,0,0" 
                    Text="Lua Script Editor"/>
-        <!--<avalonEdit:TextEditor
+        <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor" FontFamily="Consolas" 
             BorderThickness="1" BorderBrush="#212121" FontSize="12" 
             Grid.Column="5" Grid.Row="3" Grid.RowSpan="2" 
-            Margin="20,0,0,0" xml:space="preserve">function Start()
+            Margin="20,0,0,0" xml:space="preserve" 
+            SyntaxHighlighting="Lua">function Start()
     print("preview")
 end
-        </avalonEdit:TextEditor>-->
-        <avalonEdit:TextEditor
+        </avalonEdit:TextEditor>
+        <!--<avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor"
             Grid.Column="5" Grid.Row="3" Grid.RowSpan="2" 
             Margin="20,0,0,0" xml:space="preserve" SyntaxHighlighting="Lua">function Start()
     print("preview")
 end
-        </avalonEdit:TextEditor>
+        </avalonEdit:TextEditor>-->
        
         
     
