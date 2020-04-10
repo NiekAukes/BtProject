@@ -85,6 +85,9 @@ void CommandManager::loadbtdfile(std::string arg1) {
 	return;
 }
 
+
+
+
 void CommandManager::startcommander(bool intro, std::string loadfile)
 {
 	if (true || std::this_thread::get_id() == commandthread->get_id())
@@ -93,10 +96,13 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			std::cout << "hi \n";
 
 		if (loadfile != "") {
+#ifdef Obsolete
 			loadbtdfile(loadfile);
+#else
+			Keysender::LuaFile = loadfile;
+#endif
 		}
 		BTService service;
-
 
 		std::string command;
 
@@ -116,165 +122,170 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 
 			if (command._Equal("rule"))
 			{
-				if (std::cin.peek() == 10)
-					std::cout << "specify action: add rem edit list\n";
-				std::string arg1;
-				std::cin >> arg1;
-
-				if (arg1._Equal("add"))
-				{
-					//create more args
-					int arg2;
-					double arg3;
-					char key;
-					char getcondit[2];
-					int Condition = 0;
-
+				#ifdef Obsolete
 					if (std::cin.peek() == 10)
-						std::cout << "id: ";
-					std::cin >> arg2;
-					if (std::cin.peek() == 10)
-						std::cout << "value: ";
-					std::cin >> arg3;	
-					if (std::cin.peek() == 10)
-						std::cout << "key: ";
-					std::cin >> key;
+						std::cout << "specify action: add rem edit list\n";
+					std::string arg1;
+					std::cin >> arg1;
 
-					if (std::cin.peek() == 10)
-						std::cout << "condition: ";
-					std::cin >> getcondit;
-				
-					//convert char condition to int condition
-					Condition = convchar2int(getcondit);
-
-					bool exist = false;
-					for (int i = 0; i < Keysender::ruleset.size(); i++)
+					if (arg1._Equal("add"))
 					{
+						//create more args
+						int arg2;
+						double arg3;
+						char key;
+						char getcondit[2];
+						int Condition = 0;
 
-						if (Keysender::ruleset[i].id == arg2)
+						if (std::cin.peek() == 10)
+							std::cout << "id: ";
+						std::cin >> arg2;
+						if (std::cin.peek() == 10)
+							std::cout << "value: ";
+						std::cin >> arg3;
+						if (std::cin.peek() == 10)
+							std::cout << "key: ";
+						std::cin >> key;
+
+						if (std::cin.peek() == 10)
+							std::cout << "condition: ";
+						std::cin >> getcondit;
+
+						//convert char condition to int condition
+						Condition = convchar2int(getcondit);
+
+						bool exist = false;
+						for (int i = 0; i < Keysender::ruleset.size(); i++)
 						{
-							//check if ruleset exists
-							std::cout << "failed to create rule, there was already a rule there";
-							exist = true;
+
+							if (Keysender::ruleset[i].id == arg2)
+							{
+								//check if ruleset exists
+								std::cout << "failed to create rule, there was already a rule there";
+								exist = true;
+							}
+						}
+						if (!exist)
+						{
+							Rulepart r = { arg2, arg3, (condition)Condition };
+							Rule rule;
+							rule.id = arg2;
+							rule.key = key;
+							rule.parts.push_back(r);
+							Keysender::ruleset.push_back(rule);
+							std::cout << "\nrule created succesfully\n";
 						}
 					}
-					if (!exist)
+					if (arg1._Equal("rem"))
 					{
-						Rulepart r = { arg2, arg3, (condition)Condition };
-						Rule rule;
-						rule.id = arg2;
-						rule.key = key;
-						rule.parts.push_back(r);
-						Keysender::ruleset.push_back(rule);
-						std::cout << "\nrule created succesfully\n";
-					}
-				}
-				if (arg1._Equal("rem"))
-				{
-					int arg2;
-					if (std::cin.peek() == 10)
-						std::cout << "id: ";
-					std::cin >> arg2;
-					std::vector<Rule> tmp; //ask for more args
+						int arg2;
+						if (std::cin.peek() == 10)
+							std::cout << "id: ";
+						std::cin >> arg2;
+						std::vector<Rule> tmp; //ask for more args
 
-					for (int i = 0; i < Keysender::ruleset.size(); i++)
-					{
-						if (Keysender::ruleset[i].id == arg2)
+						for (int i = 0; i < Keysender::ruleset.size(); i++)
 						{
-							Rule newRule = Keysender::ruleset[i];
-							newRule.id = i; //set the id of the rule to the arraynumber, since the actual id is not needed in this operation.
-							tmp.push_back(newRule);
+							if (Keysender::ruleset[i].id == arg2)
+							{
+								Rule newRule = Keysender::ruleset[i];
+								newRule.id = i; //set the id of the rule to the arraynumber, since the actual id is not needed in this operation.
+								tmp.push_back(newRule);
+							}
 						}
-					}
-					/*if (tmp.size() > 1)
-					{
-						//ask wich one to remove
-						std::cout << "there were more rules set on this id, which one do you want to remove? \n\n";
-						int ans = 0;
-						for (int i = 0; i < tmp.size(); i++)
+						/*if (tmp.size() > 1)
 						{
-							std::cout << i + 1 << '\n';
-							std::cout << "Value: " << tmp[i].value << "\n Condition: " << strcondit[tmp[i].condit] << "\n";
-						}
-						std::cin >> ans;
-						ans--;
+							//ask wich one to remove
+							std::cout << "there were more rules set on this id, which one do you want to remove? \n\n";
+							int ans = 0;
+							for (int i = 0; i < tmp.size(); i++)
+							{
+								std::cout << i + 1 << '\n';
+								std::cout << "Value: " << tmp[i].value << "\n Condition: " << strcondit[tmp[i].condit] << "\n";
+							}
+							std::cin >> ans;
+							ans--;
 
-						ruleset.erase(ruleset.begin() + tmp[ans].id);
-						std::cout << "rule succesfully removed\n";
-					} */
-					if (tmp.size() == 1)
-					{
-						//just remove (ToDo)
-						Keysender::ruleset.erase(Keysender::ruleset.begin() + tmp[0].id);
-						std::cout << "rule removed succesfully\n";
-					}
-					else
-					{
-						//does not exist, so do nothing
-						std::cout << "rule does not exist or multiple rules were found\n";
-					}
-				}
-				else if (arg1._Equal("edit"))
-				{
-					int arg2; //rule Id
-					double arg3; //value
-					char Condition[2]; 
-					int arg4 = 1; //rulepart Id
-
-					if (std::cin.peek() == 10)
-						std::cout << "rule Id: ";
-					std::cin >> arg2;
-					if (std::cin.peek() == 10)
-						std::cout << "value: ";
-					std::cin >> arg3;
-					if (std::cin.peek() == 10)
-						std::cout << "new condition, [rulepart-Id]: ";
-					std::cin >> Condition;
-					if (std::cin.peek() != 10) //optional var
-						std::cin >> arg4;
-
-					//todo
-
-					//search Rule and Rulepart
-					if (Keysender::ruleset.size() >= arg2)
-					{
-						if (Keysender::ruleset[arg2 - 1].parts.size() >= arg4)
+							ruleset.erase(ruleset.begin() + tmp[ans].id);
+							std::cout << "rule succesfully removed\n";
+						} */
+						if (tmp.size() == 1)
 						{
-							Rulepart* part = &Keysender::ruleset[arg2 - 1].parts[arg4 - 1];
-							part->value = arg3;
-							part->condit = convchar2int(Condition);
-							std::cout << "Edited Rulepart\n";
+							//just remove (ToDo)
+							Keysender::ruleset.erase(Keysender::ruleset.begin() + tmp[0].id);
+							std::cout << "rule removed succesfully\n";
 						}
 						else
 						{
-							//create new rule
-							Rulepart newPart;
-							newPart.id = Keysender::ruleset[arg2 - 1].parts.size();
-							newPart.value = arg4;
-							newPart.condit = convchar2int(Condition);
-							Keysender::ruleset[arg2 - 1].parts.push_back(newPart);
-							std::cout << "Created new Rulepart\n";
+							//does not exist, so do nothing
+							std::cout << "rule does not exist or multiple rules were found\n";
 						}
 					}
-					else
+					else if (arg1._Equal("edit"))
 					{
-						std::cout << "Invalid argument: Id";
-					}
-				}
-				else if (arg1._Equal("list"))
-				{
-					std::cout << '\n';
-					for (int i = 0; i < Keysender::ruleset.size(); i++)
-					{
-						std::cout << "Rule: " << i + 1 << '\n';
-						for (int j = 0; j < Keysender::ruleset[i].parts.size(); j++)
+						int arg2; //rule Id
+						double arg3; //value
+						char Condition[2];
+						int arg4 = 1; //rulepart Id
+
+						if (std::cin.peek() == 10)
+							std::cout << "rule Id: ";
+						std::cin >> arg2;
+						if (std::cin.peek() == 10)
+							std::cout << "value: ";
+						std::cin >> arg3;
+						if (std::cin.peek() == 10)
+							std::cout << "new condition, [rulepart-Id]: ";
+						std::cin >> Condition;
+						if (std::cin.peek() != 10) //optional var
+							std::cin >> arg4;
+
+						//todo
+
+						//search Rule and Rulepart
+						if (Keysender::ruleset.size() >= arg2)
 						{
-							std::cout << "\trulepart: " << j + 1 << '\n';
-							std::cout << "\t\tId: " << Keysender::ruleset[i].parts[j].id << "\n\t\tValue: " << Keysender::ruleset[i].parts[j].value << "\n\t\tCondition: " << Keysender::strcondit[Keysender::ruleset[i].parts[j].condit] << "\n\n";
-						
+							if (Keysender::ruleset[arg2 - 1].parts.size() >= arg4)
+							{
+								Rulepart* part = &Keysender::ruleset[arg2 - 1].parts[arg4 - 1];
+								part->value = arg3;
+								part->condit = convchar2int(Condition);
+								std::cout << "Edited Rulepart\n";
+							}
+							else
+							{
+								//create new rule
+								Rulepart newPart;
+								newPart.id = Keysender::ruleset[arg2 - 1].parts.size();
+								newPart.value = arg4;
+								newPart.condit = convchar2int(Condition);
+								Keysender::ruleset[arg2 - 1].parts.push_back(newPart);
+								std::cout << "Created new Rulepart\n";
+							}
+						}
+						else
+						{
+							std::cout << "Invalid argument: Id";
+						}
+					}
+					else if (arg1._Equal("list"))
+					{
+						std::cout << '\n';
+						for (int i = 0; i < Keysender::ruleset.size(); i++)
+						{
+							std::cout << "Rule: " << i + 1 << '\n';
+							for (int j = 0; j < Keysender::ruleset[i].parts.size(); j++)
+							{
+								std::cout << "\trulepart: " << j + 1 << '\n';
+								std::cout << "\t\tId: " << Keysender::ruleset[i].parts[j].id << "\n\t\tValue: " << Keysender::ruleset[i].parts[j].value << "\n\t\tCondition: " << Keysender::strcondit[Keysender::ruleset[i].parts[j].condit] << "\n\n";
+
+							}
 						}
 					}
 				}
+#else
+				std::cout << "out of date, use Lua instead\n";
+#endif
 
 			}
 			else if (command._Equal("device"))
@@ -329,7 +340,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				//std::this_thread::sleep_for(std::chrono::microseconds(500));
 				std::cout << "commandline active\n";
 			}
+
 			else if (command._Equal("save")) {
+#ifdef Obsolete
 				std::string skip;
 				std::string arg1;
 				if (std::cin.peek() != 10) //optional var
@@ -360,14 +373,19 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					save.put(0x00); save.put(0x01);
 				}
 				save.close();
+#else std::cout << "Obsolete command";
+#endif
 			}
 			else if (command._Equal("load")) {
+
 				std::string skip;
 				std::string arg1;
 				std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
-
+#ifdef Obsolete
 				loadbtdfile(arg1);
-
+#else 
+				Keysender::LuaFile = arg1;
+#endif
 			}
 			else if (command._Equal("quit"))
 			{

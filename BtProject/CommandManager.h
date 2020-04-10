@@ -30,6 +30,7 @@ public:
 		
 	}
 	void loadbtdfile(std::string arg1);
+	void loadluafile(std::string arg1);
 	void startcommander(bool intro, std::string loadfile = "");
 	void stopcommander();
 };
