@@ -28,7 +28,7 @@ namespace LeHandUI
         private static NamedPipeClientStream dataStream;
         private static NamedPipeClientStream errorStream;
 
-		DataPacket ProcessData(Stream stream)
+		/*DataPacket ProcessData(Stream stream)
 		{
 			stream.
 
@@ -45,9 +45,9 @@ namespace LeHandUI
 
 					--Footer
 					0xFFFF
+			
 
-
-			*/
+			
 			bool Active = true;
 			short Length = -1;
 			short Protocol = -1;
@@ -136,7 +136,7 @@ namespace LeHandUI
 
 			return 0;
 		}
-
+	*/
 		public static void Init()
         {
             //Process Device = new Process
