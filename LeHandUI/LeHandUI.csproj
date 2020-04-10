@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -109,6 +110,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Lua.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AddIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DeleteIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RefreshIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\RefreshIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\AddIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\DeleteIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RefreshIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
