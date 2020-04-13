@@ -49,9 +49,9 @@ namespace LeHandUI
 
 			InitializeComponent();
 			//Alle icoontjes
-			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon);
-			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon);
-			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon);
+			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
+			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
+			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
 
 			Communicator.Init();
 		}
