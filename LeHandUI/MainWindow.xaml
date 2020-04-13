@@ -8,10 +8,13 @@
         xmlns:local="clr-namespace:LeHandUI"
         mc:Ignorable="d" Background="#2A2A2C"
         Title="MainWindow" Height="600" Width="800" FontSize="25" 
-        FontFamily="Futura Lt BT" Foreground="#F2F2F2" >
-    
+        FontFamily="Futura Lt BT" Foreground="#F2F2F2" AllowsTransparency="True" WindowStyle="None" >
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
+    </WindowChrome.WindowChrome>
     <!--COLOUR SCHEME: #212121 , #065464 , #34acbc , #85c3cf , #7a7d84 
                  very dark blue, dark blue, aqua,    pale aqua, greyish-->
+
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -21,6 +24,10 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -32,17 +39,64 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" HorizontalAlignment="Center" 
-                   Margin="0,0,0,10" FontFamily="Futura Md BT" Style="{StaticResource TitleFont}"
-                   Text="Bluetooth Hand Controller"/>
+        <!--Custom title bar-->
+        <Image
+		Grid.Column="0"
+		Width="22"
+		Height="22"
+		Margin="4"
+		Source="/Resources/BTProgramIcon.png" />
+        <TextBlock Grid.Column="1" Margin="4 0 0 0"	VerticalAlignment="Center"
+		FontSize="14"
+		Text="{Binding WindowTitle}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                            <!--<Setter Property="Foreground" Value="{DynamicResource WindowTitleBarInactiveText}" />-->
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
+        <Button
+		Grid.Column="6" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased"
+		Style="{StaticResource TitleBarButtonStyle}">
+            <Path Width="46" Height="32" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1" />
+        </Button>
+        <!--<Button	Name="maximizeButton" Grid.Column="7" Click="MaximizeWindow"
+		Style="{StaticResource TitleBarButtonStyle}">
+            <Path Width="46" Height="32" Data="M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z"
+			Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1" />
+        </Button>-->
+        <Button Name="restoreButton" Grid.Column="8" Click="MaximizeWindow"
+		Style="{StaticResource TitleBarButtonStyle}">
+            <Path Width="46" Height="32" Data="M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5"
+			Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1" />
+        </Button>
+        <Button
+		Grid.Column="9" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
+            <Path Width="46" Height="32" Data="M 18,11 27,20 M 18,20 27,11"
+			Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1" />
+            
+        </Button>
 
-        <!--<TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Style="{StaticResource TitleText}"
-                   Text="File Explorer"/>-->
+        
+        
+        
         <ListView Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="4" BorderThickness="1"
                    Margin="0,5,0,0" Padding="5,5,5,5" FontSize="20" x:Name="LuaFileView" Background="#212121" BorderBrush="#F2F2F2"
                   ItemsSource="{Binding Path=LuaFileNames, Mode=TwoWay}"/>
-        
+
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
         <DockPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,10,40,0">
 

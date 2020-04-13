@@ -20,7 +20,7 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 
-using System.Windows.UI.Viewmanagement;
+
 
 namespace LeHandUI
 {
@@ -44,31 +44,38 @@ namespace LeHandUI
 			}
 			finally { DeleteObject(handle); }
 		}
-		
-
-
 
 		public MainWindow()
 		{
-
 			InitializeComponent();
+
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
 
-			
-
 			//Communicator.Init();
 		}
-		private void ChangeTitleBarBackground()
-		{
-			var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+		//Handlers for custom titlebar buttons
+		private void MinimizeWindow(object sender, EventArgs e){
+			App.Current.MainWindow.WindowState = WindowState.Minimized;
 		}
-
+		private void MaximizeWindow(object sender, EventArgs e){
+			if (App.Current.MainWindow.WindowState == WindowState.Maximized)
+			{
+				App.Current.MainWindow.WindowState = WindowState.Normal;
+			}
+			else if (App.Current.MainWindow.WindowState == WindowState.Normal)
+			{
+				App.Current.MainWindow.WindowState = WindowState.Maximized;
+			}
+		}
+		private void CloseWindow(object sender, EventArgs e){
+			App.Current.MainWindow.Close();
+		}
+		private void DragStart(object sender, MouseButtonEventArgs e)
+		{
+			this.DragMove();
+		}
 	}
-	
 }
-
-
-	
