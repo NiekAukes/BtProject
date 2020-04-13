@@ -276,6 +276,7 @@ namespace LeHandUI
         }
         public static status quit()
         {
+
             if (process != null)
             {
                 process.StandardInput.WriteLine("quit");

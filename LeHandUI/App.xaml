@@ -5,6 +5,14 @@
              StartupUri="MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
+
+        <Style x:Key="TitleFont" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="35"/>
+                <Setter Property="Foreground" Value="#F2F2F2"/>
+            </Style.Setters>
+        </Style>
+        
         <Style x:Key="TranspButton" TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Height" Value="16"/>
@@ -19,10 +27,104 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="TitleText" TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="Futura Md Bt"/>
+        
+        <Style x:Key="TitleText" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Foreground" Value="#34acbc"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="FontSize" Value="25"/>
+            </Style.Setters>
         </Style>
-        
-        
+
+        <Style x:Key="MinimizeButton" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Height" Value="16"/>
+                <Setter Property="Width" Value="16"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="MaximizeButton">
+        </Style>
+        <Style x:Key="CloseButton" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Height" Value="16"/>
+                <Setter Property="Width" Value="16"/>
+            </Style.Setters>
+        </Style>
+
+
+
+
+
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource WindowTextBrush}" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border
+					x:Name="border"
+					Background="Transparent"
+					BorderThickness="0"
+					SnapsToDevicePixels="true">
+                            <ContentPresenter
+						x:Name="contentPresenter"
+						Margin="0"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Focusable="False"
+						RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource MouseOverOverlayBackgroundBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource PressedOverlayBackgroundBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TitleBarCloseButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border
+					x:Name="border"
+					Background="Transparent"
+					BorderThickness="0"
+					SnapsToDevicePixels="true">
+                            <ContentPresenter
+						x:Name="contentPresenter"
+						Margin="0"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Focusable="False"
+						RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource MouseOverWindowCloseButtonBackgroundBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MouseOverWindowCloseButtonForegroundBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource PressedWindowCloseButtonBackgroundBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MouseOverWindowCloseButtonForegroundBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

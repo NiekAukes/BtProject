@@ -14,7 +14,7 @@ using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 
 namespace LeHandUI
-{
+{   
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -22,6 +22,8 @@ namespace LeHandUI
     {
         public App()
         {
+            this.InitializeComponent();
+           
             using (var stream = new System.IO.MemoryStream(LeHandUI.Properties.Resources.Highlighting))
             {
                 using (var reader = new System.Xml.XmlTextReader(stream))
@@ -38,5 +40,6 @@ namespace LeHandUI
         {
             Communicator.quit();
         }
+
     }
 }

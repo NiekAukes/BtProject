@@ -73,6 +73,16 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AddIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("AddIcon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AddIcon16x16 {
             get {
                 object obj = ResourceManager.GetObject("AddIcon16x16", resourceCulture);
@@ -83,9 +93,29 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BTProgramIcon {
+            get {
+                object obj = ResourceManager.GetObject("BTProgramIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeleteIcon {
             get {
                 object obj = ResourceManager.GetObject("DeleteIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeleteIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("DeleteIcon1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +146,16 @@ namespace LeHandUI.Properties {
         internal static System.Drawing.Bitmap RefreshIcon {
             get {
                 object obj = ResourceManager.GetObject("RefreshIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RefreshIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("RefreshIcon1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
