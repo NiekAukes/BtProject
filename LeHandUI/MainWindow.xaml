@@ -64,17 +64,7 @@
     print("preview")
 end
         </avalonEdit:TextEditor>
-        <!--<avalonEdit:TextEditor
-            xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-            Name="textEditor"
-            Grid.Column="5" Grid.Row="3" Grid.RowSpan="2" 
-            Margin="20,0,0,0" xml:space="preserve" SyntaxHighlighting="Lua">function Start()
-    print("preview")
-end
-        </avalonEdit:TextEditor>-->
-       
-        
-    
+
     </Grid>
     
 </Window>

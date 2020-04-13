@@ -191,7 +191,8 @@ namespace LeHandUI
             }
 			return null;
 		}
-	
+
+        static byte[] buf = new byte[1024];
 		public static void Init()
         {
             //Process Device = new Process
@@ -205,9 +206,9 @@ namespace LeHandUI
             //};
             
             process.StartInfo.FileName = "LeHand.exe";
-            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.CreateNoWindow = false;
             process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardOutput = false;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.RedirectStandardInput = true;
             process.OutputDataReceived += new DataReceivedEventHandler
@@ -220,29 +221,29 @@ namespace LeHandUI
                 }
             );
             process.Start();
-            process.BeginOutputReadLine();
+            //process.BeginOutputReadLine();
 
             dataStream = new NamedPipeClientStream(@".", @"LeHandData");
             errorStream = new NamedPipeClientStream("LeHandError");
 
             dataStream.Connect();
-            errorStream.Connect();
+            //errorStream.Connect();
 
 
-            process.StandardInput.WriteLine("connect");
+            process.StandardInput.WriteLine("device discover");
 
+            dataStream.BeginRead(buf, 0, 1024, null, null);
             while (Active)
             {
-                //if (dataStream.Length > 20)
-                //{
-                //    ProcessData(dataStream);
-                //}
+                if (buf.Length > 20)
+                {
+                    ProcessData(dataStream);
+                }
             }
         }
-
         public class device
         {
-            public status discover()
+            public static status discover()
             {
                 process.StandardInput.WriteLine("device discover");
                 process.BeginErrorReadLine();
@@ -250,25 +251,30 @@ namespace LeHandUI
                     return status.S_Error;
                 return status.S_OK;
             }
-            public status connect()
+            public static status connect()
             {
                 return status.S_OK;
             }
-            public status list()
+            public static status list()
             {
                 return status.S_OK;
             }
-            public status auto()
+            public static status auto()
             {
                 return status.S_OK;
             }
         }
-        public status start()
+        public static status start()
         {
             return status.S_OK;
         }
-        public status load()
+        public static status load()
         {
+            return status.S_OK;
+        }
+        public static status quit()
+        {
+            process.StandardInput.WriteLine("quit");
             return status.S_OK;
         }
 

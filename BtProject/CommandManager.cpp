@@ -110,6 +110,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandError"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
 
+		
 		std::string command;
 
 
@@ -125,10 +126,10 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			}
 			char f = std::cin.peek();
 			std::cin >> command;
-
-			if (command._Equal("rule"))
-			{
-				#ifdef Obsolete
+			if (*command.c_str() != '\0') {
+				if (command._Equal("rule"))
+				{
+#ifdef Obsolete
 					if (std::cin.peek() == 10)
 						std::cout << "specify action: add rem edit list\n";
 					std::string arg1;
@@ -290,147 +291,149 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					}
 				}
 #else
-				std::cout << "out of date, use Lua instead\n";
+					std::cout << "out of date, use Lua instead\n";
 #endif
 
-			}
-			else if (command._Equal("device"))
-			{
-				std::string arg2;
-				if (std::cin.peek() == 10)
-					std::cout << "specify action: discover connect list\n";
-				std::cin >> arg2;
-				if (arg2._Equal("discover"))
-				{
-					int ndev = service.Discover(&devices);
-					deviceLen = ndev;
 				}
-
-				else if (arg2._Equal("connect"))
+				else if (command._Equal("device"))
 				{
-					if (devices == nullptr || devices->valid == false)
+					std::string arg2;
+					if (std::cin.peek() == 10)
+						std::cout << "specify action: discover connect list\n";
+					std::cin >> arg2;
+					if (arg2._Equal("discover"))
 					{
-						std::cout << "no devices available\n";
+						int ndev = service.Discover(&devices);
+						deviceLen = ndev;
 					}
-					else
+
+					else if (arg2._Equal("connect"))
 					{
-						if (deviceLen == 1) {
-							service.Connect(*devices);
+						if (devices == nullptr || devices->valid == false)
+						{
+							std::cout << "no devices available\n";
 						}
-						else {
-							int arg3;
-							if (std::cin.peek() == 10)
-								std::cout << "device: ";
-							std::cin >> arg3;
-							if (arg3 < deviceLen + 1)
-								service.Connect(*(devices + arg3));
-							else
-								std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
+						else
+						{
+							if (deviceLen == 1) {
+								service.Connect(*devices);
+							}
+							else {
+								int arg3;
+								if (std::cin.peek() == 10)
+									std::cout << "device: ";
+								std::cin >> arg3;
+								if (arg3 < deviceLen + 1)
+									service.Connect(*(devices + arg3));
+								else
+									std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
+							}
 						}
 					}
+					else if (arg2._Equal("list") || arg2._Equal("ls"))
+					{
+						//to do
+						std::cout << "Not yet implemented\n";
+					}
+					else if (arg2._Equal("auto")) {
+						int ret = service.LatestConnect();
+					}
 				}
-				else if (arg2._Equal("list") || arg2._Equal("ls"))
+				else if (command._Equal("start"))
 				{
-					//to do
-					std::cout << "Not yet implemented\n";
-				}
-				else if (arg2._Equal("auto")) {
-					int ret = service.LatestConnect();
-				}
-			}
-			else if (command._Equal("start"))
-			{
-				keysend->startSender();
-				command = "";
+					keysend->startSender();
+					command = "";
 
-				//std::this_thread::sleep_for(std::chrono::microseconds(500));
-				std::cout << "commandline active\n";
-			}
+					//std::this_thread::sleep_for(std::chrono::microseconds(500));
+					std::cout << "commandline active\n";
+				}
 
-			else if (command._Equal("save")) {
+				else if (command._Equal("save")) {
 #ifdef Obsolete
-				std::string skip;
-				std::string arg1;
-				if (std::cin.peek() != 10) //optional var
-					std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
+					std::string skip;
+					std::string arg1;
+					if (std::cin.peek() != 10) //optional var
+						std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
 
-				std::ofstream save;
-				if (arg1.empty()) {
-					save.open("newsave.btd", std::ios::binary | std::ios::out | std::ios::trunc);
-				}
-				else {
-					
-					save.open(arg1.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
-				}
-				size_t siz = Keysender::ruleset.size();
-				save.write((char*)&siz, 4);
-				for (int i = 0; i < Keysender::ruleset.size(); i++) {
-					Rule f = Keysender::ruleset[i];
-					siz = f.parts.size();
-					save.write((char*)&siz, 4);
-					save.write((char*)&f.id, 4);
-					save.write((char*)&f.key, 1);
-					for (int j = 0; j < f.parts.size(); j++) {
-						save.write((char*)&f.parts[j].id, 4);
-						save.write((char*)&f.parts[j].condit, 4);
-						save.write((char*)&f.parts[j].value, 8);
-						save.put(0x00); save.put(0x02);
+					std::ofstream save;
+					if (arg1.empty()) {
+						save.open("newsave.btd", std::ios::binary | std::ios::out | std::ios::trunc);
 					}
-					save.put(0x00); save.put(0x01);
-				}
-				save.close();
+					else {
+
+						save.open(arg1.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
+					}
+					size_t siz = Keysender::ruleset.size();
+					save.write((char*)&siz, 4);
+					for (int i = 0; i < Keysender::ruleset.size(); i++) {
+						Rule f = Keysender::ruleset[i];
+						siz = f.parts.size();
+						save.write((char*)&siz, 4);
+						save.write((char*)&f.id, 4);
+						save.write((char*)&f.key, 1);
+						for (int j = 0; j < f.parts.size(); j++) {
+							save.write((char*)&f.parts[j].id, 4);
+							save.write((char*)&f.parts[j].condit, 4);
+							save.write((char*)&f.parts[j].value, 8);
+							save.put(0x00); save.put(0x02);
+						}
+						save.put(0x00); save.put(0x01);
+					}
+					save.close();
 #else std::cout << "Obsolete command";
 #endif
-			}
-			else if (command._Equal("load")) {
+				}
+				else if (command._Equal("load")) {
 
-				std::string skip;
-				std::string arg1;
-				std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
+					std::string skip;
+					std::string arg1;
+					std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
 #ifdef Obsolete
-				loadbtdfile(arg1);
+					loadbtdfile(arg1);
 #else 
-				Keysender::LuaFile = arg1;
+					Keysender::LuaFile = arg1;
 #endif
-			}
-			//else if (command._Equal("pipe")) {
-			//	std::string arg1; //pipeName
-			//	std::string arg2 = ""; //pipe function
+				}
+				//else if (command._Equal("pipe")) {
+				//	std::string arg1; //pipeName
+				//	std::string arg2 = ""; //pipe function
 
-			//	if (arg2 == "error") {
+				//	if (arg2 == "error") {
 
-			//	}
-			//	else if (arg2 == "data") {
+				//	}
+				//	else if (arg2 == "data") {
 
-			//	}
-			//	else {
-			//		std::cout << "function not found";
-			//	}
-			//}
-			else if (command._Equal("quit"))
-			{
-				return;
+				//	}
+				//	else {
+				//		std::cout << "function not found";
+				//	}
+				//}
+				else if (command._Equal("quit"))
+				{
+					return;
+				}
+				else if (command._Equal("help") || command._Equal("--help"))
+				{
+					//todo
+					std::cout << "Command\t\t | Args\t\t\t\t\t | Description\n";
+					std::cout << "help\t\t | None \t\t\t\t | provides help\n";
+					std::cout << "rule add\t | <Id> <Value> <key> <Condit>\t | creates new rule\n";
+					std::cout << "rule rem\t | <Id> \t\t\t\t | removes rule\n";
+					std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 1] | edit rule\n";
+					std::cout << "rule list\t | None\t\t\t\t\t | lists rules\n";
+					std::cout << "save\t\t | [filename]\t\t\t\t | saves file\n";
+					std::cout << "load\t\t | <filename>\t\t\t\t | loads file\n";
+					std::cout << "device discover\t | <Amount> \t\t\t\t | Discovers BTDevices\n";
+					std::cout << "device connect\t | <Id> \t\t\t\t | Connects to the device\n";
+					std::cout << "device auto\t | None \t\t\t\t | Discovers and connects automatically with the device\n";
+				}
+				else
+				{
+					//std::cout << "command not recognized\n";
+					system(command.c_str());
+				}
 			}
-			else if (command._Equal("help") || command._Equal("--help"))
-			{
-				//todo
-				std::cout << "Command\t\t | Args\t\t\t\t\t | Description\n";
-				std::cout << "help\t\t | None \t\t\t\t | provides help\n";
-				std::cout << "rule add\t | <Id> <Value> <key> <Condit>\t | creates new rule\n";
-				std::cout << "rule rem\t | <Id> \t\t\t\t | removes rule\n";
-				std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 1] | edit rule\n";
-				std::cout << "rule list\t | None\t\t\t\t\t | lists rules\n";
-				std::cout << "save\t\t | [filename]\t\t\t\t | saves file\n";
-				std::cout << "load\t\t | <filename>\t\t\t\t | loads file\n";
-				std::cout << "device discover\t | <Amount> \t\t\t\t | Discovers BTDevices\n";
-				std::cout << "device connect\t | <Id> \t\t\t\t | Connects to the device\n";
-				std::cout << "device auto\t | None \t\t\t\t | Discovers and connects automatically with the device\n";
-			}
-			else
-			{
-				//std::cout << "command not recognized\n";
-				system(command.c_str());
-			}
+				else exit(0);
 			std::cout << "\n";
 		}
 	}
