@@ -239,7 +239,7 @@ namespace LeHandUI
                 
                 if (Enumerable.Contains<ushort>(shortbuf, 0xFFFF))
                 {
-                    ProcessData(dataStream);
+                    //still shit to do
                 }
             }
         }

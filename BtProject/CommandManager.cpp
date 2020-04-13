@@ -109,7 +109,13 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
 		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandError"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
+		
+		while (1) {
+			short shortbuf[64];
+			service.DataGenerator((short**)&shortbuf);
 
+			WriteFile(keysend->datapipe, "Hello Pipe\n", 12, &keysend->dwdataread, NULL);
+		}
 		
 		std::string command;
 
