@@ -104,7 +104,8 @@ public:
 	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
 	void ApplyData(NormalData* Datain);
 
-	void DataGenerator();
+	int DataGenerator();
+	int DataGenerator(short**);
 
 	double* getDoubleDataFromBT(int* length);
 

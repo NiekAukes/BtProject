@@ -456,7 +456,7 @@ typedef DeviceDetails* lpDeviceDetails;
 	{
 	}
 
-	void BTService::DataGenerator()
+	int BTService::DataGenerator()
 	{
 		for (int k = 0; k < 1; k++)
 		{
@@ -480,6 +480,36 @@ typedef DeviceDetails* lpDeviceDetails;
 			NormalData* returnad = new NormalData();
 			ProcessData(returnad);
 			std::cout << returnad->finger->val << '\n';
+			return 0;
+		}
+	}
+	int BTService::DataGenerator(short** buf)
+	{
+		
+		std::vector<short> vshort;
+		for (int k = 0; k < 1; k++)
+		{
+			//int n = (rand() * 36 + 4) % 40;
+			int n = 7;
+
+			//Header
+			vshort.push_back(0x0001);
+			vshort.push_back(n - 3);
+			//Data
+			double val = rand();
+			for (int i = 0; i < n - 3; i++)
+			{
+				vshort.push_back(*((short*)&val + i));
+				std::cout << *((short*)&val + i) << '\n';
+			}
+			std::cout << '\n';
+			//Footer
+			vshort.push_back(0xFFFF);
+			*buf = new short[vshort.size()];
+			for (int i = 0; i < vshort.size(); i++) {
+				*(*buf + i) = vshort[i];
+			}
+			return vshort.size();
 		}
 	}
 

@@ -235,9 +235,11 @@ namespace LeHandUI
             dataStream.BeginRead(buf, 0, 1024, null, null);
             while (Active)
             {
-                if (buf.Length > 20)
+                ushort[] shortbuf = Array.ConvertAll(buf, c => (ushort)c);
+                
+                if (Enumerable.Contains<ushort>(shortbuf, 0xFFFF))
                 {
-                    ProcessData(dataStream);
+                    //still shit to do
                 }
             }
         }
@@ -274,7 +276,16 @@ namespace LeHandUI
         }
         public static status quit()
         {
-            return status.S_OK;
+
+            if (process != null)
+            {
+                process.StandardInput.WriteLine("quit");
+                return status.S_OK;
+            }
+            else
+            {
+                return status.S_Error;
+            }
         }
 
     }
