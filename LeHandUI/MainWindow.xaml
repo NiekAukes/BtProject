@@ -67,8 +67,7 @@
             Margin="20,0,0,0" xml:space="preserve" 
             SyntaxHighlighting="Lua">function Start()
     print("preview")
-end</avalonEdit:TextEditor>
-
+        end</avalonEdit:TextEditor>
     </Grid>
     
 </Window>

@@ -53,6 +53,7 @@ namespace LeHandUI
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon);
 
+			Communicator.Init();
 		}
 
 
