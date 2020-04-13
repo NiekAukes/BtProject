@@ -7,7 +7,7 @@
 	    xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:LeHandUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800" FontSize="20" FontFamily="Futura Lt BT">
+        Title="MainWindow" Height="600" Width="800" FontSize="25" FontFamily="Futura Lt BT">
     
     <Grid>
 
@@ -57,14 +57,12 @@
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor" FontFamily="Consolas" 
-            BorderThickness="1" BorderBrush="#212121" FontSize="12" 
+            BorderThickness="1" BorderBrush="#212121" FontSize="15" 
             Grid.Column="5" Grid.Row="3" Grid.RowSpan="2" 
             Margin="20,0,0,0" xml:space="preserve" 
             SyntaxHighlighting="Lua">function Start()
     print("preview")
-end
-        </avalonEdit:TextEditor>
-
+        end</avalonEdit:TextEditor>
     </Grid>
     
 </Window>
