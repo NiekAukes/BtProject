@@ -6,9 +6,12 @@
 	    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
 	    xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:LeHandUI"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800" FontSize="25" FontFamily="Futura Lt BT">
+        mc:Ignorable="d" Background="#2A2A2C"
+        Title="MainWindow" Height="600" Width="800" FontSize="25" 
+        FontFamily="Futura Lt BT" Foreground="#F2F2F2" >
     
+    <!--COLOUR SCHEME: #212121 , #065464 , #34acbc , #85c3cf , #7a7d84 
+                 very dark blue, dark blue, aqua,    pale aqua, greyish-->
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -29,21 +32,21 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" HorizontalAlignment="Center" FontSize="30" Margin="0,0,0,10" FontFamily="Futura Md BT"
+        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" HorizontalAlignment="Center" 
+                   Margin="0,0,0,10" FontFamily="Futura Md BT" Style="{StaticResource TitleFont}"
                    Text="Bluetooth Hand Controller"/>
 
 
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" FontFamily="Futura Hv BT"
-                   Text="Lua Files"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="4" 
-                   Margin="0,10,0,0" FontSize="20">
-            Test text<LineBreak/>
-            More test text
-        </TextBlock>
+        <!--<TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Style="{StaticResource TitleText}"
+                   Text="File Explorer"/>-->
+        <ListView Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="4" BorderThickness="1"
+                   Margin="0,5,0,0" Padding="5,5,5,5" FontSize="20" x:Name="LuaFileView" Background="#212121" BorderBrush="#F2F2F2"
+                  ItemsSource="{Binding Path=LuaFileNames, Mode=TwoWay}"/>
+        
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
-        <DockPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,10,0,0">
+        <DockPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,10,40,0">
 
-            <Button Style="{StaticResource TranspButton}"
+            <Button Style="{StaticResource TranspButton}" 
                 x:Name="AddButton">
                 <Image x:Name="PlusIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
@@ -51,23 +54,23 @@
                 x:Name="DeleteButton">
                 <Image x:Name="DeleteIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
-            <Button Style="{StaticResource TranspButton}"
+            <Button Style="{StaticResource TranspButton}" Margin="5,5,0,5"
                 x:Name="RefreshButton">
                 <Image x:Name="RefreshIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
         </DockPanel>
         <!--Dat waren alle buttons-->
-        <TextBlock Grid.Column="5" Grid.Row="2" HorizontalAlignment="Left" Margin="20,10,0,0" 
-                   Text="Lua Script Editor"/>
+        <TextBlock Grid.Column="5" Grid.Row="2" Margin="10,10,0,0" 
+                    Style="{StaticResource TitleText}" Text="Lua Script Editor"/>
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor" FontFamily="Consolas" 
-            BorderThickness="1" BorderBrush="#212121" FontSize="15" 
-            Grid.Column="5" Grid.Row="3" Grid.RowSpan="2" 
-            Margin="20,0,0,0" xml:space="preserve" 
+            BorderThickness="1" BorderBrush="#F2F2F2" FontSize="15"
+            Grid.Column="5" Grid.Row="3" Grid.RowSpan="2" Background="#212121" Foreground="#F2F2F2"
+            Margin="10,5,0,0" Padding="5,5,5,10" xml:space="preserve" 
             SyntaxHighlighting="Lua">function Start()
     print("preview")
-        end</avalonEdit:TextEditor>
+end</avalonEdit:TextEditor>
     </Grid>
     
 </Window>

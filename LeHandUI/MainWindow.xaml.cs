@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -19,6 +20,7 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 
+using System.Windows.UI.Viewmanagement;
 
 namespace LeHandUI
 {
@@ -42,8 +44,10 @@ namespace LeHandUI
 			}
 			finally { DeleteObject(handle); }
 		}
-
 		
+
+
+
 		public MainWindow()
 		{
 
@@ -53,9 +57,18 @@ namespace LeHandUI
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
 
-			Communicator.Init();
+			
+
+			//Communicator.Init();
+		}
+		private void ChangeTitleBarBackground()
+		{
+			var titleBar = ApplicationView.GetForCurrentView().TitleBar;
 		}
 
-
 	}
+	
 }
+
+
+	

@@ -5,6 +5,15 @@
              StartupUri="MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
+        
+
+        <Style x:Key="TitleFont" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="35"/>
+                <Setter Property="Foreground" Value="#F2F2F2"/>
+            </Style.Setters>
+        </Style>
+        
         <Style x:Key="TranspButton" TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Height" Value="16"/>
@@ -19,10 +28,15 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="TitleText" TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="Futura Md Bt"/>
-        </Style>
         
+        <Style x:Key="TitleText" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Foreground" Value="#34acbc"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="FontSize" Value="25"/>
+            </Style.Setters>
+        </Style>
+
         
     </Application.Resources>
 </Application>

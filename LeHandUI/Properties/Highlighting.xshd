@@ -9,34 +9,38 @@
   <Digits name = "Digits"
           bold = "false"
           italic = "false"
-          color = "Blue"/>
+          color = "#34acbc"/> <!--Nice Blue-->
 
   <RuleSets>
     <RuleSet ignorecase="false">
       <Delimiters>~@$%^&amp;*()+=|\[]{};"'&lt;&gt; ,#:	</Delimiters>
-
+      
+      <!--Greenish-->
       <Span name = "BlockComment"
             bold = "false"
             italic = "false"
-            color = "Green"
+            color = "#42E442" 
+            
             stopateol = "false">
         <Begin>--[[</Begin>
         <End>]]</End>
       </Span>
 
+      <!--Also green-->
       <Span name = "LineComment"
             bold = "false"
             italic = "false"
-            color = "Green"
-            stopateol = "true">
+            color = "#42E442"
+        stopateol = "true">
         <Begin>--</Begin>
       </Span>
 
+      <!--Red was default, now orangy-->
       <Span name = "String"
             bold = "false"
             italic = "false"
-            color = "Red"
-            stopateol = "true">
+            color = "#FF7138"
+        stopateol = "true">
         <Begin>"</Begin>
         <End>"</End>
       </Span>
@@ -70,10 +74,11 @@
         <Key word = "&amp;" />
       </KeyWords>
 
+      <!--Was blue, now purple-ish-->
       <KeyWords name = "Keywords"
                 bold="true"
                 italic="false"
-                color="Blue">
+                color="#BA60BA">
         <Key word = "and" />
         <Key word = "break" />
         <Key word = "do" />
@@ -96,16 +101,21 @@
         <Key word = "until" />
         <Key word = "while" />
       </KeyWords>
+      
+    <!-- Was purple, now yellow-ish -->
 	  <KeyWords name = "Keywords"
-                bold="true"
+                bold="false"
                 italic="false"
-                color="Purple">
+                color="#FFD959">
 				<Key word = "Update"/>
 				<Key word = "Kpress"/>
 				<Key word = "Mpress"/>
 				<Key word = "Exit"/>
 				<Key word = "Mmove"/>
-		</KeyWords>
+        <Key word = "Start"/>
+        <Key word = "Print"/>
+
+    </KeyWords>
     </RuleSet>
   </RuleSets>
 </SyntaxDefinition>
