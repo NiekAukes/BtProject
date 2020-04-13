@@ -130,6 +130,7 @@
     <None Include="obj\DeleteIcon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\RefreshIcon16x16.pdn" />
     <None Include="Resources\settings.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\RefreshIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RefreshIcon16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
