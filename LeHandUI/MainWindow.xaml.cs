@@ -47,6 +47,7 @@ namespace LeHandUI
 
 		public MainWindow()
 		{
+			Communicator.Init();
 			InitializeComponent();
 
 			//Alle icoontjes
@@ -54,7 +55,7 @@ namespace LeHandUI
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
 
-			//Communicator.Init();
+			
 		}
 		//Handlers for custom titlebar buttons
 		private void MinimizeWindow(object sender, EventArgs e){

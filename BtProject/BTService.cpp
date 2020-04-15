@@ -483,7 +483,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			return 0;
 		}
 	}
-	int BTService::DataGenerator(short** buf)
+	std::vector<short> BTService::GetGeneratedData()
 	{
 		
 		std::vector<short> vshort;
@@ -505,11 +505,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			std::cout << '\n';
 			//Footer
 			vshort.push_back(0xFFFF);
-			*buf = new short[vshort.size()];
-			for (int i = 0; i < vshort.size(); i++) {
-				*(*buf + i) = vshort[i];
-			}
-			return vshort.size();
+			return vshort;
 		}
 	}
 

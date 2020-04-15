@@ -73,7 +73,7 @@ namespace LeHandUI
             S_Error
         }
 
-        public static Process process = new Process();
+        public static Process process = null;
         public static string LatestLog = "";
         private static NamedPipeClientStream dataStream;
         private static NamedPipeClientStream errorStream;
@@ -193,6 +193,19 @@ namespace LeHandUI
 		}
 
         static byte[] buf = new byte[1024];
+        public static async Task DistributeData()
+        {
+            while (Active)
+            {
+                ushort[] shortbuf = Array.ConvertAll(buf, c => (ushort)c);
+
+                if (Enumerable.Contains<ushort>(shortbuf, 0xFFFF))
+                {
+                    //still shit to do
+                }
+            }
+        }
+        static Task distribution = null;
 		public static void Init()
         {
             //Process Device = new Process
@@ -204,7 +217,9 @@ namespace LeHandUI
             //        UseShellExecute = false
             //    }
             //};
-            
+            process = new Process();
+
+
             process.StartInfo.FileName = "LeHand.exe";
             process.StartInfo.CreateNoWindow = false;
             process.StartInfo.UseShellExecute = false;
@@ -233,15 +248,7 @@ namespace LeHandUI
             process.StandardInput.WriteLine("device discover");
 
             dataStream.BeginRead(buf, 0, 1024, null, null);
-            while (Active)
-            {
-                ushort[] shortbuf = Array.ConvertAll(buf, c => (ushort)c);
-                
-                if (Enumerable.Contains<ushort>(shortbuf, 0xFFFF))
-                {
-                    //still shit to do
-                }
-            }
+            distribution = DistributeData();
         }
         public class device
         {
