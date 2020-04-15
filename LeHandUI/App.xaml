@@ -6,6 +6,11 @@
              Exit="Application_Exit">
     <Application.Resources>
 
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#212121"/>
+            <Setter Property="Foreground" Value="#34acbc"/>
+        </Style>
+        
         <Style x:Key="TitleFont" TargetType="TextBlock">
             <Style.Setters>
                 <Setter Property="FontSize" Value="35"/>
@@ -56,7 +61,7 @@
 
 
 
-
+        <!--Custom title bar styles-->
         <Style x:Key="TitleBarButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{DynamicResource WindowTextBrush}" />
             <Setter Property="Padding" Value="0" />

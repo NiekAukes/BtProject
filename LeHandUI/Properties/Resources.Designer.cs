@@ -93,6 +93,16 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BTIconNew {
+            get {
+                object obj = ResourceManager.GetObject("BTIconNew", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BTProgramIcon {
             get {
                 object obj = ResourceManager.GetObject("BTProgramIcon", resourceCulture);
@@ -137,6 +147,16 @@ namespace LeHandUI.Properties {
             get {
                 object obj = ResourceManager.GetObject("Highlighting", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon {
+            get {
+                object obj = ResourceManager.GetObject("icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
