@@ -105,7 +105,7 @@ public:
 	void ApplyData(NormalData* Datain);
 
 	int DataGenerator();
-	int DataGenerator(short**);
+	std::vector<short> GetGeneratedData();
 
 	double* getDoubleDataFromBT(int* length);
 
