@@ -82,6 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="registry.cs" />
     <Compile Include="Communicator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -171,6 +172,9 @@
   <ItemGroup>
     <None Include="Resources\BTIconNew.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddReference16x16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -186,5 +190,4 @@
   </Target>
   <Import Project="..\packages\System.Runtime.WindowsRuntime.4.7.0\build\net45\System.Runtime.WindowsRuntime.targets" Condition="Exists('..\packages\System.Runtime.WindowsRuntime.4.7.0\build\net45\System.Runtime.WindowsRuntime.targets')" />
   <Import Project="..\packages\System.Runtime.WindowsRuntime.UI.Xaml.4.7.0\build\net45\System.Runtime.WindowsRuntime.UI.Xaml.targets" Condition="Exists('..\packages\System.Runtime.WindowsRuntime.UI.Xaml.4.7.0\build\net45\System.Runtime.WindowsRuntime.UI.Xaml.targets')" />
-
 </Project>

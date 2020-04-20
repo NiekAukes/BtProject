@@ -21,7 +21,6 @@ using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 
 
-
 namespace LeHandUI
 {
 	/// <summary>
@@ -45,6 +44,23 @@ namespace LeHandUI
 			finally { DeleteObject(handle); }
 		}
 
+		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
+		//DRIE FUNCTIES: ADD FILE, REMOVE FILE, REFRESH FILES
+
+		string[] LuaNames = {"Testfile.lua","TestFile2Shits.lua"};
+		private void AddLuaScript(object sender, EventArgs e){
+			return;
+		}
+		private void RemoveLuaScript(object sender, EventArgs e){
+			return;
+		}
+		private void RefreshLuaScript(object sender, EventArgs e){
+			LuaNames = LHregistry.GetAllFilenames();
+		}
+		private void AddReferenceScript(object sender, EventArgs e){
+			return;
+		}
+
 		public MainWindow()
 		{
 			//Communicator.Init();
@@ -54,6 +70,13 @@ namespace LeHandUI
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
+			AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
+
+
+			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
+
+			LuaFileView.ItemsSource = LuaNames;
+			
 		}
 		//Handlers for custom titlebar buttons
 		private void MinimizeWindow(object sender, EventArgs e){
