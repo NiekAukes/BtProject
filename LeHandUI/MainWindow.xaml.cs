@@ -58,8 +58,6 @@ namespace LeHandUI
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
-
-			
 		}
 		//Handlers for custom titlebar buttons
 		private void MinimizeWindow(object sender, EventArgs e){
