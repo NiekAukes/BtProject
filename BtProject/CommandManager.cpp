@@ -446,7 +446,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					system(command.c_str());
 				}
 			}
-				else exit(0);
+				else return;
 			std::cout << "\n";
 		}
 	}
