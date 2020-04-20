@@ -191,21 +191,27 @@ namespace LeHandUI
             }
 			return null;
 		}
-
+        static int shortsread = 0;
         static byte[] buf = new byte[1024];
-        public static async Task DistributeData()
+        public static void DistributeData()
         {
             while (Active)
             {
-                ushort[] shortbuf = Array.ConvertAll(buf, c => (ushort)c);
+                ushort[] shortbuf = new ushort[512];
+                for (int i = 0; i < 512; i++)
+                {
+                    shortbuf[i] = BitConverter.ToUInt16(buf, i * 2 + (shortsread % 1024));
+                }
 
-                if (Enumerable.Contains<ushort>(shortbuf, 0xFFFF))
+                if (Enumerable.Contains<ushort>(shortbuf, 65535))
                 {
                     //still shit to do
+
+                    shortsread += 7;
                 }
             }
         }
-        static Task distribution = null;
+        static Thread distribution = null;
 		public static void Init()
         {
             //Process Device = new Process
@@ -248,7 +254,8 @@ namespace LeHandUI
             process.StandardInput.WriteLine("device discover");
 
             dataStream.BeginRead(buf, 0, 1024, null, null);
-            distribution = DistributeData();
+            distribution = new Thread(DistributeData);
+            return;
         }
         public class device
         {

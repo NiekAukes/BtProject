@@ -66,6 +66,10 @@ namespace LeHandUI
 			//Communicator.Init();
 			InitializeComponent();
 
+			LHregistry.SetFile("test.txt", 1);
+			LHregistry.SetFile("testall.txt", 2);
+			string[] s = LHregistry.GetAllFilenames();
+
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
