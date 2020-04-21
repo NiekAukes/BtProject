@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace LeHandUI
 {
-    
+
     class LHregistry
     {
         static string keyName = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames";

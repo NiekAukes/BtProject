@@ -52,7 +52,14 @@ namespace LeHandUI
 		string[] LuaNames = {};
 		string SelectedItem = "";
 
-		
+		//check which list item is selected: LuaFileView.SelectedItem.ToString();
+		//check if doubleclicked: 
+
+		private void LoadLuaFile(object sender, EventArgs e){
+			SelectedItem = LuaFileView.SelectedItem.ToString();
+
+			//FileManager.LoadFile()
+		}
 
 		private void AddLuaScript(object sender, EventArgs e){
 			return;
