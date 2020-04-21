@@ -12,7 +12,7 @@ namespace LeHandUI
     }
     class FileManager
     {
-        static FileStream[] files = new FileStream[50];
+        public static FileStream[] files = new FileStream[50];
         /// <summary>
         /// creates new file, returns -1 if failed
         /// </summary>
@@ -28,19 +28,21 @@ namespace LeHandUI
             }
         }
 
-        public static int Addfile(string filepath)
+        /*public static int Addfile(string filepath)
         {
             for(int i = 0; i < 50; i++)
             {
-                if (!files[i].CanRead) {
+                if (files[i] == null) {
                     //open file
-                    files[i] = File.Create(filepath);
-                    LHregistry.SetFile(filepath, i);
+                    //string[] pathparts = filepath.Split('\\');
+                    //string newFilePath = ".\\Resources\\LuaFiles\\" + pathparts[(pathparts.Length - 1)];
+                    //files[i] = File.Create(newFilePath);
+                    //LHregistry.SetFile(newFilePath, i);
                     return i;
                 }
             }
             return -1;
-        }
+        }*/
 
         public static string LoadFile(int id) 
         {
@@ -55,7 +57,7 @@ namespace LeHandUI
 
         public static void Deletefile(int fileid)
         {
-            return;
+            LHregistry.RemoveFile(fileid);
         }
 
         public static int AddReference(string filepath)

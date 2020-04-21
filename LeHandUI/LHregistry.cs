@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,7 +66,16 @@ namespace LeHandUI
         public static void RemoveFile(int id)
         {
             RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\Filenames");
-            rk.DeleteValue(id.ToString());
+            string[] names = rk.GetValueNames();
+            if (File.Exists(names[id])){
+                rk.DeleteValue(id.ToString());
+            }
+            else
+            {
+                Console.WriteLine("File not found: " + names[id]);
+            }
+            
+            
         }
         public static string GetFile(int id)
         {

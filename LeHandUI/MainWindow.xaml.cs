@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -25,6 +26,7 @@ using Microsoft.Win32;
 
 namespace LeHandUI
 {
+	
 	/// <summary>
 	/// Interaction logic for Window1.xaml
 	/// </summary>
@@ -47,12 +49,14 @@ namespace LeHandUI
 		}
 
 		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-		//DRIE FUNCTIES: ADD FILE, REMOVE FILE, REFRESH FILES
+		//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
 		List<string> LuaNames = new List<string>();
-		int SelectedItemIndex;
 
-		//check which list item is selected: LuaFileView.SelectedItem.ToString();
-		//check if doubleclicked: 
+		Stopwatch refreshTimer = new Stopwatch();
+		int SelectedItemIndex;
+		long elapsedTime;
+		bool hasRefreshOccurredWithinSeconds = false;
+		
 
 		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
 			ListBox naam = (ListBox)(sender);
@@ -64,14 +68,47 @@ namespace LeHandUI
 			textEditor.Text = FileContents;
 		}
 
-		private void AddLuaScript(object sender, EventArgs e) {
-			return;
-		}
+		/*private void AddLuaScript(object sender, EventArgs e) {
+			string filePath = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames\\Testfile1.lua";
+			int newFileId = FileManager.Addfile(filePath);
+			LuaNames.Add(LHregistry.getSimpleName(filePath));
+			LuaFileView.Items.Refresh();
+		}*/
 		private void RemoveLuaScript(object sender, EventArgs e) {
-			return;
+			int idToBeRemoved = 80085; //some ridiculous number
+
+			/*
+			if (LuaFileView.SelectedIndex != -1) {
+				idToBeRemoved = (LuaFileView.SelectedIndex);
+				int[] allIds = LHregistry.GetAllFileIds();
+				if (allIds.Length > idToBeRemoved && idToBeRemoved != 80085) { //haha funni boob number
+					LHregistry.RemoveFile(allIds[idToBeRemoved]);
+					LuaNames = null;
+					LuaNames = new List<string>(LHregistry.GetAllFilenames());
+				}
+				else{}
+			}*/
+
+			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
+			LuaFileView.Items.Refresh();
+			
 		}
 		private void RefreshLuaScript(object sender, EventArgs e) {
-			LuaNames = new List<string>(LHregistry.GetAllFilenames());
+			
+			if (hasRefreshOccurredWithinSeconds == false) { //if the refresh has not occurred in x milliseconds
+				LuaNames = null;
+				LuaNames = new List<string>(LHregistry.GetAllFilenames());
+				int currentLuaNamesCount = LuaNames.Count;
+				for (int i = 0; i < currentLuaNamesCount; i++)
+				{
+					LuaNames.Add(LHregistry.getSimpleName(LuaNames[i]));
+				}
+				
+			}
+			else{}
+			hasRefreshOccurredWithinSeconds = true;
+
+			LuaFileView.Items.Refresh();
 		}
 		private void AddReferenceScript(object sender, EventArgs e) {
 			OpenFileDialog openFileExplorer = new OpenFileDialog()
@@ -80,8 +117,7 @@ namespace LeHandUI
 				CheckPathExists = true,
 				InitialDirectory = @"Documents",
 				ShowReadOnly = true,
-				DefaultExt = ".lua",
-				Filter = "Lua files (*.lua)|*.txt|All files (*.*)|*.*"
+				Filter = " All files(*.*) 'cuz .lua doesn't work|*.*"
 			};
 
 			Nullable<bool> result = openFileExplorer.ShowDialog();
@@ -90,8 +126,10 @@ namespace LeHandUI
 				string newFilePath = openFileExplorer.FileName;
 				int newFileId = FileManager.AddReference(newFilePath);
 				LuaNames.Add(LHregistry.getSimpleName(newFilePath));
-				LuaFileView.Items.Refresh();
+				
 			}
+
+			LuaFileView.Items.Refresh();
 		}
 
 		public MainWindow()
@@ -100,6 +138,7 @@ namespace LeHandUI
 			InitializeComponent();
 
 			FileManager.LoadAllFiles();
+			
 
 			LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
@@ -112,12 +151,30 @@ namespace LeHandUI
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
 			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
-			AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
+			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
 
 
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
-			
+
 			LuaFileView.ItemsSource = LuaNames;
+
+			
+
+			
+			/*while (!false)
+			{
+				if (hasRefreshOccurredWithinSeconds)
+				{
+					refreshTimer.Start();
+				}
+				else if(refreshTimer.ElapsedMilliseconds > 2000)
+				{
+					hasRefreshOccurredWithinSeconds = false;
+					refreshTimer.Stop();
+					refreshTimer.Reset();
+				}
+				else { }
+			}*/
 		}
 
 

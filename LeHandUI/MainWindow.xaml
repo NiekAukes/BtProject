@@ -86,11 +86,11 @@
                  Margin="0,5,0,0" Padding="5,5,5,5" FontSize="15" x:Name="LuaFileView" 
                  Background="#212121" BorderBrush="#F2F2F2" Foreground="#F2F2F2" 
                  FontFamily="Futura Lt BT" Control.MouseDoubleClick="LoadLuaFileFromSelectedObjectInList"/>
-
+        
         
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
         <DockPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,10,40,0">
-            <Button Style="{StaticResource TranspButton}"  Click="AddLuaScript"
+            <Button Style="{StaticResource TranspButton}"  Click="AddReferenceScript"
                 x:Name="AddButton">
                 <Image x:Name="PlusIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
@@ -99,13 +99,14 @@
                 <Image x:Name="DeleteIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
             <Button Style="{StaticResource TranspButton}" Click="RefreshLuaScript"
-                x:Name="RefreshButton" >
+                x:Name="RefreshButton" Margin="5,5,0,5">
                 <Image x:Name="RefreshIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
-            <Button Style="{StaticResource TranspButton}" Click="AddReferenceScript"
+            <!--<Button Style="{StaticResource TranspButton}" Click="AddReferenceScript"
                 x:Name="AddReferenceButton" Margin="5,5,0,5">
                 <Image x:Name="AddReferenceIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
-            </Button>
+            </Button> 
+            -->
         </DockPanel>
         <!--Dat waren alle buttons-->
         
