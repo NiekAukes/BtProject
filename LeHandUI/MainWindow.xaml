@@ -41,9 +41,9 @@
 
         <!--Custom title bar-->
         <Image
-		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
+		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
 		Width="46" Height="32" x:Name="ProgramIcon" Margin="5"
-		Panel.ZIndex="99999999" />
+		Panel.ZIndex="9999999" />
         <TextBlock Grid.Column="1" Margin="4,13,0,12"	VerticalAlignment="Center"
 		FontSize="14"
 		Text="{Binding WindowTitle}">

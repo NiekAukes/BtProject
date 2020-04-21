@@ -47,7 +47,11 @@ namespace LeHandUI
 		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
 		//DRIE FUNCTIES: ADD FILE, REMOVE FILE, REFRESH FILES
 
-		string[] LuaNames = {"Testfile.lua","TestFile2Shits.lua"};
+		string[] LuaNames = {};
+		string SelectedItem = "";
+
+		//Thread checkChangedThread = new Thread()
+
 		private void AddLuaScript(object sender, EventArgs e){
 			return;
 		}
@@ -66,9 +70,11 @@ namespace LeHandUI
 			//Communicator.Init();
 			InitializeComponent();
 
-			LHregistry.SetFile("test.txt", 1);
-			LHregistry.SetFile("testall.txt", 2);
-			string[] s = LHregistry.GetAllFilenames();
+			LHregistry.SetFile("test", 1);
+			LHregistry.SetFile("testall", 2);
+
+
+			LuaNames = LHregistry.GetAllFilenames();
 
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
@@ -81,7 +87,14 @@ namespace LeHandUI
 
 			LuaFileView.ItemsSource = LuaNames;
 			
+
 		}
+
+
+
+
+
+
 		//Handlers for custom titlebar buttons
 		private void MinimizeWindow(object sender, EventArgs e){
 			App.Current.MainWindow.WindowState = WindowState.Minimized;
