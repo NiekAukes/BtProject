@@ -18,6 +18,16 @@ namespace LeHandUI
         /// </summary>
         /// <param name="filepath">full path of </param>
         /// <returns></returns>
+        public static void LoadAllFiles()
+        {
+            string[] filenames = LHregistry.GetAllFilenames();
+            int[] fileids = LHregistry.GetAllFileIds();
+            for(int i = 0; i < fileids.Length; i++)
+            {
+                files[fileids[i]] = File.Open(filenames[i], FileMode.Open);
+            }
+        }
+
         public static int Addfile(string filepath)
         {
             for(int i = 0; i < 50; i++)
@@ -25,6 +35,7 @@ namespace LeHandUI
                 if (!files[i].CanRead) {
                     //open file
                     files[i] = File.Create(filepath);
+                    LHregistry.SetFile(filepath, i);
                     return i;
                 }
             }
@@ -44,7 +55,22 @@ namespace LeHandUI
 
         public static void Deletefile(int fileid)
         {
+            return;
+        }
 
+        public static int AddReference(string filepath)
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                if (files[i] == null)
+                {
+                    //open file
+                    files[i] = File.Open(filepath, FileMode.Open);
+                    LHregistry.SetFile(filepath, i);
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }

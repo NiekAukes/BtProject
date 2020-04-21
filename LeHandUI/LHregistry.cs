@@ -52,7 +52,9 @@ namespace LeHandUI
         }
         public static string getSimpleName(string strin)
         {
-            return null;
+            string[] strbits = strin.Split('\\');
+            string strbit = strbits[strbits.Length - 1];
+            return strbit;
         }
         public static void SetFile(string filename, int id)
         {
