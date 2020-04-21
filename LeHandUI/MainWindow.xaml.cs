@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -11,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+
 using System.Xml;
 
 using ICSharpCode.AvalonEdit.CodeCompletion;
@@ -50,7 +52,7 @@ namespace LeHandUI
 		string[] LuaNames = {};
 		string SelectedItem = "";
 
-		//Thread checkChangedThread = new Thread()
+		
 
 		private void AddLuaScript(object sender, EventArgs e){
 			return;
