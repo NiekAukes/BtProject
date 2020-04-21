@@ -103,6 +103,11 @@ namespace LeHandUI
 
 			LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
+			for(int i = 0; i < LuaNames.Count; i++)
+			{
+				LuaNames[i] = LHregistry.getSimpleName(LuaNames[i]);
+			}
+
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
@@ -111,7 +116,7 @@ namespace LeHandUI
 
 
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
-
+			
 			LuaFileView.ItemsSource = LuaNames;
 		}
 

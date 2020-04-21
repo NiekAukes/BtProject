@@ -313,7 +313,7 @@ typedef DeviceDetails* lpDeviceDetails;
 				std::cout << "failed to open key: " << lRes;
 		}
 		return 0;
-	}
+	} 
 
 	void receiver(bool* signal, SOCKET s, BTService* bts) 
 	{

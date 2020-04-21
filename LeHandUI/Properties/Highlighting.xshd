@@ -16,10 +16,11 @@
       <Delimiters>~@$%^&amp;*()+=|\[]{};"'&lt;&gt; ,#:	</Delimiters>
       
       <!--Greenish-->
+      <!--color = "#42E442" -->
       <Span name = "BlockComment"
             bold = "false"
             italic = "false"
-            color = "#42E442" 
+            color = "#238F23"
             
             stopateol = "false">
         <Begin>--[[</Begin>
@@ -30,7 +31,7 @@
       <Span name = "LineComment"
             bold = "false"
             italic = "false"
-            color = "#42E442"
+            color = "#238F23"
         stopateol = "true">
         <Begin>--</Begin>
       </Span>
@@ -48,7 +49,7 @@
       <KeyWords name = "Punctuation"
                 bold = "false"
                 italic = "false"
-                color = "DarkGreen">
+                color = "#C0C0C0">
         <Key word = "?" />
         <Key word = "," />
         <Key word = "." />
@@ -85,7 +86,6 @@
         <Key word = "else" />
         <Key word = "elseif" />
         <Key word = "end" />
-        <Key word = "false" />
         <Key word = "for" />
         <Key word = "function" />
         <Key word = "if" />
@@ -97,9 +97,17 @@
         <Key word = "repeat" />
         <Key word = "return" />
         <Key word = "then" />
-        <Key word = "true" />
         <Key word = "until" />
         <Key word = "while" />
+      </KeyWords>
+      
+      <KeyWords name = "KeywordValues"
+                bold="false"
+                italic="false"
+                color="#34acbc">
+        <Key word = "false" />
+        <Key word = "true" />
+        
       </KeyWords>
       
     <!-- Was purple, now yellow-ish -->
@@ -113,7 +121,7 @@
 				<Key word = "Exit"/>
 				<Key word = "Mmove"/>
         <Key word = "Start"/>
-        <Key word = "Print"/>
+        <Key word = "print"/>
 
     </KeyWords>
     </RuleSet>
