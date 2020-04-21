@@ -48,42 +48,60 @@ namespace LeHandUI
 
 		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
 		//DRIE FUNCTIES: ADD FILE, REMOVE FILE, REFRESH FILES
-
-		string[] LuaNames = {};
-		string SelectedItem = "";
+		List<string> LuaNames = new List<string>();
+		int SelectedItemIndex;
 
 		//check which list item is selected: LuaFileView.SelectedItem.ToString();
 		//check if doubleclicked: 
 
-		private void LoadLuaFile(object sender, EventArgs e){
-			SelectedItem = LuaFileView.SelectedItem.ToString();
+		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
+			ListBox naam = (ListBox)(sender);
+			SelectedItemIndex = naam.SelectedIndex;
+			int[] id = LHregistry.GetAllFileIds();
+			int ActualFileId = id[SelectedItemIndex];
 
-			//FileManager.LoadFile()
+			string FileContents = FileManager.LoadFile(ActualFileId);
+			textEditor.Text = FileContents;
 		}
 
-		private void AddLuaScript(object sender, EventArgs e){
+		private void AddLuaScript(object sender, EventArgs e) {
 			return;
 		}
-		private void RemoveLuaScript(object sender, EventArgs e){
+		private void RemoveLuaScript(object sender, EventArgs e) {
 			return;
 		}
-		private void RefreshLuaScript(object sender, EventArgs e){
-			LuaNames = LHregistry.GetAllFilenames();
+		private void RefreshLuaScript(object sender, EventArgs e) {
+			LuaNames = new List<string>(LHregistry.GetAllFilenames());
 		}
-		private void AddReferenceScript(object sender, EventArgs e){
-			return;
+		private void AddReferenceScript(object sender, EventArgs e) {
+			OpenFileDialog openFileExplorer = new OpenFileDialog()
+			{
+				CheckFileExists = true,
+				CheckPathExists = true,
+				InitialDirectory = @"Documents",
+				ShowReadOnly = true,
+				DefaultExt = ".lua",
+				Filter = "Lua files (*.lua)|*.txt|All files (*.*)|*.*"
+			};
+
+			Nullable<bool> result = openFileExplorer.ShowDialog();
+			if (result == true)
+			{
+				string newFilePath = openFileExplorer.FileName;
+				int newFileId = FileManager.AddReference(newFilePath);
+				LuaNames.Add(LHregistry.getSimpleName(newFilePath));
+				LuaFileView.Items.Refresh();
+			}
 		}
 
 		public MainWindow()
 		{
-			Communicator.Init();
+			//Communicator.Init();
 			InitializeComponent();
 
-			LHregistry.SetFile("test", 1);
-			LHregistry.SetFile("testall", 2);
+			FileManager.LoadAllFiles();
 
-
-			LuaNames = LHregistry.GetAllFilenames();
+			LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
@@ -95,10 +113,6 @@ namespace LeHandUI
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
 			LuaFileView.ItemsSource = LuaNames;
-
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.
-
 		}
 
 

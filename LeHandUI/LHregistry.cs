@@ -54,7 +54,8 @@ namespace LeHandUI
         {
             string[] strbits = strin.Split('\\');
             string strbit = strbits[strbits.Length - 1];
-            return null;
+
+            return strbit;
         }
         public static void SetFile(string filename, int id)
         {
