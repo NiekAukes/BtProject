@@ -12,13 +12,13 @@ namespace LeHandUI
     }
     class FileManager
     {
-        FileStream[] files = new FileStream[50];
+        static FileStream[] files = new FileStream[50];
         /// <summary>
         /// creates new file, returns -1 if failed
         /// </summary>
         /// <param name="filepath">full path of </param>
         /// <returns></returns>
-        int Addfile(string filepath)
+        public static int Addfile(string filepath)
         {
             for(int i = 0; i < 50; i++)
             {
@@ -26,12 +26,23 @@ namespace LeHandUI
                     //open file
                     files[i] = File.Create(filepath);
                     return i;
-
                 }
             }
             return -1;
         }
-        void Deletefile(int fileid)
+
+        public static string LoadFile(int id) 
+        {
+            string fileContents;
+            using (StreamReader reader = new StreamReader(files[id]))
+            {
+                fileContents = reader.ReadToEnd();
+            }
+
+            return fileContents;
+        }
+
+        public static void Deletefile(int fileid)
         {
 
         }
