@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LeHandUI
 {
+    struct FileData
+    {
+    }
     class FileManager
     {
         FileStream[] files = new FileStream[50];

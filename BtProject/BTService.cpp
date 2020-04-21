@@ -325,6 +325,7 @@ typedef DeviceDetails* lpDeviceDetails;
 				if (buf[i] != ' ') {
 					std::cout << buf[i];
 					bts->Data.push(buf[i]);
+
 				}
 				if (buf[i] == 0xff && buf[i + 1] == 0xff) {
 					bts->Data.push(buf[i]);
