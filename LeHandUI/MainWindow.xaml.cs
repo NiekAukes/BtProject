@@ -69,7 +69,7 @@ namespace LeHandUI
 
 		public MainWindow()
 		{
-			//Communicator.Init();
+			Communicator.Init();
 			InitializeComponent();
 
 			LHregistry.SetFile("test", 1);
