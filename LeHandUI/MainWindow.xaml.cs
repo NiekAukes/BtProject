@@ -95,7 +95,9 @@ namespace LeHandUI
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
 			LuaFileView.ItemsSource = LuaNames;
-			
+
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.
 
 		}
 

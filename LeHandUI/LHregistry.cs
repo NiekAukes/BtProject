@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace LeHandUI
 {
-
+    
     class LHregistry
     {
         static string keyName = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames";
@@ -52,6 +52,8 @@ namespace LeHandUI
         }
         public static string getSimpleName(string strin)
         {
+            string[] strbits = strin.Split('\\');
+            string strbit = strbits[strbits.Length - 1];
             return null;
         }
         public static void SetFile(string filename, int id)
