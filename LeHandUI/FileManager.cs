@@ -47,12 +47,11 @@ namespace LeHandUI
         public static string LoadFile(int id) 
         {
             string fileContents = "";
-            if (files != null)
+            if (files[id].CanRead)
             {
-                using (StreamReader reader = new StreamReader(files[id]))
-                {
-                    fileContents = reader.ReadToEnd();
-                }
+                StreamReader reader = new StreamReader(files[id]);
+                fileContents = reader.ReadToEnd();
+                reader.Dispose();
             }
             else
             {

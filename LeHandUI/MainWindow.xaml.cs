@@ -64,7 +64,8 @@ namespace LeHandUI
 			int ActualFileId = id[SelectedItemIndex];
 
 			string FileContents = FileManager.LoadFile(ActualFileId);
-			textEditor.Text = FileContents;
+			if (FileContents != null)
+				textEditor.Text = FileContents;
 		}
 		/*private void AddLuaScript(object sender, EventArgs e) {
 			string filePath = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames\\Testfile1.lua";
