@@ -176,6 +176,24 @@
   <ItemGroup>
     <None Include="Resources\AddReference16x16.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AQUA_RefreshIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PALE_GREEN_AddIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PALE_PURPLE_AddReference16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveScript16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StartScript16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WASHED_OUT_RED_DeleteIcon16x16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

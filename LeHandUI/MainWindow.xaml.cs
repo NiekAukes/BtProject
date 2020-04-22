@@ -54,7 +54,6 @@ namespace LeHandUI
 
 		Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
-		long elapsedTime;
 		bool hasRefreshOccurredWithinSeconds = false;
 		int currentSelectedId = -1;
 
@@ -67,7 +66,6 @@ namespace LeHandUI
 			string FileContents = FileManager.LoadFile(ActualFileId);
 			textEditor.Text = FileContents;
 		}
-
 		/*private void AddLuaScript(object sender, EventArgs e) {
 			string filePath = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames\\Testfile1.lua";
 			int newFileId = FileManager.Addfile(filePath);
@@ -130,6 +128,15 @@ namespace LeHandUI
 
 			LuaFileView.Items.Refresh();
 		}
+		private void SaveScript(object sender, EventArgs e)
+		{
+			return;
+		}
+		private void RunLuaScript(object sender, EventArgs e)
+		{
+			return;
+		}
+
 
 		public MainWindow()
 		{
@@ -147,11 +154,12 @@ namespace LeHandUI
 			}
 
 			//Alle icoontjes
-			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddIcon16x16);
-			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.DeleteIcon16x16);
-			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshIcon16x16);
+			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon16x16);
+			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon16x16);
+			RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AQUA_RefreshIcon16x16);
 			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
-
+			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript16x16);
+			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript16x16);
 
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
