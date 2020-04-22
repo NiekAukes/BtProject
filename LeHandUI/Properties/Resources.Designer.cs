@@ -63,26 +63,6 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AddIcon {
-            get {
-                object obj = ResourceManager.GetObject("AddIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap AddIcon1 {
-            get {
-                object obj = ResourceManager.GetObject("AddIcon1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap AddIcon16x16 {
             get {
                 object obj = ResourceManager.GetObject("AddIcon16x16", resourceCulture);
@@ -113,39 +93,19 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AQUA_RefreshIcon64x64 {
+            get {
+                object obj = ResourceManager.GetObject("AQUA_RefreshIcon64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BTIconNew {
             get {
                 object obj = ResourceManager.GetObject("BTIconNew", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BTProgramIcon {
-            get {
-                object obj = ResourceManager.GetObject("BTProgramIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DeleteIcon {
-            get {
-                object obj = ResourceManager.GetObject("DeleteIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DeleteIcon1 {
-            get {
-                object obj = ResourceManager.GetObject("DeleteIcon1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,29 +153,19 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PALE_GREEN_AddIcon64x64 {
+            get {
+                object obj = ResourceManager.GetObject("PALE_GREEN_AddIcon64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PALE_PURPLE_AddReference16x16 {
             get {
                 object obj = ResourceManager.GetObject("PALE_PURPLE_AddReference16x16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap RefreshIcon {
-            get {
-                object obj = ResourceManager.GetObject("RefreshIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap RefreshIcon1 {
-            get {
-                object obj = ResourceManager.GetObject("RefreshIcon1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -236,6 +186,16 @@ namespace LeHandUI.Properties {
         internal static System.Drawing.Bitmap SaveScript16x16 {
             get {
                 object obj = ResourceManager.GetObject("SaveScript16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SaveScript64x64 {
+            get {
+                object obj = ResourceManager.GetObject("SaveScript64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -262,9 +222,19 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap WASHED_OUT_RED_DeleteIcon16x16 {
+        internal static System.Drawing.Bitmap StartScript64x64 {
             get {
-                object obj = ResourceManager.GetObject("WASHED_OUT_RED_DeleteIcon16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("StartScript64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WASHED_OUT_RED_DeleteIcon64x64 {
+            get {
+                object obj = ResourceManager.GetObject("WASHED_OUT_RED_DeleteIcon64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
