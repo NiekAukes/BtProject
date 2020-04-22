@@ -103,6 +103,16 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AQUA_RefreshIcon16x16 {
+            get {
+                object obj = ResourceManager.GetObject("AQUA_RefreshIcon16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BTIconNew {
             get {
                 object obj = ResourceManager.GetObject("BTIconNew", resourceCulture);
@@ -173,6 +183,26 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PALE_GREEN_AddIcon16x16 {
+            get {
+                object obj = ResourceManager.GetObject("PALE_GREEN_AddIcon16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PALE_PURPLE_AddReference16x16 {
+            get {
+                object obj = ResourceManager.GetObject("PALE_PURPLE_AddReference16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap RefreshIcon {
             get {
                 object obj = ResourceManager.GetObject("RefreshIcon", resourceCulture);
@@ -201,11 +231,41 @@ namespace LeHandUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SaveScript16x16 {
+            get {
+                object obj = ResourceManager.GetObject("SaveScript16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string settings {
             get {
                 return ResourceManager.GetString("settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap StartScript16x16 {
+            get {
+                object obj = ResourceManager.GetObject("StartScript16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WASHED_OUT_RED_DeleteIcon16x16 {
+            get {
+                object obj = ResourceManager.GetObject("WASHED_OUT_RED_DeleteIcon16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
