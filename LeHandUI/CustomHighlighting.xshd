@@ -27,8 +27,8 @@
 			<Word>AvalonEdit</Word>
 		</Keywords>
 		
-		<!-- Digits -->
-		<Rule foreground="DarkBlue">
+		<!-- Digits colour fist was DarkBlue, now hex colour representing pale light blue-->
+		<Rule foreground="#1CB3FF"> 
             \b0[xX][0-9a-fA-F]+  # hex number
         |    \b
             (    \d+(\.[0-9]+)?   #number with optional floating point
