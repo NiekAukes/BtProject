@@ -65,15 +65,9 @@ namespace LeHandUI
 
         public static void RemoveFile(int id)
         {
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\Filenames");
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\Filenames", true);
             string[] names = rk.GetValueNames();
-            if (File.Exists(names[id])){
-                rk.DeleteValue(id.ToString());
-            }
-            else
-            {
-                Console.WriteLine("File not found: " + names[id]);
-            }
+            rk.DeleteValue(names[id]);
             
             
         }

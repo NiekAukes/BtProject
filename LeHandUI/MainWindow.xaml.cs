@@ -50,7 +50,7 @@ namespace LeHandUI
 
 		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
 		//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-		List<string> LuaNames = new List<string>();
+		//List<string> LuaNames = new List<string>();
 
 		Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
@@ -76,16 +76,19 @@ namespace LeHandUI
 		}*/
 		private void RemoveLuaScript(object sender, EventArgs e) {
 			int idToBeRemoved = -1; //some ridiculous number
+
 			if (LuaFileView.SelectedIndex != -1) {
+
 				idToBeRemoved = (LuaFileView.SelectedIndex);
 				int[] allIds = LHregistry.GetAllFileIds();
+
 				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1) {
 					LHregistry.RemoveFile(allIds[idToBeRemoved]);
-					LuaNames = new List<string>(LHregistry.GetAllFilenames());
-					//LuaFileView.Items.Remove(LuaFileView.SelectedItem.ToString());
-					LuaFileView.UpdateLayout();
+
+
+
+					LuaFileView.Items.RemoveAt(idToBeRemoved);
 				}
-				else { }
 			}
 
 			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
@@ -95,19 +98,17 @@ namespace LeHandUI
 		private void RefreshLuaScript(object sender, EventArgs e) {
 			
 			if (hasRefreshOccurredWithinSeconds == false) { //if the refresh has not occurred in x milliseconds
-				LuaNames = null;
-				LuaNames = new List<string>(LHregistry.GetAllFilenames());
-				int currentLuaNamesCount = LuaNames.Count;
-				for (int i = 0; i < currentLuaNamesCount; i++)
+				List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
+				for (int i = 0; i < LuaNames.Count; i++)
 				{
 					LuaNames.Add(LHregistry.getSimpleName(LuaNames[i]));
+					LuaFileView.Items.Add(LuaNames[i]);
 				}
 				
 			}
 			else{}
 			hasRefreshOccurredWithinSeconds = true;
 
-			LuaFileView.Items.Refresh();
 		}
 		private void AddReferenceScript(object sender, EventArgs e) {
 			OpenFileDialog openFileExplorer = new OpenFileDialog()
@@ -124,11 +125,10 @@ namespace LeHandUI
 			{
 				string newFilePath = openFileExplorer.FileName;
 				int newFileId = FileManager.AddReference(newFilePath);
-				LuaNames.Add(LHregistry.getSimpleName(newFilePath));
+				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
 				
 			}
 
-			LuaFileView.Items.Refresh();
 		}
 
 		public MainWindow()
@@ -139,11 +139,12 @@ namespace LeHandUI
 			FileManager.LoadAllFiles();
 			
 
-			LuaNames = new List<string>(LHregistry.GetAllFilenames());
+			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
 			for(int i = 0; i < LuaNames.Count; i++)
 			{
 				LuaNames[i] = LHregistry.getSimpleName(LuaNames[i]);
+				LuaFileView.Items.Add(LuaNames[i]);
 			}
 
 			//Alle icoontjes
@@ -155,7 +156,7 @@ namespace LeHandUI
 
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
-			LuaFileView.ItemsSource = LuaNames;
+			
 
 			
 
