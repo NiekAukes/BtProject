@@ -56,7 +56,7 @@ namespace LeHandUI
 		int SelectedItemIndex;
 		long elapsedTime;
 		bool hasRefreshOccurredWithinSeconds = false;
-		
+		int currentSelectedId = -1;
 
 		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
 			ListBox naam = (ListBox)(sender);
@@ -75,19 +75,18 @@ namespace LeHandUI
 			LuaFileView.Items.Refresh();
 		}*/
 		private void RemoveLuaScript(object sender, EventArgs e) {
-			int idToBeRemoved = 80085; //some ridiculous number
-
-			/*
+			int idToBeRemoved = -1; //some ridiculous number
 			if (LuaFileView.SelectedIndex != -1) {
 				idToBeRemoved = (LuaFileView.SelectedIndex);
 				int[] allIds = LHregistry.GetAllFileIds();
-				if (allIds.Length > idToBeRemoved && idToBeRemoved != 80085) { //haha funni boob number
+				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1) {
 					LHregistry.RemoveFile(allIds[idToBeRemoved]);
-					LuaNames = null;
 					LuaNames = new List<string>(LHregistry.GetAllFilenames());
+					//LuaFileView.Items.Remove(LuaFileView.SelectedItem.ToString());
+					LuaFileView.UpdateLayout();
 				}
-				else{}
-			}*/
+				else { }
+			}
 
 			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
 			LuaFileView.Items.Refresh();
