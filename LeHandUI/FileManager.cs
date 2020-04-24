@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace LeHandUI
 {
@@ -12,7 +13,8 @@ namespace LeHandUI
     }
     class FileManager
     {
-        public static FileStream[] files = new FileStream[50];
+        public static string[] files = new string[50];
+        public static int currentFile = -1;
         /// <summary>
         /// creates new file, returns -1 if failed
         /// </summary>
@@ -20,11 +22,12 @@ namespace LeHandUI
         /// <returns></returns>
         public static void LoadAllFiles()
         {
+            
             string[] filenames = LHregistry.GetAllFilenames();
             int[] fileids = LHregistry.GetAllFileIds();
-            for(int i = 0; i < fileids.Length; i++)
+            for (int i = 0; i < fileids.Length; i++)
             {
-                files[fileids[i]] = File.Open(filenames[i], FileMode.Open);
+                files[fileids[i]] = LHregistry.GetFile(fileids[i]);
             }
         }
 
@@ -46,18 +49,24 @@ namespace LeHandUI
 
         public static string LoadFile(int id) 
         {
+
+            //load new file
             string fileContents = "";
-            if (files[id].CanRead)
+            byte[] cont = new byte[files[id].Length];
+            if (files[id] != null)
             {
-                StreamReader reader = new StreamReader(files[id]);
+                FileStream stream = File.OpenRead(LHregistry.GetFile(id));
+                StreamReader reader = new StreamReader(stream);
                 fileContents = reader.ReadToEnd();
-                reader.Dispose();
+                reader.Close();
+                stream.Close();
+
             }
             else
             {
                 return null;
             }
-
+            currentFile = id;
             return fileContents;
         }
 
@@ -73,7 +82,7 @@ namespace LeHandUI
                 if (files[i] == null)
                 {
                     //open file
-                    files[i] = File.Open(filepath, FileMode.Open);
+                    files[i] = filepath;
                     LHregistry.SetFile(filepath, i);
                     return i;
                 }
