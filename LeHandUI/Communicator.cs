@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Security.Principal;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace LeHandUI
 {
@@ -57,6 +58,15 @@ namespace LeHandUI
         public int id;
         public double val;
 	}
+    public static class CommunicatorHelper
+    {
+        public static T[] SubArray<T>(this T[] data, int index, int length)
+        {
+            T[] result = new T[length];
+            Array.Copy(data, index, result, 0, length);
+            return result;
+        }
+    }
     public class Communicator
     {
         enum Expectedtype
@@ -81,12 +91,10 @@ namespace LeHandUI
 
 
         static bool Active = true;
-        public static DataPacket ProcessData(Stream stream)
+        
+        public static DataPacket ProcessData(ushort[] data)
         {
-            StreamString streamString = new StreamString(stream);
-            char[] str = streamString.ReadString().ToCharArray();
-            short[] AShort = Array.ConvertAll(str, c => (short)Char.GetNumericValue(c));
-            List<short> Data = new List<short>(AShort);
+            List<ushort> Data = new List<ushort>(data);
             /*
 				Data format: uses 16 bit data chunks
 					--Header
@@ -104,18 +112,17 @@ namespace LeHandUI
 
             
             int datlen = Data.Count;
-            short Length = -1;
-			short Protocol = -1;
+            ushort Length = 65535;
+			ushort Protocol = 65535;
 			ushort[] databuf = { 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF };
 			DataPacket ret = new DataPacket();
             while (Active)
             {
-                Debug.WriteLine(str);
-                
-                /*
-                 if (datlen != 0)
+
+
+                if (datlen != 0)
                 {
-                    short chunk = Data[0]; Data.RemoveAt(datlen - 1);
+                    ushort chunk = Data[0]; Data.RemoveAt(0);
                     datlen = Data.Count;
 
                     if (expected == Expectedtype.Protocol)
@@ -172,12 +179,13 @@ namespace LeHandUI
                                 //ret.finger->val = *value;
                                 //if (out != nullptr)
                                 //*out = ret;
-                                byte[] bytes = new byte[8];
+                                IEnumerable<byte> ex = new byte[0];
                                 foreach (ushort s in databuf)
                                 {
-                                    bytes.Concat(BitConverter.GetBytes(s));
+                                    byte[] con = BitConverter.GetBytes(s);
+                                    ex = ex.Concat(con);
                                 }
-                                ret.val = BitConverter.ToDouble(bytes, 0);
+                                ret.val = BitConverter.ToDouble(ex.ToArray(), 0);
                                 return ret;
                             }
                         }
@@ -187,28 +195,46 @@ namespace LeHandUI
                 else
                 {
                     return null;
-                }*/
+                }
             }
 			return null;
 		}
         static int shortsread = 0;
+        static int charsread = 0;
         static byte[] buf = new byte[1024];
+        static IAsyncResult readres;
         public static void DistributeData()
         {
             while (Active)
             {
+                dataStream.EndRead(readres);
                 ushort[] shortbuf = new ushort[512];
                 for (int i = 0; i < 512; i++)
                 {
-                    shortbuf[i] = BitConverter.ToUInt16(buf, i * 2 + (shortsread % 1024));
+                    shortbuf[i] = BitConverter.ToUInt16(buf, (i * 2 + shortsread) % 1023);
                 }
 
                 if (Enumerable.Contains<ushort>(shortbuf, 65535))
                 {
                     //still shit to do
-
+                    ushort[] dat = CommunicatorHelper.SubArray<ushort>(shortbuf, 0, 7);
+                    DataPacket pack = ProcessData(dat);
                     shortsread += 7;
+                    if (pack != null)
+                        Debug.WriteLine("detected a new message" + pack.val.ToString()); 
                 }
+                else
+                {
+
+                }
+
+                for (int i = 0; i < 1024; i++)
+                {
+
+                }
+                readres = dataStream.BeginRead(buf, 0, 1024, null, null);
+
+                Thread.Sleep(200);
             }
         }
         static Thread distribution = null;
@@ -253,8 +279,9 @@ namespace LeHandUI
 
             process.StandardInput.WriteLine("device discover");
 
-            dataStream.BeginRead(buf, 0, 1024, null, null);
-            distribution = new Thread(DistributeData);
+            readres = dataStream.BeginRead(buf, 0, 1024, null, null);
+            distribution = new Thread(new ThreadStart(DistributeData));
+            distribution.Start();
             return;
         }
         public class device

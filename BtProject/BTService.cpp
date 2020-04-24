@@ -484,6 +484,13 @@ typedef DeviceDetails* lpDeviceDetails;
 			return 0;
 		}
 	}
+
+	double fRand(double fMin, double fMax)
+	{
+		double f = (double)rand() / RAND_MAX;
+		return fMin + f * (fMax - fMin);
+	}
+
 	std::vector<short> BTService::GetGeneratedData()
 	{
 		
@@ -497,7 +504,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			vshort.push_back(0x0001);
 			vshort.push_back(n - 3);
 			//Data
-			double val = rand();
+			double val = fRand(0.0,1.0);
 			for (int i = 0; i < n - 3; i++)
 			{
 				vshort.push_back(*((short*)&val + i));
