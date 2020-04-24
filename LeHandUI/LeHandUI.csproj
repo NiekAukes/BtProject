@@ -128,12 +128,6 @@
     <None Include="AddIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DeleteIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="RefreshIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="obj\RefreshIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -147,52 +141,52 @@
     <None Include="Resources\settings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AddIcon.png" />
+    <None Include="Resources\Icons\BTIconNew.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DeleteIcon.png" />
+    <None Include="Resources\Icons\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RefreshIcon.png" />
+    <None Include="Resources\Icons\icon16\AddIcon16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AddIcon16x16.png" />
+    <None Include="Resources\Icons\icon16\AddReference16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DeleteIcon16x16.png" />
+    <None Include="Resources\Icons\icon16\AQUA_RefreshIcon16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RefreshIcon16x16.png" />
+    <None Include="Resources\Icons\icon16\DeleteIcon16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BTProgramIcon.png" />
+    <None Include="Resources\Icons\icon16\PALE_GREEN_AddIcon16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icon.png" />
+    <None Include="Resources\Icons\icon16\PALE_PURPLE_AddReference16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BTIconNew.png" />
+    <None Include="Resources\Icons\icon16\RefreshIcon16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AddReference16x16.png" />
+    <None Include="Resources\Icons\icon16\SaveScript16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AQUA_RefreshIcon16x16.png" />
+    <None Include="Resources\Icons\icon16\StartScript16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PALE_GREEN_AddIcon16x16.png" />
+    <None Include="Resources\Icons\icon64\AQUA_RefreshIcon64x64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PALE_PURPLE_AddReference16x16.png" />
+    <None Include="Resources\Icons\icon64\PALE_GREEN_AddIcon64x64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SaveScript16x16.png" />
+    <None Include="Resources\Icons\icon64\SaveScript64x64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\StartScript16x16.png" />
+    <None Include="Resources\Icons\icon64\StartScript64x64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\WASHED_OUT_RED_DeleteIcon16x16.png" />
+    <None Include="Resources\Icons\icon64\WASHED_OUT_RED_DeleteIcon64x64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
