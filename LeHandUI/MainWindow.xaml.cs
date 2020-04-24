@@ -165,25 +165,6 @@ namespace LeHandUI
 
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
-			
-
-			
-
-			
-			/*while (!false)
-			{
-				if (hasRefreshOccurredWithinSeconds)
-				{
-					refreshTimer.Start();
-				}
-				else if(refreshTimer.ElapsedMilliseconds > 2000)
-				{
-					hasRefreshOccurredWithinSeconds = false;
-					refreshTimer.Stop();
-					refreshTimer.Reset();
-				}
-				else { }
-			}*/
 		}
 
 
