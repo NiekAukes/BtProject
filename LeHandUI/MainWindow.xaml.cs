@@ -74,7 +74,7 @@ namespace LeHandUI
 			LuaFileView.Items.Refresh();
 		}*/
 		private void RemoveLuaScript(object sender, EventArgs e) {
-			int idToBeRemoved = -1; //some ridiculous number
+			int idToBeRemoved = -1; //some ridiculous number, i. e. -1 just isn't possible
 
 			if (LuaFileView.SelectedIndex != -1) {
 
