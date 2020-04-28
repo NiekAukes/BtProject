@@ -26,10 +26,6 @@ using Microsoft.Win32;
 
 namespace LeHandUI
 {
-	
-	/// <summary>
-	/// Interaction logic for Window1.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -55,7 +51,6 @@ namespace LeHandUI
 		Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
 		bool hasRefreshOccurredWithinSeconds = false;
-		int currentSelectedId = -1;
 
 		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
 			ListBox naam = (ListBox)(sender);
@@ -174,8 +169,9 @@ namespace LeHandUI
 
 
 
-		//Handlers for custom titlebar buttons
-		private void MinimizeWindow(object sender, EventArgs e){
+        //Handlers for custom titlebar buttons
+        #region TitleBarButtonHandlers
+        private void MinimizeWindow(object sender, EventArgs e){
 			App.Current.MainWindow.WindowState = WindowState.Minimized;
 		}
 		private void MaximizeWindow(object sender, EventArgs e){
@@ -195,5 +191,6 @@ namespace LeHandUI
 		{
 			this.DragMove();
 		}
+		#endregion
 	}
 }
