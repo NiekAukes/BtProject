@@ -135,6 +135,8 @@ namespace LeHandUI
 		}
 		private void RunLuaScript(object sender, EventArgs e)
 		{
+			Startwindow sw = new Startwindow();
+			sw.Show();
 			return;
 		}
 
