@@ -100,13 +100,37 @@
         <Key word = "until" />
         <Key word = "while" />
       </KeyWords>
-      
+
       <KeyWords name = "KeywordValues"
                 bold="false"
                 italic="false"
                 color="#34acbc">
         <Key word = "false" />
         <Key word = "true" />
+      </KeyWords>
+      <KeyWords name = "ConstValues"
+                bold="false"
+                italic="false"
+                color="#9884f0">
+        <Key word = "LF" />
+        <Key word = "RF" />
+        <Key word = "MF" />
+        <Key word = "IF" />
+        <Key word = "Th" />
+        <Key word = "AX" />
+        <Key word = "AY" />
+        <Key word = "AZ" />
+        <Key word = "RY" />
+        <Key word = "Button_MLD" />
+        <Key word = "Button_MLU" />
+        <Key word = "Button_MRD" />
+        <Key word = "Button_MRU" />
+        <Key word = "Button_MMD" />
+        <Key word = "Button_MMU" />
+        <Key word = "Button_MXD" />
+        <Key word = "Button_MXU" />
+        <Key word = "Button_MFW" />
+        <Key word = "Button_MFHW" />
         
       </KeyWords>
       

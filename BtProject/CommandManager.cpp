@@ -96,7 +96,7 @@ void doData(BTService service, Keysender* keysend) {
 		}
 
 		WriteFile(keysend->datapipe, (char*)sdat, dat.size() * 2, &keysend->dwdataread, NULL);
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
 }
 
@@ -115,6 +115,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 #endif
 		}
 		BTService service;
+
+		//set title
+		SetConsoleTitleW(L"LeHand");
 
 		//setup pipes
 		keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandData"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,

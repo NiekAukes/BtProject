@@ -30,7 +30,6 @@ public:
 
 		}
 		return inst;
-		
 	}
 	void loadbtdfile(std::string arg1);
 	void loadluafile(std::string arg1);

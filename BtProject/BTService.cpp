@@ -508,9 +508,8 @@ typedef DeviceDetails* lpDeviceDetails;
 			for (int i = 0; i < n - 3; i++)
 			{
 				vshort.push_back(*((short*)&val + i));
-				std::cout << *((short*)&val + i) << '\n';
 			}
-			std::cout << '\n';
+			std::cout << "sent: " << val << '\n';
 			//Footer
 			vshort.push_back(0xFFFF);
 			return vshort;

@@ -143,7 +143,7 @@ namespace LeHandUI
 
 		public MainWindow()
 		{
-			//Communicator.Init();
+			Communicator.Init();
 			InitializeComponent();
 
 			FileManager.LoadAllFiles();
