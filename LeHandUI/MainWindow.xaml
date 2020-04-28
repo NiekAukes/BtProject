@@ -17,7 +17,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
@@ -80,32 +80,36 @@
         </Button>
         <!--end of custom titlebar -->
 
-        
+
         <!--List of all lua files-->
-        <ListBox Grid.Row="3" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="3" BorderThickness="1"
-                 Margin="0,5,0,0" Padding="5,5,5,5" FontSize="15" x:Name="LuaFileView" 
+        <ListBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="5" BorderThickness="1"
+                 Margin="20,5,0,0" Padding="5,5,5,5" FontSize="15" x:Name="LuaFileView" 
                  Background="#212121" BorderBrush="#F2F2F2" Foreground="#F2F2F2" 
                  FontFamily="Futura Lt BT" Control.MouseDoubleClick="LoadLuaFileFromSelectedObjectInList"/>
-        
-        
+
+
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
-        <DockPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,10,40,0">
+        <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="20,10,40,0">
             <Button Style="{StaticResource TranspButton}"  Click="AddReferenceScript"
                     ToolTipService.InitialShowDelay="2000"
                     ToolTipService.ShowDuration="2000"
-                    ToolTipService.BetweenShowDelay="10000"
+                    ToolTipService.BetweenShowDelay="1000"
                     ToolTip="Add Reference"
                 x:Name="AddButton">
-                <Image x:Name="PlusIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
+                <Image x:Name="PlusIcon" Height="16" Width="auto" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </Button>
             <Button Style="{StaticResource TranspButton}" Click="RemoveLuaScript"
-                x:Name="DeleteButton">
+                x:Name="DeleteButton"
+                    ToolTipService.InitialShowDelay="2000"
+                    ToolTipService.ShowDuration="2000"
+                    ToolTipService.BetweenShowDelay="1000"
+                    ToolTip="Remove Selected File">
                 <Image x:Name="DeleteIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
             </Button>
-            <Button Style="{StaticResource TranspButton}" Click="RefreshLuaScript"
+            <!--<Button Style="{StaticResource TranspButton}" Click="RefreshLuaScript"
                 x:Name="RefreshButton" Margin="5,5,0,5">
                 <Image x:Name="RefreshIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
-            </Button>
+            </Button>-->
             <!--<Button Style="{StaticResource TranspButton}" Click="AddReferenceScript"
                 x:Name="AddReferenceButton" Margin="5,5,0,5">
                 <Image x:Name="AddReferenceIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
@@ -128,7 +132,7 @@
                     Click="RunLuaScript" HorizontalAlignment="Left">
                 <Image x:Name="RunPrgmIcon" Width="auto" Height="auto"/>
             </Button>
-            
+
         </DockPanel>
 
 
