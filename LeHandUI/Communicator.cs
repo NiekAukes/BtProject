@@ -207,7 +207,7 @@ namespace LeHandUI
         {
             while (Active)
             {
-                dataStream.EndRead(readres);
+                //dataStream.EndRead(readres);
                 ushort[] shortbuf = new ushort[512];
                 for (int i = 0; i < 512; i++)
                 {
@@ -232,7 +232,7 @@ namespace LeHandUI
                 {
 
                 }
-                readres = dataStream.BeginRead(buf, 0, 1024, null, null);
+                //readres = dataStream.BeginRead(buf, 0, 1024, null, null);
 
                 Thread.Sleep(200);
             }
@@ -252,22 +252,24 @@ namespace LeHandUI
             process = new Process();
 
 
-            process.StartInfo.FileName = "LeHand.exe";
-            process.StartInfo.CreateNoWindow = false;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = false;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.RedirectStandardInput = true;
-            process.OutputDataReceived += new DataReceivedEventHandler
-            (
-                delegate (object sender, DataReceivedEventArgs e)
-                {
-                    // append the new data to the data already read-in
-                    Debug.WriteLine(e.Data);
-                    LatestLog = e.Data;
-                }
-            );
-            process.Start();
+            //process.StartInfo.FileName = "LeHand.exe";
+            //process.StartInfo.CreateNoWindow = false;
+            //process.StartInfo.UseShellExecute = false;
+            //process.StartInfo.RedirectStandardOutput = false;
+            //process.StartInfo.RedirectStandardError = true;
+            //process.StartInfo.RedirectStandardInput = true;
+            //process.OutputDataReceived += new DataReceivedEventHandler
+            //(
+            //    delegate (object sender, DataReceivedEventArgs e)
+            //    {
+            //        // append the new data to the data already read-in
+            //        Debug.WriteLine(e.Data);
+            //        LatestLog = e.Data;
+            //    }
+            //);
+            //process.Start();
+            Thread.Sleep(3000);
+            process = Process.GetProcessesByName("LeHand")[0];
             //process.BeginOutputReadLine();
 
             dataStream = new NamedPipeClientStream(@".", @"LeHandData");
@@ -277,7 +279,7 @@ namespace LeHandUI
             //errorStream.Connect();
 
 
-            process.StandardInput.WriteLine("device discover");
+            //process.StandardInput.WriteLine("device discover");
 
             readres = dataStream.BeginRead(buf, 0, 1024, null, null);
             distribution = new Thread(new ThreadStart(DistributeData));
