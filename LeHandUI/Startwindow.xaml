@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:DVC1="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d" 
         
         Background="#2A2A2C" Title="StartWindow" Height="600" Width="800" FontSize="25" 
@@ -16,30 +17,28 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        
         <!--Custom title bar-->
         <Image
-		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
+		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="1"
 		Width="46" Height="32" x:Name="ProgramIcon" Margin="5"
 		Panel.ZIndex="9999999" />
         <TextBlock Grid.Column="1" Margin="4,13,0,12"	VerticalAlignment="Center"
@@ -55,22 +54,20 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button
-		Grid.Column="7" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
-		Style="{StaticResource TitleBarButtonStyle}" Grid.ColumnSpan="2">
+        <Button Grid.Column="4" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
+		Style="{StaticResource TitleBarButtonStyle}">
             <Path Width="46" Height="32" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
 			StrokeThickness="1" />
         </Button>
-        <Button Name="restoreButton" Grid.Column="9" Click="MaximizeWindow" Foreground="White"
+        <Button Grid.Column="5" Name="restoreButton"  Click="MaximizeWindow" Foreground="White"
 		Style="{StaticResource TitleBarButtonStyle}">
             <Path Width="46" Height="32" Data="M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5"
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
 			StrokeThickness="1" />
         </Button>
-        <Button
-		Grid.Column="10" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
+        <Button	Grid.Column="6" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
             <Path Width="46" Height="32" Data="M 18,11 27,20 M 18,20 27,11"
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -78,6 +75,21 @@
         </Button>
         <!--end of custom titlebar -->
 
-        
+        <lvc:CartesianChart Series="{Binding TestChart}" Hoverable="True" 
+                            Margin="5" BorderBrush="Black" LegendLocation="Right"
+                            Grid.Column="1" Grid.Row="1">
+            <lvc:LineSeries x:Name="LineSeries1test"
+                            Values="{Binding ValueListTest}" Fill="Transparent" Stroke="Transparent" AreaLimit="0"/>
+
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Labels=" " Title="Time">
+                    <lvc:Axis.Separator>
+                        <lvc:Separator IsEnabled="False"/>
+                    </lvc:Axis.Separator>
+                </lvc:Axis>
+            </lvc:CartesianChart.AxisX>
+
+        </lvc:CartesianChart>
+
     </Grid>
 </Window>

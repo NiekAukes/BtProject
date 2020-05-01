@@ -34,7 +34,7 @@ namespace LeHandUI
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool DeleteObject([In] IntPtr hObject);
 
-		public ImageSource ImageSourceFromBitmap(Bitmap bmp)
+		public static ImageSource ImageSourceFromBitmap(Bitmap bmp)
 		{
 			var handle = bmp.GetHbitmap();
 			try
