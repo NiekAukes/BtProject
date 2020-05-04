@@ -124,17 +124,15 @@ namespace LeHandUI
                     Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,217,89))
                 }
             };
-
             AccelerationGraph.AxisX.Add(new Axis
             {
-                Title = "Time",
+                Title = "Refreshes",
                 Labels = null
             });
-
             AccelerationGraph.AxisY.Add(new Axis
             {
                 Title = "Value",
-                LabelFormatter = value => value.ToString("C")
+                LabelFormatter = null
             });
 
             AccelerationGraph.DisableAnimations = true;
