@@ -6,6 +6,10 @@
              Exit="Application_Exit">
     <Application.Resources>
 
+        
+        
+        
+        
         <Style TargetType="ScrollBar">
             <Setter Property="Background" Value="#212121"/>
             <Setter Property="Foreground" Value="#34acbc"/>
@@ -43,12 +47,6 @@
                 <Setter Property="FontSize" Value="25"/>
             </Style.Setters>
         </Style>
-
-
-        <!--ToolTipService.InitialShowDelay="2000"
-                    ToolTipService.ShowDuration="2000"
-                    ToolTipService.BetweenShowDelay="1000"
-                    ToolTip="Add Reference"-->
 
         <!--Custom title bar styles-->
         <Style x:Key="TitleBarButtonStyle" TargetType="Button">
