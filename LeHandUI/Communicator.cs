@@ -278,7 +278,6 @@ namespace LeHandUI
             dataStream.Connect();
             //errorStream.Connect();
 
-
             //process.StandardInput.WriteLine("device discover");
 
             readres = dataStream.BeginRead(buf, 0, 1024, null, null);
