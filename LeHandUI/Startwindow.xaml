@@ -74,7 +74,7 @@
         </DockPanel>
         <!--end of custom titlebar -->
 
-        <lvc:CartesianChart x:Name="cartesianchart1" Hoverable="True"
+        <lvc:CartesianChart x:Name="AccelerationGraph" Hoverable="True"
                             Margin="0,0,5,0" BorderBrush="Black" LegendLocation="Left" 
                             FontFamily="Futura Lt Bt" FontSize="15" Zoom="None" 
                             Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="1" Grid.RowSpan="1">

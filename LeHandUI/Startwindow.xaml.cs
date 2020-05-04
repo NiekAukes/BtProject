@@ -17,10 +17,15 @@ using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
 
+/*COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
+                   (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
+                 very dark blue, dark blue,  aqua,           pale aqua,     greyish */
+
 namespace LeHandUI
 {
     public partial class Startwindow : Window
     {
+        int[] graphs = { };
         #region ImageSourceFromBitmap_func
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -36,68 +41,104 @@ namespace LeHandUI
         }
         #endregion
 
+        public static Startwindow inst = null;
+
+        static ChartValues<double> AccXList         =   new ChartValues<double>();
+        static ChartValues<double> AccYList         =   new ChartValues<double>();
+        static ChartValues<double> AccZList         =   new ChartValues<double>();
+
+        static ChartValues<double> RotXList         =   new ChartValues<double>();
+        static ChartValues<double> RotYList         =   new ChartValues<double>();
+        static ChartValues<double> RotZList         =   new ChartValues<double>();
+
+        static ChartValues<double> DuimList         =   new ChartValues<double>();
+        static ChartValues<double> WijsvingerList   =   new ChartValues<double>();
+        static ChartValues<double> MiddelvingerList =   new ChartValues<double>();
+        static ChartValues<double> RingvingerList   =   new ChartValues<double>();
+        static ChartValues<double> PinkList         =   new ChartValues<double>();
+
+
+        //IMPORTANT GODVER
+        //ACCGRAPHVALUES is master object, die de graph values houdt van de lijsten
+        public static ChartValues<double>[] AllGraphValues = { AccXList, AccYList, AccZList, 
+                                                        RotXList, RotYList, RotZList,
+                                                        DuimList, WijsvingerList, MiddelvingerList, RingvingerList, PinkList};
+        // [0-2]  Acceleration
+        // [3-5]  Rotation
+        // [6-10] Fingers
+
         public Startwindow()
         {
+            inst = this;
             InitializeComponent();
             ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
-            //assigning values to all chart values in chart
-            ChartValues<double> XvalueList = new ChartValues<double>();
-            double[] newXVals = { 2, 5, 6, 6 };
-            addChartValues(newXVals, XvalueList);
+            //REDUNDANT LISTS FOR TEST VALUES, TO BE REMOVED IN NEXT IMPLEMENTATION
+            AccXList.AddRange(new ChartValues<double>(new double[] { 2, 5, 6, 6 }));
+            AccYList.AddRange(new ChartValues<double>(new double[] { 0, 2, 8, 4 }));
+            AccZList.AddRange(new ChartValues<double>(new double[] { 5, 3, 5, 4 }));
 
-            ChartValues<double> YvalueList = new ChartValues<double>();
-            double[] newYVals = { 0,2,8,4 };
-            addChartValues(newYVals, YvalueList);
-            
-            ChartValues<double> ZvalueList = new ChartValues<double>();
-            double[] newZVals = { 5,3,5,4 };
-            addChartValues(newZVals, ZvalueList);
+            RotXList.AddRange(new ChartValues<double>(new double[] { 0, 0, 2, 4 }));
+            RotYList.AddRange(new ChartValues<double>(new double[] { 1, 2, 7, 3 }));
+            RotZList.AddRange(new ChartValues<double>(new double[] { 3, 0, 0, 0 }));
 
-            cartesianchart1.Series = new SeriesCollection
+            DuimList.AddRange(new ChartValues<double>(new double[] { 5, 4, 7, 5 }));
+            WijsvingerList.AddRange(new ChartValues<double>(new double[] { 0,6,8,5 }));
+            MiddelvingerList.AddRange(new ChartValues<double>(new double[] { 3,8,5,6 }));
+            RingvingerList.AddRange(new ChartValues<double>(new double[] { 8,6,7,5 }));
+            PinkList.AddRange(new ChartValues<double>(new double[] { 5,7,4,6 }));
+
+            AccelerationGraph.Series = new SeriesCollection
             {
                 new LineSeries
                 {
                     Title = "X",
-                    Values =  XvalueList,  //new ChartValues<double> {4, 6, 5, 2, 7}
+                    Values =  AccXList,  //new ChartValues<double> {4, 6, 5, 2, 7}
                     PointGeometry = DefaultGeometries.Diamond,
                     PointGeometrySize = 4,
                     LineSmoothness = 1,
-                    StrokeThickness = 2,
-                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0x00, 0xFF,0xFF,0x90))
+                    StrokeThickness = 4,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(52,172,188)),
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,52,172,188)) //Completely transparent but if you want you can enable it
                 },
                 new LineSeries
                 {
                     Title = "Y",
-                    Values = YvalueList,
-                    PointGeometry = DefaultGeometries.Cross,
+                    Values = AccYList,
+                    PointGeometry = DefaultGeometries.Circle,
                     PointGeometrySize = 4,
-                    LineSmoothness = 1
+                    LineSmoothness = 1,
+                    StrokeThickness = 4,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,19,120)), //#E11378
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,19,120)) // same here, just insert 120 into the alpha channel
                 },
                 new LineSeries
                 {
                     Title = "Z",
-                    Values = ZvalueList,
+                    Values = AccZList,
                     PointGeometry = DefaultGeometries.Square,
                     PointGeometrySize = 4,
-                    LineSmoothness = 1
+                    LineSmoothness = 1,
+                    StrokeThickness = 4,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,217,89)), //#FFD959
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,217,89))
                 }
             };
 
-            cartesianchart1.AxisX.Add(new Axis
+            AccelerationGraph.AxisX.Add(new Axis
             {
                 Title = "Time",
                 Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" }
             });
 
-            cartesianchart1.AxisY.Add(new Axis
+            AccelerationGraph.AxisY.Add(new Axis
             {
                 Title = "Value",
                 LabelFormatter = value => value.ToString("C")
             });
 
             
-            cartesianchart1.DataClick += CartesianChart1OnDataClick;
+            AccelerationGraph.DataClick += CartesianChart1OnDataClick;
 
 
 
@@ -113,6 +154,13 @@ namespace LeHandUI
             }
         }
         #endregion
+
+        public static void addNodeToGraph(int graphId, float value)
+        {
+            AllGraphValues[graphId].Add(value);
+            return;
+        }
+
         private void CartesianChart1OnDataClick(object sender, ChartPoint chartPoint)
         {
             return;
