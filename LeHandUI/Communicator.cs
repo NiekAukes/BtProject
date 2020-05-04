@@ -12,6 +12,8 @@ using System.Security.Cryptography;
 
 namespace LeHandUI
 {
+
+
     public class StreamString
     {
         private Stream ioStream;
@@ -200,7 +202,7 @@ namespace LeHandUI
 			return null;
 		}
         static int shortsread = 0;
-        //static int charsread = 0;
+        static int charsread = 0;
         static byte[] buf = new byte[1024];
         static IAsyncResult readres;
         public static void DistributeData()
@@ -208,10 +210,11 @@ namespace LeHandUI
             while (Active)
             {
                 //dataStream.EndRead(readres);
+                dataStream.Read(buf, 0, 1023);
                 ushort[] shortbuf = new ushort[512];
                 for (int i = 0; i < 512; i++)
                 {
-                    shortbuf[i] = BitConverter.ToUInt16(buf, (i * 2 + shortsread) % 1023);
+                    shortbuf[i] = BitConverter.ToUInt16(buf, (i * 2) % 1023);
                 }
 
                 if (Enumerable.Contains<ushort>(shortbuf, 65535))
@@ -219,7 +222,7 @@ namespace LeHandUI
                     //still shit to do
                     ushort[] dat = CommunicatorHelper.SubArray<ushort>(shortbuf, 0, 7);
                     DataPacket pack = ProcessData(dat);
-                    shortsread += 7;
+                    charsread += 14;
                     if (pack != null)
                         Debug.WriteLine("detected a new message" + pack.val.ToString()); 
                 }
@@ -278,7 +281,6 @@ namespace LeHandUI
             dataStream.Connect();
             //errorStream.Connect();
 
-
             //process.StandardInput.WriteLine("device discover");
 
             readres = dataStream.BeginRead(buf, 0, 1024, null, null);
@@ -286,6 +288,7 @@ namespace LeHandUI
             distribution.Start();
             return;
         }
+
         public class device
         {
             public static status discover()
@@ -322,7 +325,7 @@ namespace LeHandUI
 
             if (process != null)
             {
-                process.StandardInput.WriteLine("quit");
+                //process.StandardInput.WriteLine("quit");
                 return status.S_OK;
             }
             else
