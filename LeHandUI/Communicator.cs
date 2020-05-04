@@ -224,7 +224,17 @@ namespace LeHandUI
                     DataPacket pack = ProcessData(dat);
                     charsread += 14;
                     if (pack != null)
-                        Debug.WriteLine("detected a new message" + pack.val.ToString()); 
+                    {
+                        Debug.WriteLine("detected a new message" + pack.val.ToString());
+                        if (Startwindow.inst != null)
+                        {
+                            Random rand = new Random();
+                            Startwindow.addNodeToGraph(0, 2 + (pack.val * 2));
+                            Startwindow.addNodeToGraph(1, 7 - (pack.val));
+                            Startwindow.addNodeToGraph(2, 5 + (pack.val));
+
+                        }
+                    }
                 }
                 else
                 {
