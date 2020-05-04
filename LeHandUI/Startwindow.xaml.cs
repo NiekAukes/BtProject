@@ -137,7 +137,7 @@ namespace LeHandUI
                 LabelFormatter = value => value.ToString("C")
             });
 
-            
+            AccelerationGraph.DisableAnimations = true;
             AccelerationGraph.DataClick += CartesianChart1OnDataClick;
 
 
@@ -159,19 +159,14 @@ namespace LeHandUI
         {
             //Automatic Checker if value of a list has gone past 20, assuming an update rate of 200ms per update means last 4 seconds stays in graph
             for (int i = 0; i < AllGraphValues.Length; i++){
-                if(AllGraphValues[i].Count > 20)
+                if(AllGraphValues[i].Count > 100)
                 {
-                    while(AllGraphValues[i].Count > 20)
+                    while(AllGraphValues[i].Count > 100)
                     {
                         AllGraphValues[i].RemoveAt(0); //removes first value of list
                     }
                 }
             }
-            AllGraphValues[graphId].Add(value);
-            return;
-        }
-        public static void addNodeToGraph(int graphId, double value)
-        {
             AllGraphValues[graphId].Add(value);
             return;
         }
