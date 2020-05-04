@@ -170,6 +170,11 @@ namespace LeHandUI
             AllGraphValues[graphId].Add(value);
             return;
         }
+        public static void addNodeToGraph(int graphId, double value)
+        {
+            AllGraphValues[graphId].Add(value);
+            return;
+        }
 
         private void CartesianChart1OnDataClick(object sender, ChartPoint chartPoint)
         {
