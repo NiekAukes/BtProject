@@ -128,7 +128,7 @@ namespace LeHandUI
             AccelerationGraph.AxisX.Add(new Axis
             {
                 Title = "Time",
-                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" }
+                Labels = null
             });
 
             AccelerationGraph.AxisY.Add(new Axis
@@ -155,8 +155,18 @@ namespace LeHandUI
         }
         #endregion
 
-        public static void addNodeToGraph(int graphId, float value)
+        public static void addNodeToGraph(int graphId, double value)
         {
+            //Automatic Checker if value of a list has gone past 20, assuming an update rate of 200ms per update means last 4 seconds stays in graph
+            for (int i = 0; i < AllGraphValues.Length; i++){
+                if(AllGraphValues[i].Count > 20)
+                {
+                    while(AllGraphValues[i].Count > 20)
+                    {
+                        AllGraphValues[i].RemoveAt(0); //removes first value of list
+                    }
+                }
+            }
             AllGraphValues[graphId].Add(value);
             return;
         }
