@@ -22,12 +22,40 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
-
+using ICSharpCode.AvalonEdit;
 
 namespace LeHandUI
 {
+	public class SaveCommand : ICommand
+	{
+		public event EventHandler CanExecuteChanged;
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public SaveCommand()
+		{
+
+		}
+
+		public bool CanExecute(object parameter)
+		{
+			return true;
+		}
+
+		public void Execute(object parameter)
+		{
+			//MessageBox.Show("HelloWorld");
+			string writePath = LHregistry.GetFile(FileManager.currentFile);
+			MainWindow.UnChangedFile(MainWindow.Listbox);
+		}
+	}
+
+
 	public partial class MainWindow : Window
 	{
+		public static ListBox Listbox = null;
+		static bool isCurrentFileSaved = true;
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
 		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -104,6 +132,38 @@ namespace LeHandUI
 			hasRefreshOccurredWithinSeconds = true;
 
 		}
+		public void ChangeLabel(string label, int index)
+		{
+			LuaFileView.Items.RemoveAt(index);
+			LuaFileView.Items.Insert(index, label);
+		}
+		public static void ChangeLabel(ListBox list, string label, int index)
+		{
+			list.Items.RemoveAt(index);
+			list.Items.Insert(index, label);
+		}
+		public static void UnChangedFile(ListBox list)
+		{
+			if (!isCurrentFileSaved && FileManager.currentFile > -1)
+			{
+				int index = FileManager.currentFile;
+				isCurrentFileSaved = true;
+				string label = (string)(list.Items[index]);
+				label = label.Remove(label.Length - 1);
+				ChangeLabel(list, label, index);
+			}
+		}
+
+		private void ChangedFile(object sender, KeyEventArgs e)
+		{
+			if (isCurrentFileSaved && FileManager.currentFile > -1)
+			{
+				int index = FileManager.currentFile;
+				isCurrentFileSaved = false;
+				string label = (string)(LuaFileView.Items[index]) + "*";
+				ChangeLabel(label, index);
+			}
+		}
 		private void AddReferenceScript(object sender, EventArgs e) {
 			OpenFileDialog openFileExplorer = new OpenFileDialog()
 			{
@@ -142,7 +202,13 @@ namespace LeHandUI
 			InitializeComponent();
 
 			FileManager.LoadAllFiles();
-			
+
+			textEditor.InputBindings.Add(
+				new InputBinding(new SaveCommand(),
+				new KeyGesture(Key.S, ModifierKeys.Control
+				)));
+
+			Listbox = LuaFileView;
 
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
@@ -152,6 +218,7 @@ namespace LeHandUI
 				LuaFileView.Items.Add(LuaNames[i]);
 			}
 
+			textEditor.Text = "function Start()\n	print(\"preview\")\nend";
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
@@ -192,5 +259,6 @@ namespace LeHandUI
 			this.DragMove();
 		}
 		#endregion
+
 	}
 }
