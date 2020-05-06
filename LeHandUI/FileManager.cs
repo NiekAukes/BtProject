@@ -13,6 +13,7 @@ namespace LeHandUI
     }
     class FileManager
     {
+        public static bool[] isFileSaved = new bool[50];
         public static string[] files = new string[50];
         public static int currentFile = -1;
         /// <summary>
@@ -67,6 +68,7 @@ namespace LeHandUI
                 return null;
             }
             currentFile = id;
+            isFileSaved[id] = true;
             return fileContents;
         }
 

@@ -55,7 +55,6 @@ namespace LeHandUI
 	public partial class MainWindow : Window
 	{
 		public static ListBox Listbox = null;
-		static bool isCurrentFileSaved = true;
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
 		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -144,24 +143,31 @@ namespace LeHandUI
 		}
 		public static void UnChangedFile(ListBox list)
 		{
-			if (!isCurrentFileSaved && FileManager.currentFile > -1)
+			int index = FileManager.currentFile;
+			if (index > -1)
 			{
-				int index = FileManager.currentFile;
-				isCurrentFileSaved = true;
-				string label = (string)(list.Items[index]);
-				label = label.Remove(label.Length - 1);
-				ChangeLabel(list, label, index);
+				if (!FileManager.isFileSaved[index])
+				{
+
+					FileManager.isFileSaved[index] = true;
+					string label = (string)(list.Items[index]);
+					label = label.Remove(label.Length - 1);
+					ChangeLabel(list, label, index);
+				}
 			}
 		}
 
 		private void ChangedFile(object sender, KeyEventArgs e)
 		{
-			if (isCurrentFileSaved && FileManager.currentFile > -1)
+			int index = FileManager.currentFile;
+			if (index > -1)
 			{
-				int index = FileManager.currentFile;
-				isCurrentFileSaved = false;
-				string label = (string)(LuaFileView.Items[index]) + "*";
-				ChangeLabel(label, index);
+				if (FileManager.isFileSaved[index])
+				{
+					FileManager.isFileSaved[index] = false;
+					string label = (string)(LuaFileView.Items[index]) + "*";
+					ChangeLabel(label, index);
+				}
 			}
 		}
 		private void AddReferenceScript(object sender, EventArgs e) {
