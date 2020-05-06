@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -25,7 +26,7 @@ namespace LeHandUI
 {
     public partial class Startwindow : Window
     {
-        static int maximumAllowedPointsInGraph = 50;
+        static int[] maximumAllowedPointsInGraph = {80,40,40}; //0 = Fingers, 1 = Acceleration, 2 = Rotation
         static int defaultGeometrySize = 10;
         static int defaultSmoothness = 1;
         static int defaultStrokeThicc = 3;
@@ -47,6 +48,12 @@ namespace LeHandUI
 
         public static Startwindow inst = null;
 
+        static ChartValues<double> PinkList = new ChartValues<double>();
+        static ChartValues<double> RingvingerList = new ChartValues<double>();
+        static ChartValues<double> MiddelvingerList = new ChartValues<double>();
+        static ChartValues<double> WijsvingerList = new ChartValues<double>();
+        static ChartValues<double> DuimList = new ChartValues<double>();
+
         static ChartValues<double> AccXList         =   new ChartValues<double>();
         static ChartValues<double> AccYList         =   new ChartValues<double>();
         static ChartValues<double> AccZList         =   new ChartValues<double>();
@@ -55,21 +62,16 @@ namespace LeHandUI
         static ChartValues<double> RotYList         =   new ChartValues<double>();
         static ChartValues<double> RotZList         =   new ChartValues<double>();
 
-        static ChartValues<double> DuimList         =   new ChartValues<double>();
-        static ChartValues<double> WijsvingerList   =   new ChartValues<double>();
-        static ChartValues<double> MiddelvingerList =   new ChartValues<double>();
-        static ChartValues<double> RingvingerList   =   new ChartValues<double>();
-        static ChartValues<double> PinkList         =   new ChartValues<double>();
-
 
         //IMPORTANT GODVER
         //ACCGRAPHVALUES is master object, die de graph values houdt van de lijsten
-        public static ChartValues<double>[] AllGraphValues = { AccXList, AccYList, AccZList, 
-                                                        RotXList, RotYList, RotZList,
-                                                        DuimList, WijsvingerList, MiddelvingerList, RingvingerList, PinkList};
-        // [0-2]  Acceleration
-        // [3-5]  Rotation
-        // [6-10] Fingers
+        public static ChartValues<double>[] AllGraphValues = { PinkList, RingvingerList, MiddelvingerList, WijsvingerList, DuimList, 
+                                                               AccXList, AccYList, AccZList,
+                                                               RotXList, RotYList, RotZList};
+                                                        
+        // [0-4]  Fingers
+        // [5-7]  Acceleration
+        // [8-10] Rotation
 
         public Startwindow()
         {
@@ -78,6 +80,12 @@ namespace LeHandUI
             ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
             //REDUNDANT LISTS FOR TEST VALUES, TO BE REMOVED IN NEXT IMPLEMENTATION
+            PinkList.AddRange(new ChartValues<double>(new double[] { 5, 7, 4, 6 }));
+            RingvingerList.AddRange(new ChartValues<double>(new double[] { 8, 6, 7, 5 }));
+            MiddelvingerList.AddRange(new ChartValues<double>(new double[] { 3, 8, 5, 6 }));
+            WijsvingerList.AddRange(new ChartValues<double>(new double[] { 0, 6, 8, 5 }));
+            DuimList.AddRange(new ChartValues<double>(new double[] { 5, 4, 7, 5 }));
+
             AccXList.AddRange(new ChartValues<double>(new double[] { 2, 5, 6, 6 }));
             AccYList.AddRange(new ChartValues<double>(new double[] { 0, 2, 8, 4 }));
             AccZList.AddRange(new ChartValues<double>(new double[] { 5, 3, 5, 4 }));
@@ -85,12 +93,6 @@ namespace LeHandUI
             RotXList.AddRange(new ChartValues<double>(new double[] { 0, 0, 2, 4 }));
             RotYList.AddRange(new ChartValues<double>(new double[] { 1, 2, 7, 3 }));
             RotZList.AddRange(new ChartValues<double>(new double[] { 3, 0, 0, 0 }));
-
-            DuimList.AddRange(new ChartValues<double>(new double[] { 5, 4, 7, 5 }));
-            WijsvingerList.AddRange(new ChartValues<double>(new double[] { 0,6,8,5 }));
-            MiddelvingerList.AddRange(new ChartValues<double>(new double[] { 3,8,5,6 }));
-            RingvingerList.AddRange(new ChartValues<double>(new double[] { 8,6,7,5 }));
-            PinkList.AddRange(new ChartValues<double>(new double[] { 5,7,4,6 }));
 
             #region AccelerationGraph
             AccelerationGraph.Series = new SeriesCollection
@@ -270,20 +272,35 @@ namespace LeHandUI
         }
         #endregion
 
+        
         public static void addNodeToGraph(int graphId, double value)
         {
-            //Automatic Checker if value of a list has gone past 20, assuming an update rate of 200ms per update means last 4 seconds stays in graph
-            for (int i = 0; i < AllGraphValues.Length; i++){
-                if(AllGraphValues[i].Count > maximumAllowedPointsInGraph)
-                {
-                    while(AllGraphValues[i].Count > maximumAllowedPointsInGraph)
+            // [0-4]  Fingers
+            // [5-7]  Acceleration
+            // [8-10] Rotation
+            int graphIdOfMasterGraph = -1; //0 to 2 for the three graphs we have, fingers, acc, rot
+            if (graphId >= 0 && graphId <= 4) { graphIdOfMasterGraph  = 0; }
+            if (graphId >= 5 && graphId <= 7) { graphIdOfMasterGraph  = 1; }
+            if (graphId >= 8 && graphId <= 10) { graphIdOfMasterGraph = 2; }
+
+            if (graphIdOfMasterGraph != -1) {
+                //Automatic Checker if value of a list has gone past 20, assuming an update rate of 200ms per update means last 4 seconds stays in graph
+                for (int i = 0; i < AllGraphValues.Length; i++) {
+                    if (AllGraphValues[i].Count > maximumAllowedPointsInGraph[graphIdOfMasterGraph])
                     {
-                        AllGraphValues[i].RemoveAt(0); //removes first value of list
+                        while (AllGraphValues[i].Count > maximumAllowedPointsInGraph[graphIdOfMasterGraph])
+                        {
+                            AllGraphValues[i].RemoveAt(0); //removes first value of list
+                        }
                     }
                 }
+                AllGraphValues[graphId].Add(value);
             }
-            AllGraphValues[graphId].Add(value);
-            return;
+            else
+            {
+                //Void hasn't succeeded
+                Debug.WriteLine("public static void addNodeToGraph failed to execute, could not assign graphIdOfMasterGraph");
+            }
         }
 
         private void CartesianChart1OnDataClick(object sender, ChartPoint chartPoint)
