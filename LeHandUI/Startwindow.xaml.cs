@@ -25,12 +25,11 @@ namespace LeHandUI
 {
     public partial class Startwindow : Window
     {
-        int defaultGeometrySize = 10;
-        int defaultSmoothness = 1;
-        int defaultStrokeThicc = 3;
+        static int maximumAllowedPointsInGraph = 50;
+        static int defaultGeometrySize = 10;
+        static int defaultSmoothness = 1;
+        static int defaultStrokeThicc = 3;
 
-
-        int[] graphs = { };
         #region ImageSourceFromBitmap_func
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -136,6 +135,8 @@ namespace LeHandUI
                 LabelFormatter = null
             });
             AccelerationGraph.DisableAnimations = true;
+            AccelerationGraph.ToolTip = null;
+            AccelerationGraph.Hoverable = false;
             AccelerationGraph.DataClick += CartesianChart1OnDataClick;
             #endregion
             
@@ -182,6 +183,8 @@ namespace LeHandUI
                 LabelFormatter = null
             });
             RotationGraph.DisableAnimations = true;
+            RotationGraph.ToolTip = null;
+            RotationGraph.Hoverable = false;
             RotationGraph.DataClick += CartesianChart1OnDataClick;
             #endregion
             
@@ -249,6 +252,8 @@ namespace LeHandUI
                 LabelFormatter = null
             });
             HandGraph.DisableAnimations = true;
+            HandGraph.ToolTip = null;
+            HandGraph.Hoverable = false;
             #endregion
 
 
@@ -269,9 +274,9 @@ namespace LeHandUI
         {
             //Automatic Checker if value of a list has gone past 20, assuming an update rate of 200ms per update means last 4 seconds stays in graph
             for (int i = 0; i < AllGraphValues.Length; i++){
-                if(AllGraphValues[i].Count > 100)
+                if(AllGraphValues[i].Count > maximumAllowedPointsInGraph)
                 {
-                    while(AllGraphValues[i].Count > 100)
+                    while(AllGraphValues[i].Count > maximumAllowedPointsInGraph)
                     {
                         AllGraphValues[i].RemoveAt(0); //removes first value of list
                     }
