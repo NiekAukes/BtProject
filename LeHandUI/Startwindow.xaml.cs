@@ -25,6 +25,11 @@ namespace LeHandUI
 {
     public partial class Startwindow : Window
     {
+        int defaultGeometrySize = 10;
+        int defaultSmoothness = 1;
+        int defaultStrokeThicc = 3;
+
+
         int[] graphs = { };
         #region ImageSourceFromBitmap_func
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -88,56 +93,163 @@ namespace LeHandUI
             RingvingerList.AddRange(new ChartValues<double>(new double[] { 8,6,7,5 }));
             PinkList.AddRange(new ChartValues<double>(new double[] { 5,7,4,6 }));
 
+            #region AccelerationGraph
             AccelerationGraph.Series = new SeriesCollection
             {
-                new LineSeries
-                {
+                new LineSeries{
                     Title = "X",
                     Values =  AccXList,  //new ChartValues<double> {4, 6, 5, 2, 7}
                     PointGeometry = DefaultGeometries.Diamond,
-                    PointGeometrySize = 4,
-                    LineSmoothness = 1,
-                    StrokeThickness = 4,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
                     Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(52,172,188)),
                     Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,52,172,188)) //Completely transparent but if you want you can enable it
                 },
-                new LineSeries
-                {
+                new LineSeries{
                     Title = "Y",
                     Values = AccYList,
                     PointGeometry = DefaultGeometries.Circle,
-                    PointGeometrySize = 4,
-                    LineSmoothness = 1,
-                    StrokeThickness = 4,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
                     Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,19,120)), //#E11378
                     Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,19,120)) // same here, just insert 120 into the alpha channel
                 },
-                new LineSeries
-                {
+                new LineSeries{
                     Title = "Z",
                     Values = AccZList,
                     PointGeometry = DefaultGeometries.Square,
-                    PointGeometrySize = 4,
-                    LineSmoothness = 1,
-                    StrokeThickness = 4,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
                     Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,217,89)), //#FFD959
                     Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,217,89))
                 }
             };
-            AccelerationGraph.AxisX.Add(new Axis
-            {
+            AccelerationGraph.AxisX.Add(new Axis{
                 Title = "Refreshes",
                 Labels = null
             });
-            AccelerationGraph.AxisY.Add(new Axis
-            {
+            AccelerationGraph.AxisY.Add(new Axis{
                 Title = "Value",
                 LabelFormatter = null
             });
-
             AccelerationGraph.DisableAnimations = true;
             AccelerationGraph.DataClick += CartesianChart1OnDataClick;
+            #endregion
+            
+            #region RotationGraph
+            RotationGraph.Series = new SeriesCollection
+            {
+                new LineSeries{
+                    Title = "X",
+                    Values =  RotXList,
+                    PointGeometry = DefaultGeometries.Triangle,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(52,172,188)),
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,52,172,188)) //Completely transparent but if you want you can enable it
+                },
+                new LineSeries{
+                    Title = "Y",
+                    Values = RotYList,
+                    PointGeometry = DefaultGeometries.Diamond,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,19,120)), //#E11378
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,19,120)) // same here, just insert 120 into the alpha channel
+                },
+                new LineSeries{
+                    Title = "Z",
+                    Values = RotZList,
+                    PointGeometry = DefaultGeometries.Circle,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,217,89)), //#FFD959
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,217,89))
+                }
+            };
+            RotationGraph.AxisX.Add(new Axis{
+                Title = "Refreshes",
+                Labels = null
+            });
+            RotationGraph.AxisY.Add(new Axis{
+                Title = "Value",
+                LabelFormatter = null
+            });
+            RotationGraph.DisableAnimations = true;
+            RotationGraph.DataClick += CartesianChart1OnDataClick;
+            #endregion
+            
+            #region HandGraph
+            HandGraph.Series = new SeriesCollection
+            {
+                new LineSeries{
+                    Title = "Duim",
+                    Values =  DuimList,
+                    PointGeometry = DefaultGeometries.Square,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(52,172,188)),
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,52,172,188)) //Completely transparent but if you want you can enable it
+                },
+                new LineSeries{
+                    Title = "Wijsvinger",
+                    Values = WijsvingerList,
+                    PointGeometry = DefaultGeometries.Square,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,19,120)), //#E11378
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,19,120)) // same here, just insert 120 into the alpha channel
+                },
+                new LineSeries{
+                    Title = "Middelvinger",
+                    Values = MiddelvingerList,
+                    PointGeometry = DefaultGeometries.Square,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,217,89)), //#FFD959
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,255,217,89))
+                },
+                new LineSeries{
+                    Title = "Ringvinger",
+                    Values = RingvingerList,
+                    PointGeometry = DefaultGeometries.Square,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(242,242,242)),
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,242,242,242))
+                },
+                new LineSeries{
+                    Title = "Pink",
+                    Values = PinkList,
+                    PointGeometry = DefaultGeometries.Square,
+                    PointGeometrySize = defaultGeometrySize,
+                    LineSmoothness = defaultSmoothness,
+                    StrokeThickness = defaultStrokeThicc,
+                    Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(35,143,35)), //#238F23
+                    Fill = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,35,143,35))
+                }
 
+            };
+            HandGraph.AxisX.Add(new Axis{
+                Title = "Refreshes",
+                Labels = null
+            });
+            HandGraph.AxisY.Add(new Axis{
+                Title = "Value",
+                LabelFormatter = null
+            });
+            HandGraph.DisableAnimations = true;
+            #endregion
 
 
 
