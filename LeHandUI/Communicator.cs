@@ -146,7 +146,7 @@ namespace LeHandUI
                     {
                         if ((ushort)chunk != (0xFFFF)) //not a footer
                         {
-                            if (Protocol < 7)
+                            if (Protocol < 32)
                             {
                                 //data is of double type
                                 for (int p = 0; p < 4; p++)
@@ -167,7 +167,7 @@ namespace LeHandUI
 
                             expected = Expectedtype.Protocol;
 
-                            if (Protocol < 12)
+                            if (Protocol < 32)
                             {
                                 //double* value = new double(0);
                                 //for (int p = 0; p < 4; p++) //convert data buffer to double
@@ -188,6 +188,7 @@ namespace LeHandUI
                                     ex = ex.Concat(con);
                                 }
                                 ret.val = BitConverter.ToDouble(ex.ToArray(), 0);
+                                ret.id = Protocol;
                                 return ret;
                             }
                         }
@@ -229,9 +230,7 @@ namespace LeHandUI
                         if (Startwindow.inst != null)
                         {
                             Random rand = new Random();
-                            Startwindow.addNodeToGraph(0, 2 + (pack.val * 2));
-                            Startwindow.addNodeToGraph(1, 7 - (pack.val));
-                            Startwindow.addNodeToGraph(2, 5 + (pack.val));
+                            Startwindow.addNodeToGraph(pack.id, 2 + (pack.val * 2));
 
                         }
                     }

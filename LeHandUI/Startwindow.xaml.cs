@@ -25,7 +25,7 @@ namespace LeHandUI
 {
     public partial class Startwindow : Window
     {
-        static int maximumAllowedPointsInGraph = 50;
+        static int maximumAllowedPointsInGraph = 40;
         static int defaultGeometrySize = 10;
         static int defaultSmoothness = 1;
         static int defaultStrokeThicc = 3;

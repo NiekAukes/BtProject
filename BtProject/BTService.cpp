@@ -490,7 +490,13 @@ typedef DeviceDetails* lpDeviceDetails;
 		double f = (double)rand() / RAND_MAX;
 		return fMin + f * (fMax - fMin);
 	}
-
+	double iRand(int Min, int Max)
+	{
+		double f = rand() / RAND_MAX;
+		return (int)(Min + f * (Max - Min));
+	}
+	int ider = 0;
+	double lastval[11];
 	std::vector<short> BTService::GetGeneratedData()
 	{
 		
@@ -501,10 +507,13 @@ typedef DeviceDetails* lpDeviceDetails;
 			int n = 7;
 
 			//Header
-			vshort.push_back(0x0001);
+			vshort.push_back(ider);
 			vshort.push_back(n - 3);
 			//Data
-			double val = fRand(0.0,1.0);
+			double val = fRand(-0.2,0.2);
+			lastval[ider] += val;
+			val = lastval[ider];
+
 			for (int i = 0; i < n - 3; i++)
 			{
 				vshort.push_back(*((short*)&val + i));
@@ -512,6 +521,11 @@ typedef DeviceDetails* lpDeviceDetails;
 			std::cout << "sent: " << val << '\n';
 			//Footer
 			vshort.push_back(0xFFFF);
+
+			if (ider > 9)
+				ider = 0;
+			else
+				ider++;
 			return vshort;
 		}
 	}
