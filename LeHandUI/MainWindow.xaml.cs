@@ -204,7 +204,7 @@ namespace LeHandUI
 
 		public MainWindow()
 		{
-			//Communicator.Init();
+			Communicator.Init();
 			InitializeComponent();
 
 			FileManager.LoadAllFiles();
@@ -224,7 +224,7 @@ namespace LeHandUI
 				LuaFileView.Items.Add(LuaNames[i]);
 			}
 
-			textEditor.Text = "function Start()\n	print(\"preview\")\nend";
+			textEditor.Text = @"function Start()\n	print(\'preview\')\nend";
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
