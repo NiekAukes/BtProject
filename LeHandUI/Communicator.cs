@@ -246,7 +246,7 @@ namespace LeHandUI
                 }
                 //readres = dataStream.BeginRead(buf, 0, 1024, null, null);
 
-                //Thread.Sleep(200);
+                //Thread.Sleep(10);
             }
         }
         static Thread distribution = null;

@@ -26,9 +26,9 @@ namespace LeHandUI
 {
     public partial class Startwindow : Window
     {
-        static int[] maximumAllowedPointsInGraph = {80,40,40}; //0 = Fingers, 1 = Acceleration, 2 = Rotation
-        static int defaultGeometrySize = 10;
-        static int defaultSmoothness = 1;
+        static int[] maximumAllowedPointsInGraph = {52,26,26}; //0 = Fingers, 1 = Acceleration, 2 = Rotation
+        static int defaultGeometrySize = 0;
+        static int defaultSmoothness = 0;
         static int defaultStrokeThicc = 3;
 
         #region ImageSourceFromBitmap_func
@@ -283,18 +283,20 @@ namespace LeHandUI
             if (graphId >= 5 && graphId <= 7) { graphIdOfMasterGraph  = 1; }
             if (graphId >= 8 && graphId <= 10) { graphIdOfMasterGraph = 2; }
 
-            if (graphIdOfMasterGraph != -1) {
+            if (graphIdOfMasterGraph != -1)
+            {
                 //Automatic Checker if value of a list has gone past 20, assuming an update rate of 200ms per update means last 4 seconds stays in graph
-                for (int i = 0; i < AllGraphValues.Length; i++) {
-                    if (AllGraphValues[i].Count > maximumAllowedPointsInGraph[graphIdOfMasterGraph])
+                
+                AllGraphValues[graphId].Add(value);
+                
+                    if (AllGraphValues[graphId].Count > maximumAllowedPointsInGraph[graphIdOfMasterGraph])
                     {
-                        while (AllGraphValues[i].Count > maximumAllowedPointsInGraph[graphIdOfMasterGraph])
+                        while (AllGraphValues[graphId].Count >= maximumAllowedPointsInGraph[graphIdOfMasterGraph])
                         {
-                            AllGraphValues[i].RemoveAt(0); //removes first value of list
+                            AllGraphValues[graphId].RemoveAt(0); //removes first value of list
                         }
                     }
-                }
-                AllGraphValues[graphId].Add(value);
+                
             }
             else
             {
