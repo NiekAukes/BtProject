@@ -63,6 +63,7 @@ namespace LeHandUI
                 reader.Close();
                 stream.Close();
 
+                currentFile = id;
                 isFileSaved[id] = true;
             }
             else
