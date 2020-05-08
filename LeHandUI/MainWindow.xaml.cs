@@ -90,12 +90,6 @@ namespace LeHandUI
 			if (FileContents != null)
 				textEditor.Text = FileContents;
 		}
-		/*private void AddLuaScript(object sender, EventArgs e) {
-			string filePath = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames\\Testfile1.lua";
-			int newFileId = FileManager.Addfile(filePath);
-			LuaNames.Add(LHregistry.getSimpleName(filePath));
-			LuaFileView.Items.Refresh();
-		}*/
 		private void RemoveLuaScript(object sender, EventArgs e) {
 			int idToBeRemoved = -1; //some ridiculous number, i. e. -1 just isn't possible
 
@@ -129,8 +123,8 @@ namespace LeHandUI
 				
 			}
 			else{}
-			hasRefreshOccurredWithinSeconds = true;
 
+			hasRefreshOccurredWithinSeconds = true;
 		}
 		public void ChangeLabel(string label, int index)
 		{
