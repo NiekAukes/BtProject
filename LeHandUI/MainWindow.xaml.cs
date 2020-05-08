@@ -33,11 +33,7 @@ namespace LeHandUI
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public SaveCommand()
-		{
-
-		}
-
+		public SaveCommand() {}
 		public bool CanExecute(object parameter)
 		{
 			return true;
@@ -48,6 +44,7 @@ namespace LeHandUI
 			//MessageBox.Show("HelloWorld");
 			string writePath = LHregistry.GetFile(FileManager.currentFile);
 			MainWindow.UnChangedFile(MainWindow.Listbox);
+			
 		}
 	}
 
@@ -55,6 +52,8 @@ namespace LeHandUI
 	public partial class MainWindow : Window
 	{
 		public static ListBox Listbox = null;
+
+		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
 		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -70,12 +69,13 @@ namespace LeHandUI
 			}
 			finally { DeleteObject(handle); }
 		}
+        #endregion
 
-		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-		//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-		//List<string> LuaNames = new List<string>();
+        //Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
+        //DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
+        //List<string> LuaNames = new List<string>();
 
-		Stopwatch refreshTimer = new Stopwatch();
+        Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
 		bool hasRefreshOccurredWithinSeconds = false;
 
