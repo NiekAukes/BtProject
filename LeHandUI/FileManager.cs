@@ -16,6 +16,7 @@ namespace LeHandUI
         public static bool[] isFileSaved = new bool[50];
         public static string[] files = new string[50];
         public static int currentFile = -1;
+        public static int currentLoadedIndex = -1;
         /// <summary>
         /// creates new file, returns -1 if failed
         /// </summary>
@@ -62,13 +63,13 @@ namespace LeHandUI
                 reader.Close();
                 stream.Close();
 
+                currentFile = id;
+                isFileSaved[id] = true;
             }
             else
             {
                 return null;
             }
-            currentFile = id;
-            isFileSaved[id] = true;
             return fileContents;
         }
 

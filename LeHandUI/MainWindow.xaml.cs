@@ -84,6 +84,7 @@ namespace LeHandUI
 			SelectedItemIndex = naam.SelectedIndex;
 			int[] id = LHregistry.GetAllFileIds();
 			int ActualFileId = id[SelectedItemIndex];
+			FileManager.currentLoadedIndex = SelectedItemIndex;
 
 			string FileContents = FileManager.LoadFile(ActualFileId);
 			if (FileContents != null)
@@ -143,7 +144,7 @@ namespace LeHandUI
 		}
 		public static void UnChangedFile(ListBox list)
 		{
-			int index = FileManager.currentFile;
+			int index = FileManager.currentLoadedIndex;
 			if (index > -1)
 			{
 				if (!FileManager.isFileSaved[index])
@@ -159,7 +160,7 @@ namespace LeHandUI
 
 		private void ChangedFile(object sender, KeyEventArgs e)
 		{
-			int index = FileManager.currentFile;
+			int index = FileManager.currentLoadedIndex;
 			if (index > -1)
 			{
 				if (FileManager.isFileSaved[index])
