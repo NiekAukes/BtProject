@@ -12,8 +12,9 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
     </WindowChrome.WindowChrome>
-    <!--COLOUR SCHEME: #212121 , #065464 , #34acbc , #85c3cf , #7a7d84 
-                 very dark blue, dark blue, aqua,    pale aqua, greyish-->
+    <!--COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
+                   (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
+                 very dark blue, dark blue,    aqua,      pale aqua,     greyish-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -57,21 +58,24 @@
             </TextBlock.Style>
         </TextBlock>
         <Button
-		Grid.Column="7" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
+		Grid.Column="7" Name="minimizeButton" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
 		Style="{StaticResource TitleBarButtonStyle}"  Grid.ColumnSpan="2" ToolTip="Minimize Window">
             <Path Width="46" Height="32" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
 			StrokeThickness="1" />
+
         </Button>
+        <!--"M0,1 L9,1 L9,8 L0,8 Z"-->
         <Button Name="restoreButton" Grid.Column="9" Click="MaximizeWindow" Foreground="White"
 		Style="{StaticResource TitleBarButtonStyle}" ToolTip="Change Window Mode (Fullscreen/Windowed)">
-            <Path Width="46" Height="32" Data="M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5"
+            <Path x:Name="restoreButonPath" Width="46" Height="32" Data="M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z"
+                  
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
 			StrokeThickness="1" />
         </Button>
         <Button
-		Grid.Column="10" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
+		Grid.Column="10" Name="closeButton" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
             <Path Width="46" Height="32" Data="M 18,11 27,20 M 18,20 27,11" ToolTip="Close Program"
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"

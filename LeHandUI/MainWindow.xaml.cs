@@ -23,6 +23,7 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 using ICSharpCode.AvalonEdit;
+using System.Windows.Forms;
 
 namespace LeHandUI
 {
@@ -51,7 +52,7 @@ namespace LeHandUI
 
 	public partial class MainWindow : Window
 	{
-		public static ListBox Listbox = null;
+		public static System.Windows.Controls.ListBox Listbox = null;
 
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -80,7 +81,7 @@ namespace LeHandUI
 		bool hasRefreshOccurredWithinSeconds = false;
 
 		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
-			ListBox naam = (ListBox)(sender);
+			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
 			SelectedItemIndex = naam.SelectedIndex;
 			int[] id = LHregistry.GetAllFileIds();
 			int ActualFileId = id[SelectedItemIndex];
@@ -126,23 +127,19 @@ namespace LeHandUI
 
 			hasRefreshOccurredWithinSeconds = true;
 		}
-		public void ChangeLabel(string label, int index)
-		{
+		public void ChangeLabel(string label, int index){
 			LuaFileView.Items.RemoveAt(index);
 			LuaFileView.Items.Insert(index, label);
 		}
-		public static void ChangeLabel(ListBox list, string label, int index)
-		{
+		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index){
 			list.Items.RemoveAt(index);
 			list.Items.Insert(index, label);
 		}
-		public static void UnChangedFile(ListBox list)
+		public static void UnChangedFile(System.Windows.Controls.ListBox list)
 		{
 			int index = FileManager.currentLoadedIndex;
-			if (index > -1)
-			{
-				if (!FileManager.isFileSaved[index])
-				{
+			if (index > -1){				
+				if (!FileManager.isFileSaved[index]){
 
 					FileManager.isFileSaved[index] = true;
 					string label = (string)(list.Items[index]);
@@ -152,11 +149,10 @@ namespace LeHandUI
 			}
 		}
 
-		private void ChangedFile(object sender, KeyEventArgs e)
+		private void ChangedFile(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			int index = FileManager.currentLoadedIndex;
-			if (index > -1)
-			{
+			if (index > -1){
 				if (FileManager.isFileSaved[index])
 				{
 					FileManager.isFileSaved[index] = false;
@@ -166,8 +162,7 @@ namespace LeHandUI
 			}
 		}
 		private void AddReferenceScript(object sender, EventArgs e) {
-			OpenFileDialog openFileExplorer = new OpenFileDialog()
-			{
+			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog(){
 				CheckFileExists = true,
 				CheckPathExists = true,
 				InitialDirectory = @"Documents",
@@ -176,8 +171,7 @@ namespace LeHandUI
 			};
 
 			Nullable<bool> result = openFileExplorer.ShowDialog();
-			if (result == true)
-			{
+			if (result == true){
 				string newFilePath = openFileExplorer.FileName;
 				int newFileId = FileManager.AddReference(newFilePath);
 				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
@@ -185,17 +179,19 @@ namespace LeHandUI
 			}
 
 		}
-		private void SaveScript(object sender, EventArgs e)
-		{
+		private void SaveScript(object sender, EventArgs e){
 			return;
 		}
-		private void RunLuaScript(object sender, EventArgs e)
-		{
+		private void RunLuaScript(object sender, EventArgs e){
 			Startwindow sw = new Startwindow();
 			sw.Show();
 			return;
 		}
 
+
+		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b) {
+			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g),(byte)(b)));
+		}
 
 		public MainWindow()
 		{
@@ -245,10 +241,14 @@ namespace LeHandUI
 		private void MaximizeWindow(object sender, EventArgs e){
 			if (App.Current.MainWindow.WindowState == WindowState.Maximized)
 			{
+				restoreButonPath.Data = Geometry.Parse("M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z");
+
+
 				App.Current.MainWindow.WindowState = WindowState.Normal;
 			}
 			else if (App.Current.MainWindow.WindowState == WindowState.Normal)
 			{
+				restoreButonPath.Data = Geometry.Parse("M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5");
 				App.Current.MainWindow.WindowState = WindowState.Maximized;
 			}
 		}
@@ -259,6 +259,7 @@ namespace LeHandUI
 		{
 			this.DragMove();
 		}
+		
 		#endregion
 
 	}
