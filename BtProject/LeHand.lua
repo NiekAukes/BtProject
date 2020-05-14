@@ -7,6 +7,15 @@ AX = 5
 AY = 6
 AZ = 7
 RY = 8
+Prot9 = 9 -- undefined, for later use
+Prot10 =10
+Prot11 =11
+Prot12 =12
+Prot13 =13
+Prot14 =14
+Prot15 =15
+Prot16 =16
+
 
 Mode_Press = 0
 Mode_Absolute = 1
