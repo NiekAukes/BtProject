@@ -24,6 +24,7 @@ using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 using ICSharpCode.AvalonEdit;
 using WPFCustomMessageBox;
+using System.Windows.Forms;
 
 namespace LeHandUI
 {
@@ -34,11 +35,7 @@ namespace LeHandUI
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public SaveCommand()
-		{
-
-		}
-
+		public SaveCommand() {}
 		public bool CanExecute(object parameter)
 		{
 			return true;
@@ -50,6 +47,7 @@ namespace LeHandUI
 			string writePath = LHregistry.GetFile(FileManager.currentFile);
 			MainWindow.inst.textEditor.Save(writePath);
 			MainWindow.UnChangedFile(MainWindow.Listbox);
+			
 		}
 	}
 
@@ -57,7 +55,9 @@ namespace LeHandUI
 	public partial class MainWindow : Window
 	{
 		public static MainWindow inst = null;
-		public static ListBox Listbox = null;
+		public static System.Windows.Controls.ListBox Listbox = null;
+
+		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
 		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -73,18 +73,18 @@ namespace LeHandUI
 			}
 			finally { DeleteObject(handle); }
 		}
+        #endregion
 
-		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-		//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-		//List<string> LuaNames = new List<string>();
+        //Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
+        //DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
+        //List<string> LuaNames = new List<string>();
 
-		Stopwatch refreshTimer = new Stopwatch();
+        Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
 		bool hasRefreshOccurredWithinSeconds = false;
 
-		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
-		{
-			ListBox naam = (ListBox)(sender);
+		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
+			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
 			SelectedItemIndex = naam.SelectedIndex;
 			if (SelectedItemIndex < 0)
 				return;
@@ -105,12 +105,6 @@ namespace LeHandUI
 			}
 
 		}
-		/*private void AddLuaScript(object sender, EventArgs e) {
-			string filePath = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames\\Testfile1.lua";
-			int newFileId = FileManager.Addfile(filePath);
-			LuaNames.Add(LHregistry.getSimpleName(filePath));
-			LuaFileView.Items.Refresh();
-		}*/
 		private void RemoveLuaScript(object sender, EventArgs e) {
 			int idToBeRemoved = -1; //some ridiculous number, i. e. -1 just isn't possible
 
@@ -144,20 +138,18 @@ namespace LeHandUI
 				
 			}
 			else{}
-			hasRefreshOccurredWithinSeconds = true;
 
+			hasRefreshOccurredWithinSeconds = true;
 		}
-		public void ChangeLabel(string label, int index)
-		{
+		public void ChangeLabel(string label, int index){
 			LuaFileView.Items.RemoveAt(index);
 			LuaFileView.Items.Insert(index, label);
 		}
-		public static void ChangeLabel(ListBox list, string label, int index)
-		{
+		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index){
 			list.Items.RemoveAt(index);
 			list.Items.Insert(index, label);
 		}
-		public static void UnChangedFile(ListBox list)
+		public static void UnChangedFile(System.Windows.Controls.ListBox list)
 		{
 			int index = FileManager.currentLoadedIndex;
 			if (index > -1 && FileManager.currentFile > -1)
@@ -173,7 +165,7 @@ namespace LeHandUI
 			}
 		}
 		public bool BypassTextChangedEvent = true;
-		private void ChangedFile(object sender, EventArgs e)
+		private void ChangedFile(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			if (!BypassTextChangedEvent)
 			{
@@ -191,8 +183,7 @@ namespace LeHandUI
 			BypassTextChangedEvent = false;
 		}
 		private void AddReferenceScript(object sender, EventArgs e) {
-			OpenFileDialog openFileExplorer = new OpenFileDialog()
-			{
+			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog(){
 				CheckFileExists = true,
 				CheckPathExists = true,
 				InitialDirectory = @"Documents",
@@ -201,8 +192,7 @@ namespace LeHandUI
 			};
 
 			Nullable<bool> result = openFileExplorer.ShowDialog();
-			if (result == true)
-			{
+			if (result == true){
 				string newFilePath = openFileExplorer.FileName;
 				int newFileId = FileManager.AddReference(newFilePath);
 				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
@@ -262,19 +252,22 @@ namespace LeHandUI
 		{
 
 			Communicator.Init();
+		
 		}
+		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b) {
+			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g),(byte)(b)));
 		public MainWindow()
 		{
 			Loaded += OnWindowLoaded;
 			inst = this;
 			InitializeComponent();
-
 			FileManager.LoadAllFiles();
 
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
-				new KeyGesture(Key.S, ModifierKeys.Control
-				)));
+				new KeyGesture(Key.S, ModifierKeys.Control)
+				
+				));
 
 			Listbox = LuaFileView;
 
@@ -295,15 +288,9 @@ namespace LeHandUI
 			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
 			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
 			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
-
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
 		}
-
-
-
-
-
 
         //Handlers for custom titlebar buttons
         #region TitleBarButtonHandlers
@@ -313,10 +300,14 @@ namespace LeHandUI
 		private void MaximizeWindow(object sender, EventArgs e){
 			if (App.Current.MainWindow.WindowState == WindowState.Maximized)
 			{
+				restoreButonPath.Data = Geometry.Parse("M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z");
+
+
 				App.Current.MainWindow.WindowState = WindowState.Normal;
 			}
 			else if (App.Current.MainWindow.WindowState == WindowState.Normal)
 			{
+				restoreButonPath.Data = Geometry.Parse("M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5");
 				App.Current.MainWindow.WindowState = WindowState.Maximized;
 			}
 		}
@@ -329,6 +320,5 @@ namespace LeHandUI
 			this.DragMove();
 		}
 		#endregion
-
 	}
 }

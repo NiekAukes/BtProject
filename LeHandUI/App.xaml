@@ -21,8 +21,9 @@
                 <Setter Property="Foreground" Value="#F2F2F2"/>
             </Style.Setters>
         </Style>
-        
-        <Style x:Key="TranspButton" TargetType="{x:Type Button}">
+
+        <Style x:Key="TranspButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Height" Value="16"/>
             <Setter Property="Width" Value="16"/>
@@ -32,9 +33,18 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent">
-                            <ContentPresenter/>
+                        <Border Name="border" Background="{TemplateBinding Background}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#797979" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#464646"/>
+                               
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -75,10 +85,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource MouseOverOverlayBackgroundBrush}" />
+                                <Setter TargetName="border" Property="Background" Value="#464646" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource PressedOverlayBackgroundBrush}" />
+                                <Setter TargetName="border" Property="Background" Value="#797979" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -109,12 +119,12 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource MouseOverWindowCloseButtonBackgroundBrush}" />
-                                <Setter Property="Foreground" Value="{DynamicResource MouseOverWindowCloseButtonForegroundBrush}" />
+                                <Setter TargetName="border" Property="Background" Value="#A0282C" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource PressedWindowCloseButtonBackgroundBrush}" />
-                                <Setter Property="Foreground" Value="{DynamicResource MouseOverWindowCloseButtonForegroundBrush}" />
+                                <Setter TargetName="border" Property="Background" Value="#E2383E" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
