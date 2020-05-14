@@ -95,6 +95,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WPFCustomMessageBox, Version=1.0.7.39267, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFCustomMessageBox.1.0.7\lib\WPFCustomMessageBox.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -221,6 +224,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icons\icon64\WASHED_OUT_RED_DeleteIcon64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

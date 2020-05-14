@@ -35,7 +35,7 @@ namespace LeHandUI
             }
             System.Diagnostics.Debug.WriteLine("app");
         }
-
+        
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             Communicator.quit();

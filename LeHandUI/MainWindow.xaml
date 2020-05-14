@@ -136,7 +136,7 @@
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="textEditor" FontFamily="Consolas" 
-            KeyDown="ChangedFile"
+            TextChanged="ChangedFile"
             
             BorderThickness="1" BorderBrush="#F2F2F2" FontSize="15"
             Grid.Column="6" Grid.ColumnSpan="5" Grid.Row="3" Grid.RowSpan="2" Background="#212121" Foreground="#F2F2F2"

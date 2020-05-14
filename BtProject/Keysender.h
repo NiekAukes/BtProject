@@ -94,6 +94,9 @@ public:
 	HANDLE errorpipe;
 	char errorbuffer[1024];
 	DWORD dwerrorread;
+	HANDLE inputpipe;
+	char inputbuffer[1024];
+	DWORD dwinputread;
 
 	HRESULT error = S_OK;
 

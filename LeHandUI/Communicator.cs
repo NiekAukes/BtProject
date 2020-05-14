@@ -9,6 +9,10 @@ using System.IO.Pipes;
 using System.Security.Principal;
 using System.Threading;
 using System.Security.Cryptography;
+using WPFCustomMessageBox;
+using System.Windows;
+
+using System.Runtime.InteropServices;
 
 namespace LeHandUI
 {
@@ -60,6 +64,8 @@ namespace LeHandUI
         public int id;
         public double val;
 	}
+
+
     public static class CommunicatorHelper
     {
         public static T[] SubArray<T>(this T[] data, int index, int length)
@@ -68,6 +74,7 @@ namespace LeHandUI
             Array.Copy(data, index, result, 0, length);
             return result;
         }
+        
     }
     public class Communicator
     {
@@ -84,11 +91,19 @@ namespace LeHandUI
             S_OK,
             S_Error
         }
+        private static void WriteCommand(string command)
+        {
+            command += "\n";
+            byte[] r = Encoding.ASCII.GetBytes(command);
+            inputStream.Write(r, 0, r.Length); //pipe is broken error
+        }
 
         public static Process process = null;
+        public static bool isHooked = false;
         public static string LatestLog = "";
         private static NamedPipeClientStream dataStream;
         private static NamedPipeClientStream errorStream;
+        private static NamedPipeClientStream inputStream;
         static Expectedtype expected;
 
 
@@ -252,45 +267,66 @@ namespace LeHandUI
         static Thread distribution = null;
 		public static void Init()
         {
-            //Process Device = new Process
-            //{
-            //    StartInfo =
-            //    {
-            //        FileName = "C:/Users/Niek Aukes/source/repos/BtProject/Release/BtProject.exe",
-            //        CreateNoWindow = false,
-            //        UseShellExecute = false
-            //    }
-            //};
-            process = new Process();
+            bool startnewProcess = true;
+            Process[] processes = Process.GetProcessesByName("LeHand");
+            if (processes.Length > 0)
+            {
+                
+                MessageBoxResult result = CustomMessageBox.ShowYesNo(
+                    "There's a console process running, do you want to hook it?", 
+                    "Lehand Process running",
+                    "yes", "no", System.Windows.MessageBoxImage.Exclamation
+                    );
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    process = processes[0];
+                    startnewProcess = false;
+                    isHooked = true;
+                }
+
+            }
+            if (startnewProcess)
+            {
+                process = new Process();
 
 
-            //process.StartInfo.FileName = "LeHand.exe";
-            //process.StartInfo.CreateNoWindow = false;
-            //process.StartInfo.UseShellExecute = false;
-            //process.StartInfo.RedirectStandardOutput = false;
-            //process.StartInfo.RedirectStandardError = true;
-            //process.StartInfo.RedirectStandardInput = true;
-            //process.OutputDataReceived += new DataReceivedEventHandler
-            //(
-            //    delegate (object sender, DataReceivedEventArgs e)
-            //    {
-            //        // append the new data to the data already read-in
-            //        Debug.WriteLine(e.Data);
-            //        LatestLog = e.Data;
-            //    }
-            //);
-            //process.Start();
-            Thread.Sleep(3000);
-            process = Process.GetProcessesByName("LeHand")[0];
+                process.StartInfo.FileName = "LeHand.exe";
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardInput = true;
+                process.OutputDataReceived += new DataReceivedEventHandler
+                (
+                    delegate (object sender, DataReceivedEventArgs e)
+                    {
+                        // append the new data to the data already read-in
+                        Debug.WriteLine(e.Data);
+                        LatestLog = e.Data;
+                    }
+                );
+                process.Start();
+            }
+            //process = new Process();
+
+
+            
+            //Thread.Sleep(3000);
             //process.BeginOutputReadLine();
 
             dataStream = new NamedPipeClientStream(@".", @"LeHandData");
-            errorStream = new NamedPipeClientStream("LeHandError");
+            errorStream = new NamedPipeClientStream(@".", @"LeHandError");
+            inputStream = new NamedPipeClientStream(@".", @"LeHandInput");
 
             dataStream.Connect();
+            inputStream.Connect();
+            //byte[] r = Encoding.ASCII.GetBytes("help\n");
+            //inputStream.Write(r, 0, r.Length);
+            WriteCommand("help");
             //errorStream.Connect();
 
-            //process.StandardInput.WriteLine("device discover");
+            //WriteCommand("device discover");
 
             readres = dataStream.BeginRead(buf, 0, 1024, null, null);
             distribution = new Thread(new ThreadStart(DistributeData));
@@ -302,7 +338,7 @@ namespace LeHandUI
         {
             public static status discover()
             {
-                process.StandardInput.WriteLine("device discover");
+                WriteCommand("device discover");
                 process.BeginErrorReadLine();
                 if (LatestLog.StartsWith("ERROR"))
                     return status.S_Error;
@@ -323,10 +359,12 @@ namespace LeHandUI
         }
         public static status start()
         {
+            WriteCommand("start");
             return status.S_OK;
         }
-        public static status load()
+        public static status load(string filepath)
         {
+            WriteCommand("load \"" + filepath + "\"");
             return status.S_OK;
         }
         public static status quit()
@@ -334,7 +372,8 @@ namespace LeHandUI
 
             if (process != null)
             {
-                //process.StandardInput.WriteLine("quit");
+                //if (!isHooked)
+                    WriteCommand("quit");
                 return status.S_OK;
             }
             else

@@ -301,7 +301,7 @@ namespace LeHandUI
             else
             {
                 //Void hasn't succeeded
-                Debug.WriteLine("public static void addNodeToGraph failed to execute, could not assign graphIdOfMasterGraph");
+                Debug.WriteLine("public static void addNodeToGraph(int, double) failed to execute, could not assign graphIdOfMasterGraph");
             }
         }
 

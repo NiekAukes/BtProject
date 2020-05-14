@@ -1,8 +1,11 @@
 #include "CommandManager.h"
 #include <limits>
+#include <sstream>
+#include <string>
 #undef min
 #undef max
 CommandManager* CommandManager::inst = nullptr;
+//std::string CommandManager::command;
 
 int convchar2int(char c[2])
 {
@@ -85,9 +88,61 @@ void CommandManager::loadbtdfile(std::string arg1) {
 	return;
 }
 
-
-void doData(BTService service, Keysender* keysend) {
+bool waiting = false;
+void CommandManager::inputasync(std::string* cmd) {
 	while (1) {
+		if (std::cin.fail()) {
+			auto state = std::cin.rdstate();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cin.clear();
+			state = std::cin.rdstate();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		}
+		while (!waiting) {}
+		std::string s;
+		std::getline(std::cin, s);
+
+		s.push_back('\n');
+		cmd->append(s);
+
+	}
+}
+
+void CommandManager::doData(BTService service, Keysender* keysend, std::string* cmd) {
+	while (1) {
+		char* buf = new char[1024];
+		DWORD dwRead = 0;
+		DWORD dwWrite = 0;
+		while (Keysender::inst->inputpipe != INVALID_HANDLE_VALUE)
+		{
+			if (ConnectNamedPipe(Keysender::inst->inputpipe, NULL) != FALSE)   // wait for someone to connect to the pipe
+			{
+				while (ReadFile(Keysender::inst->inputpipe, buf, sizeof(buf) - 1, &dwRead, NULL) != FALSE)
+				{
+					/* add terminating zero */
+					buf[dwRead] = '\0';
+
+					/* do something with data in buffer */
+
+					while (!waiting) {}
+					std::string s((const char*)buf);
+					cmd->append(s);
+					std::this_thread::sleep_for(std::chrono::milliseconds(20));
+				}
+			}
+
+			DisconnectNamedPipe(Keysender::inst->inputpipe);
+		}
+		/*bool c = ConnectNamedPipe(Keysender::inst->inputpipe, NULL);
+
+		bool w = WriteFile(Keysender::inst->inputpipe, "hello", 6, &dwWrite, NULL);
+		DWORD last = GetLastError();
+		
+		bool r = ReadFile(Keysender::inst->inputpipe, buf, 1023, &dwRead, NULL);
+		last = GetLastError();*/
+
+
 		std::vector<short> dat = service.GetGeneratedData();
 
 		short* sdat = new short[dat.size()];
@@ -99,7 +154,24 @@ void doData(BTService service, Keysender* keysend) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }
-
+int findinstr(const char* string, char c) {
+	waiting = false;
+	if (*string == '\0')
+		return 0;
+	char* str = new char[512];
+	size_t len = strlen(string);
+	strcpy_s(str, len + 1, string);
+	for (int i = 0; i < len; i++) {
+		char a = *(str + i);
+		if (a == c)
+		{
+			delete[] str;
+			return 1;
+		}
+	}
+	delete[] str;
+	return 0;
+}
 void CommandManager::startcommander(bool intro, std::string loadfile)
 {
 	if (true || std::this_thread::get_id() == commandthread->get_id())
@@ -120,29 +192,44 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		SetConsoleTitleW(L"LeHand");
 
 		//setup pipes
+				
 		keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandData"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
 		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandError"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
-		
+		keysend->inputpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandInput"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
 		
 		std::string command;
 
-		std::thread datathread(doData, service, keysend);
-
+		std::thread datathread(doData, service, keysend, &command);
+		std::thread inputthread(inputasync, &command);
 		while (1)
 		{
-			if (std::cin.fail()) {
-				auto state = std::cin.rdstate();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				std::cin.clear();
-				state = std::cin.rdstate();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
+			args.clear();
+			//char f = std::cin.peek();
+			while (!findinstr(command.c_str(), '\n')) { 
+				waiting = true;
+				std::this_thread::sleep_for(std::chrono::milliseconds(20));
 			}
-			char f = std::cin.peek();
-			std::cin >> command;
+			waiting = false;
+
+			
+
+			//std::cin >> command;
 			if (*command.c_str() != '\0') {
+				command = command.substr(0, command.size() - 1);
+
+				std::stringstream ss(command);
+				std::string segment;
+
+				while (std::getline(ss, segment, ' '))
+				{
+					args.push_back(segment);
+				}
+
+				command = args[0];
+
 				if (command._Equal("rule"))
 				{
 #ifdef Obsolete
@@ -313,10 +400,11 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				}
 				else if (command._Equal("device"))
 				{
-					std::string arg2;
-					if (std::cin.peek() == 10)
+					std::string arg2 = args[1];
+					waiting = false;
+					/*if (std::cin.peek() == 10)
 						std::cout << "specify action: discover connect list\n";
-					std::cin >> arg2;
+					std::cin >> arg2;*/
 					if (arg2._Equal("discover"))
 					{
 						int ndev = service.Discover(&devices);
@@ -335,10 +423,10 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 								service.Connect(*devices);
 							}
 							else {
-								int arg3;
-								if (std::cin.peek() == 10)
+								int arg3 = std::stoi(args[2]);
+								/*if (std::cin.peek() == 10)
 									std::cout << "device: ";
-								std::cin >> arg3;
+								std::cin >> arg3;*/
 								if (arg3 < deviceLen + 1)
 									service.Connect(*(devices + arg3));
 								else
@@ -400,15 +488,27 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 #endif
 				}
 				else if (command._Equal("load")) {
+					std::string full(args[1]);
+					if (findinstr(full.c_str(), '\"')) {
+						for (int i = 2; i < args.size(); i++) {
+							full.append(args[i]);
+							if (findinstr(args[i].c_str(), '\"'))
+								break;
+						}
 
-					std::string skip;
-					std::string arg1;
-					std::getline(std::getline(std::cin, skip, '"'), arg1, '"');
+						for (int i = 0; i < full.size(); i++) {
+							if (full[i] == '\"') {
+								full.erase(i, i + 1);
+								i--;
+							}
+						}
+
 #ifdef Obsolete
-					loadbtdfile(arg1);
+						loadbtdfile(arg1);
 #else 
-					Keysender::LuaFile = arg1;
+						Keysender::LuaFile = full;
 #endif
+					}
 				}
 				//else if (command._Equal("pipe")) {
 				//	std::string arg1; //pipeName
@@ -449,8 +549,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					system(command.c_str());
 				}
 			}
-				else return;
+			else return;
 			std::cout << "\n";
+			command = "";
 		}
 	}
 }

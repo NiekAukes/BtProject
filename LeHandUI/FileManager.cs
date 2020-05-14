@@ -13,7 +13,8 @@ namespace LeHandUI
     }
     class FileManager
     {
-        public static bool[] isFileSaved = new bool[50];
+        public static bool[] isFileNotSaved = new bool[50];
+        public static string[] FileCache = new string[50];
         public static string[] files = new string[50];
         public static int currentFile = -1;
         public static int currentLoadedIndex = -1;
@@ -49,27 +50,35 @@ namespace LeHandUI
             return -1;
         }*/
 
-        public static string LoadFile(int id) 
+        public static string LoadFile(int id)
         {
-
-            //load new file
             string fileContents = "";
-            byte[] cont = new byte[files[id].Length];
-            if (files[id] != null)
+            //check if file is cached
+            if (!isFileNotSaved[id])
             {
-                FileStream stream = File.OpenRead(LHregistry.GetFile(id));
-                StreamReader reader = new StreamReader(stream);
-                fileContents = reader.ReadToEnd();
-                reader.Close();
-                stream.Close();
+                //load new file
+                byte[] cont = new byte[files[id].Length];
+                if (files[id] != null)
+                {
+                    FileStream stream = File.OpenRead(LHregistry.GetFile(id));
+                    StreamReader reader = new StreamReader(stream);
+                    fileContents = reader.ReadToEnd();
+                    reader.Close();
+                    stream.Close();
 
-                currentFile = id;
-                isFileSaved[id] = true;
+                    
+                    isFileNotSaved[id] = false;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
-                return null;
+                fileContents = FileCache[id];
             }
+            currentFile = id;
             return fileContents;
         }
 

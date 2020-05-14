@@ -518,7 +518,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			{
 				vshort.push_back(*((short*)&val + i));
 			}
-			std::cout << "sent: " << val << '\n';
+			//std::cout << "sent: " << val << '\n';
 			//Footer
 			vshort.push_back(0xFFFF);
 

@@ -23,6 +23,7 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 using Microsoft.Win32;
 using ICSharpCode.AvalonEdit;
+using WPFCustomMessageBox;
 
 namespace LeHandUI
 {
@@ -47,6 +48,7 @@ namespace LeHandUI
 		{
 			//MessageBox.Show("HelloWorld");
 			string writePath = LHregistry.GetFile(FileManager.currentFile);
+			MainWindow.inst.textEditor.Save(writePath);
 			MainWindow.UnChangedFile(MainWindow.Listbox);
 		}
 	}
@@ -54,6 +56,7 @@ namespace LeHandUI
 
 	public partial class MainWindow : Window
 	{
+		public static MainWindow inst = null;
 		public static ListBox Listbox = null;
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -79,16 +82,28 @@ namespace LeHandUI
 		int SelectedItemIndex;
 		bool hasRefreshOccurredWithinSeconds = false;
 
-		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
+		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
+		{
 			ListBox naam = (ListBox)(sender);
 			SelectedItemIndex = naam.SelectedIndex;
+			if (SelectedItemIndex < 0)
+				return;
 			int[] id = LHregistry.GetAllFileIds();
 			int ActualFileId = id[SelectedItemIndex];
 			FileManager.currentLoadedIndex = SelectedItemIndex;
 
+			//save old on memory
+			if (FileManager.currentFile >= 0)
+				FileManager.FileCache[FileManager.currentFile] = textEditor.Text;
+
+
 			string FileContents = FileManager.LoadFile(ActualFileId);
 			if (FileContents != null)
+			{
+				BypassTextChangedEvent = true;
 				textEditor.Text = FileContents;
+			}
+
 		}
 		/*private void AddLuaScript(object sender, EventArgs e) {
 			string filePath = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames\\Testfile1.lua";
@@ -145,31 +160,35 @@ namespace LeHandUI
 		public static void UnChangedFile(ListBox list)
 		{
 			int index = FileManager.currentLoadedIndex;
-			if (index > -1)
+			if (index > -1 && FileManager.currentFile > -1)
 			{
-				if (!FileManager.isFileSaved[index])
+				if (FileManager.isFileNotSaved[FileManager.currentFile])
 				{
 
-					FileManager.isFileSaved[index] = true;
+					FileManager.isFileNotSaved[FileManager.currentFile] = false;
 					string label = (string)(list.Items[index]);
 					label = label.Remove(label.Length - 1);
 					ChangeLabel(list, label, index);
 				}
 			}
 		}
-
-		private void ChangedFile(object sender, KeyEventArgs e)
+		public bool BypassTextChangedEvent = true;
+		private void ChangedFile(object sender, EventArgs e)
 		{
-			int index = FileManager.currentLoadedIndex;
-			if (index > -1)
+			if (!BypassTextChangedEvent)
 			{
-				if (FileManager.isFileSaved[index])
+				int index = FileManager.currentLoadedIndex;
+				if (index > -1 && FileManager.currentFile > -1)
 				{
-					FileManager.isFileSaved[index] = false;
-					string label = (string)(LuaFileView.Items[index]) + "*";
-					ChangeLabel(label, index);
+					if (!FileManager.isFileNotSaved[FileManager.currentFile])
+					{
+						FileManager.isFileNotSaved[FileManager.currentFile] = true;
+						string label = (string)(LuaFileView.Items[index]) + "*";
+						ChangeLabel(label, index);
+					}
 				}
 			}
+			BypassTextChangedEvent = false;
 		}
 		private void AddReferenceScript(object sender, EventArgs e) {
 			OpenFileDialog openFileExplorer = new OpenFileDialog()
@@ -193,19 +212,61 @@ namespace LeHandUI
 		}
 		private void SaveScript(object sender, EventArgs e)
 		{
+			string writePath = LHregistry.GetFile(FileManager.currentFile);
+			textEditor.Save(writePath);
+			UnChangedFile(Listbox);
 			return;
 		}
 		private void RunLuaScript(object sender, EventArgs e)
 		{
+			if (FileManager.currentFile < 0)
+				return;
+			//check if files are saved
+			bool unsavedFiles = false;
+			for (int i = 0; i < FileManager.isFileNotSaved.Length; i++)
+			{
+				if (FileManager.isFileNotSaved[i]) 
+				{
+					unsavedFiles = true;
+					break;
+				}
+			}
+			if (unsavedFiles)
+			{
+				MessageBoxResult res = CustomMessageBox.ShowYesNoCancel(
+					"There are unsaved files, do you want to save all files?",
+					"Unsaved Files", 
+					"Yes", "No", "Cancel", MessageBoxImage.Exclamation
+					);
+				if (res == MessageBoxResult.Yes)
+				{
+					string writePath = LHregistry.GetFile(FileManager.currentFile);
+					textEditor.Save(writePath);
+					UnChangedFile(Listbox);
+				}
+				if (res == MessageBoxResult.Cancel)
+					return;
+
+			}
+			//load and run lua script
+			
+			Communicator.load(FileManager.files[FileManager.currentFile]);
+
+			//start monitoring
 			Startwindow sw = new Startwindow();
 			sw.Show();
 			return;
 		}
 
+		void OnWindowLoaded(object sender, EventArgs e)
+		{
 
+			Communicator.Init();
+		}
 		public MainWindow()
 		{
-			Communicator.Init();
+			Loaded += OnWindowLoaded;
+			inst = this;
 			InitializeComponent();
 
 			FileManager.LoadAllFiles();
@@ -225,6 +286,7 @@ namespace LeHandUI
 				LuaFileView.Items.Add(LuaNames[i]);
 			}
 
+			BypassTextChangedEvent = true;
 			textEditor.Text = "function Start()\n	print(\"preview\")\nend";
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
@@ -259,7 +321,8 @@ namespace LeHandUI
 			}
 		}
 		private void CloseWindow(object sender, EventArgs e){
-			App.Current.MainWindow.Close();
+			//App.Current.MainWindow.Close();
+			App.Current.Shutdown();
 		}
 		private void DragStart(object sender, MouseButtonEventArgs e)
 		{

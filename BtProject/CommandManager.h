@@ -17,8 +17,8 @@ private:
 	static CommandManager* inst;
 	void starter();
 
-	
-	
+
+
 public:
 	bool active = false;
 	static CommandManager* GetInst()
@@ -31,6 +31,11 @@ public:
 		}
 		return inst;
 	}
+
+	//static std::string command;
+	static void doData(BTService service, Keysender* keysend, std::string* cmd);
+	static void inputasync(std::string* cmd);
+	std::vector<std::string> args;
 	void loadbtdfile(std::string arg1);
 	void loadluafile(std::string arg1);
 	void startcommander(bool intro, std::string loadfile = "");
