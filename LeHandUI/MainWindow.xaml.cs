@@ -197,13 +197,13 @@ namespace LeHandUI
 		{
 			Communicator.Init();
 			InitializeComponent();
-
 			FileManager.LoadAllFiles();
 
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
-				new KeyGesture(Key.S, ModifierKeys.Control
-				)));
+				new KeyGesture(Key.S, ModifierKeys.Control)
+				
+				));
 
 			Listbox = LuaFileView;
 
@@ -223,15 +223,9 @@ namespace LeHandUI
 			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
 			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
 			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
-
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 
 		}
-
-
-
-
-
 
         //Handlers for custom titlebar buttons
         #region TitleBarButtonHandlers
@@ -259,8 +253,6 @@ namespace LeHandUI
 		{
 			this.DragMove();
 		}
-		
 		#endregion
-
 	}
 }
