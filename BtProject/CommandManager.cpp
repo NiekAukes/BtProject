@@ -100,9 +100,9 @@ void CommandManager::inputasync(std::string* cmd) {
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		}
-		while (!waiting) {}
 		std::string s;
 		std::getline(std::cin, s);
+		while (!waiting) {}
 
 		s.push_back('\n');
 		cmd->append(s);
@@ -126,8 +126,8 @@ void CommandManager::doData(BTService service, Keysender* keysend, std::string* 
 
 					/* do something with data in buffer */
 
-					while (!waiting) {}
 					std::string s((const char*)buf);
+					while (!waiting) {}
 					cmd->append(s);
 					std::this_thread::sleep_for(std::chrono::milliseconds(20));
 				}
@@ -158,7 +158,7 @@ void CommandManager::doData(BTService service, Keysender* keysend, std::string* 
 int findinstr(const char* string, char c) {
 	//waiting = false;
 	if (*string == '\0')
-		return 0;
+		return -2;
 	char* str = new char[512];
 	size_t len = strlen(string);
 	strcpy_s(str, len + 1, string);
@@ -167,12 +167,13 @@ int findinstr(const char* string, char c) {
 		if (a == c)
 		{
 			delete[] str;
-			return 1;
+			return i;
 		}
 	}
 	delete[] str;
-	return 0;
+	return -1;
 }
+std::string wait;
 void CommandManager::startcommander(bool intro, std::string loadfile)
 {
 	if (true || std::this_thread::get_id() == commandthread->get_id())
@@ -209,23 +210,28 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 
 		std::string command;
 
-		std::thread datathread(doData, service, keysend, &command);
-		std::thread inputthread(inputasync, &command);
+		std::thread datathread(doData, service, keysend, &wait);
+		std::thread inputthread(inputasync, &wait);
 		while (1)
 		{
 			args.clear();
 			//char f = std::cin.peek();
-			while (!findinstr(command.c_str(), '\n')) { 
+			while (findinstr(command.c_str(), '\n') < 0) { 
 				waiting = true;
 				std::this_thread::sleep_for(std::chrono::milliseconds(20));
+				command.append(wait);
+				wait.clear();
 			}
 			waiting = false;
 
 			
-
+			std::string end;
 			//std::cin >> command;
 			if (*command.c_str() != '\0') {
-				command = command.substr(0, command.size() - 1);
+				command = command.substr(0, findinstr(command.c_str(), '\n') - 1);
+				end = command.substr(findinstr(command.c_str(), '\n') - 1, command.size());
+
+
 
 				std::stringstream ss(command);
 				std::string segment;
@@ -533,6 +539,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				//}
 				else if (command._Equal("quit"))
 				{
+					CloseHandle(keysend->datapipe);
+					CloseHandle(keysend->errorpipe);
+					CloseHandle(keysend->inputpipe);
 					return;
 				}
 				else if (command._Equal("help") || command._Equal("--help"))
@@ -558,7 +567,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			}
 			else return;
 			std::cout << "\n";
-			command = "";
+			command = end;
 		}
 	}
 }
