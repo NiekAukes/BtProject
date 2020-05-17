@@ -165,7 +165,7 @@ namespace LeHandUI
 			}
 		}
 		public bool BypassTextChangedEvent = true;
-		private void ChangedFile(object sender, System.Windows.Input.KeyEventArgs e)
+		private void ChangedFile(object sender, EventArgs e)
 		{
 			if (!BypassTextChangedEvent)
 			{
@@ -241,7 +241,7 @@ namespace LeHandUI
 			//load and run lua script
 			
 			Communicator.load(FileManager.files[FileManager.currentFile]);
-
+			Communicator.start();
 			//start monitoring
 			Startwindow sw = new Startwindow();
 			sw.Show();
@@ -254,8 +254,10 @@ namespace LeHandUI
 			Communicator.Init();
 		
 		}
-		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b) {
-			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g),(byte)(b)));
+		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b)
+		{
+			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g), (byte)(b)));
+		}
 		public MainWindow()
 		{
 			Loaded += OnWindowLoaded;

@@ -155,7 +155,7 @@ void CommandManager::doData(BTService service, Keysender* keysend, std::string* 
 	}
 }
 int findinstr(const char* string, char c) {
-	waiting = false;
+	//waiting = false;
 	if (*string == '\0')
 		return 0;
 	char* str = new char[512];
