@@ -2,6 +2,7 @@
 #include <limits>
 #include <sstream>
 #include <string>
+
 #undef min
 #undef max
 CommandManager* CommandManager::inst = nullptr;
@@ -191,15 +192,21 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		//set title
 		SetConsoleTitleW(L"LeHand");
 
-		//setup pipes
-				
-		keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandData"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
-			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
-		keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandError"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
-			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
-		keysend->inputpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandInput"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
-			1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
 		
+		//setup pipes
+		std::fstream fileStream;
+		fileStream.open(TEXT("\\\\.\\pipe\\LeHandData"));
+		if (fileStream.fail()) {
+			keysend->datapipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandData"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+				1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
+
+			keysend->errorpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandError"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+				1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
+
+			keysend->inputpipe = CreateNamedPipe(TEXT("\\\\.\\pipe\\LeHandInput"), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+				1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
+		}
+
 		std::string command;
 
 		std::thread datathread(doData, service, keysend, &command);
