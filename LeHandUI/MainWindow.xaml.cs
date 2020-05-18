@@ -1,30 +1,19 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-
-using System.Xml;
-
-using ICSharpCode.AvalonEdit.CodeCompletion;
-using ICSharpCode.AvalonEdit.Folding;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Search;
-using Microsoft.Win32;
-using ICSharpCode.AvalonEdit;
 using WPFCustomMessageBox;
-using System.Windows.Forms;
 
 namespace LeHandUI
 {
@@ -203,7 +192,12 @@ namespace LeHandUI
 		private void SaveScript(object sender, EventArgs e)
 		{
 			string writePath = LHregistry.GetFile(FileManager.currentFile);
-			textEditor.Save(writePath);
+			try {
+				textEditor.Save(writePath);
+			}
+			catch (System.ArgumentException)
+			{ Debug.WriteLine("Caught Argument Exception error, propably that the file can't be empty string, so yeah..."); }
+
 			UnChangedFile(Listbox);
 			return;
 		}
@@ -251,13 +245,15 @@ namespace LeHandUI
 		void OnWindowLoaded(object sender, EventArgs e)
 		{
 
-			Communicator.Init();
-		
+			//Communicator.Init();
+			
+			
 		}
 		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b)
 		{
 			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g), (byte)(b)));
 		}
+
 		public MainWindow()
 		{
 			Loaded += OnWindowLoaded;

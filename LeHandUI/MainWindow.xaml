@@ -39,6 +39,7 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        
         <!--Custom title bar-->
         <Image
 		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
