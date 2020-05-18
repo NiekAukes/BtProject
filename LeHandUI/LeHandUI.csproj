@@ -106,6 +106,7 @@
     </ApplicationDefinition>
     <Compile Include="FileManager.cs" />
     <Compile Include="LHregistry.cs" />
+    <Compile Include="LuaParser.cs" />
     <Compile Include="Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
     </Compile>
