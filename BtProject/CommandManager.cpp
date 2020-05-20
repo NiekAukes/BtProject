@@ -228,8 +228,11 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			std::string end;
 			//std::cin >> command;
 			if (*command.c_str() != '\0') {
-				command = command.substr(0, findinstr(command.c_str(), '\n') - 1);
-				end = command.substr(findinstr(command.c_str(), '\n') - 1, command.size());
+				int cmdsplit = findinstr(command.c_str(), '\n');
+				if (cmdsplit >= 0) {
+					end = command.substr(-1, command.size() - 1);
+					command = command.substr(0, findinstr(command.c_str(), '\n') - 1);
+				}
 
 
 
