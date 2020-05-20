@@ -95,7 +95,8 @@ namespace LeHandUI
         {
             command += "\n";
             byte[] r = Encoding.ASCII.GetBytes(command);
-            inputStream.Write(r, 0, r.Length); //pipe is broken error
+            if (inputStream != null)
+                inputStream.Write(r, 0, r.Length); //pipe is broken error
         }
 
         public static Process process = null;
