@@ -245,7 +245,7 @@ namespace LeHandUI
 		void OnWindowLoaded(object sender, EventArgs e)
 		{
 
-			//Communicator.Init();
+			Communicator.Init();
 			
 			
 		}

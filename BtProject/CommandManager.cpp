@@ -236,6 +236,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 
 
 
+
 				std::stringstream ss(command);
 				std::string segment;
 
