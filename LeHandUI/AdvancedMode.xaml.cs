@@ -1,25 +1,91 @@
-﻿using System;
+﻿using ICSharpCode.AvalonEdit;
+using System;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using WPFCustomMessageBox;
 
 namespace LeHandUI
 {
-	public partial class MainWindow : Window
+	public class FirstDegreeFunctionConverter : IValueConverter
 	{
-		public static MainWindow inst = null;
+		public double A { get; set; }
+
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			double a = GetDoubleValue(parameter, A);
+
+			double x = GetDoubleValue(value, 0.0);
+
+			return (a * x);
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			double a = GetDoubleValue(parameter, A);
+
+			double y = GetDoubleValue(value, 0.0);
+
+			return (y) / a;
+		}
+		private double GetDoubleValue(object parameter, double defaultValue)
+		{
+			double a;
+			if (parameter != null)
+				try
+				{
+					a = System.Convert.ToDouble(parameter);
+				}
+				catch
+				{
+					a = defaultValue;
+				}
+			else
+				a = defaultValue;
+			return a;
+		}
+	}
+	public class SaveCommand : ICommand
+	{
+		public event EventHandler CanExecuteChanged;
+
+		public SaveCommand() { }
+		public bool CanExecute(object parameter)
+		{
+			return true;
+		}
+
+		public void Execute(object parameter)
+		{
+			//MessageBox.Show("HelloWorld");
+			string writePath = LHregistry.GetFile(FileManager.currentFile);
+			AdvancedMode.advancedInst.textEditor.Save(writePath);
+			AdvancedMode.UnChangedFile(AdvancedMode.Listbox);
+
+		}
+	}
+	
+	public partial class AdvancedMode: System.Windows.Controls.UserControl
+	{
+		public static AdvancedMode advancedInst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
 
 		#region ImageSourceFromBitmap_func
@@ -40,16 +106,29 @@ namespace LeHandUI
 		}
         #endregion
 
-        //Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-        //DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-        //List<string> LuaNames = new List<string>();
+	//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
+	//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
+	//List<string> LuaNames = new List<string>();
 
-        /*Stopwatch refreshTimer = new Stopwatch();
+	public void TextSizeChangeByAmount(MouseWheelEventArgs e)
+		{
+			double changeByAmount = 2;
+				if (e.Delta < 0 && (Keyboard.IsKeyDown(Key.LeftCtrl)||Keyboard.IsKeyDown(Key.RightCtrl)))
+				{
+					textEditor.FontSize -= changeByAmount;
+				}
+				if (e.Delta > 0 && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+				{
+					textEditor.FontSize += changeByAmount;
+				}
+		}
+
+		Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
-		bool hasRefreshOccurredWithinSeconds = false;*/
+		bool hasRefreshOccurredWithinSeconds = false;
 
-		/*
-		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
+		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
+		{
 			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
 			SelectedItemIndex = naam.SelectedIndex;
 			if (SelectedItemIndex < 0)
@@ -69,18 +148,20 @@ namespace LeHandUI
 				BypassTextChangedEvent = true;
 				textEditor.Text = FileContents;
 			}
-			
+
 		}
-		
-		private void RemoveLuaScript(object sender, EventArgs e) {
+		private void RemoveLuaScript(object sender, EventArgs e)
+		{
 			int idToBeRemoved = -1; //some ridiculous number, i. e. -1 just isn't possible
 
-			if (LuaFileView.SelectedIndex != -1) {
+			if (LuaFileView.SelectedIndex != -1)
+			{
 
 				idToBeRemoved = (LuaFileView.SelectedIndex);
 				int[] allIds = LHregistry.GetAllFileIds();
 
-				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1) {
+				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1)
+				{
 					LHregistry.RemoveFile(allIds[idToBeRemoved]);
 
 
@@ -91,29 +172,32 @@ namespace LeHandUI
 
 			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
 			LuaFileView.Items.Refresh();
-			
+
 		}
-		
-		private void RefreshLuaScript(object sender, EventArgs e) {
-			
-			if (hasRefreshOccurredWithinSeconds == false) { //if the refresh has not occurred in x milliseconds
+		private void RefreshLuaScript(object sender, EventArgs e)
+		{
+
+			if (hasRefreshOccurredWithinSeconds == false)
+			{ //if the refresh has not occurred in x milliseconds
 				List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
 				for (int i = 0; i < LuaNames.Count; i++)
 				{
 					LuaNames.Add(LHregistry.getSimpleName(LuaNames[i]));
 					LuaFileView.Items.Add(LuaNames[i]);
 				}
-				
+
 			}
-			else{}
+			else { }
 
 			hasRefreshOccurredWithinSeconds = true;
 		}
-		public void ChangeLabel(string label, int index){
+		public void ChangeLabel(string label, int index)
+		{
 			LuaFileView.Items.RemoveAt(index);
 			LuaFileView.Items.Insert(index, label);
 		}
-		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index){
+		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index)
+		{
 			list.Items.RemoveAt(index);
 			list.Items.Insert(index, label);
 		}
@@ -150,8 +234,10 @@ namespace LeHandUI
 			}
 			BypassTextChangedEvent = false;
 		}
-		private void AddReferenceScript(object sender, EventArgs e) {
-			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog(){
+		private void AddReferenceScript(object sender, EventArgs e)
+		{
+			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog()
+			{
 				CheckFileExists = true,
 				CheckPathExists = true,
 				InitialDirectory = @"Documents",
@@ -160,18 +246,20 @@ namespace LeHandUI
 			};
 
 			Nullable<bool> result = openFileExplorer.ShowDialog();
-			if (result == true){
+			if (result == true)
+			{
 				string newFilePath = openFileExplorer.FileName;
 				int newFileId = FileManager.AddReference(newFilePath);
 				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
-				
+
 			}
 
 		}
 		private void SaveScript(object sender, EventArgs e)
 		{
 			string writePath = LHregistry.GetFile(FileManager.currentFile);
-			try {
+			try
+			{
 				textEditor.Save(writePath);
 			}
 			catch (System.ArgumentException)
@@ -188,7 +276,7 @@ namespace LeHandUI
 			bool unsavedFiles = false;
 			for (int i = 0; i < FileManager.isFileNotSaved.Length; i++)
 			{
-				if (FileManager.isFileNotSaved[i]) 
+				if (FileManager.isFileNotSaved[i])
 				{
 					unsavedFiles = true;
 					break;
@@ -198,7 +286,7 @@ namespace LeHandUI
 			{
 				MessageBoxResult res = CustomMessageBox.ShowYesNoCancel(
 					"There are unsaved files, do you want to save all files?",
-					"Unsaved Files", 
+					"Unsaved Files",
 					"Yes", "No", "Cancel", MessageBoxImage.Exclamation
 					);
 				if (res == MessageBoxResult.Yes)
@@ -212,7 +300,7 @@ namespace LeHandUI
 
 			}
 			//load and run lua script
-			
+
 			Communicator.load(FileManager.files[FileManager.currentFile]);
 			Communicator.start();
 			//start monitoring
@@ -220,107 +308,51 @@ namespace LeHandUI
 			sw.Show();
 			return;
 		}
-		*/
+
 		void OnWindowLoaded(object sender, EventArgs e)
 		{
-			Communicator.Init();
-		}
-		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b)
-		{
-			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g), (byte)(b)));
-		}
 
-		public MainWindow()
-		{
-			Loaded += OnWindowLoaded;
-			inst = this;
+			Communicator.Init();
+
+		}		
+	
+		public AdvancedMode()
+        {
 			InitializeComponent();
 			FileManager.LoadAllFiles();
+			advancedInst = this;
 
-            #region Old Code
-            /*
+
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
 				new KeyGesture(Key.S, ModifierKeys.Control)
-				
+
 				));
 
+			
+			//set file view to the listbox
 			Listbox = LuaFileView;
-
+			//get all the filenames from registry
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-
-			for(int i = 0; i < LuaNames.Count; i++)
+			//display them
+			for (int i = 0; i < LuaNames.Count; i++)
 			{
 				LuaNames[i] = LHregistry.getSimpleName(LuaNames[i]);
 				LuaFileView.Items.Add(LuaNames[i]);
 			}
 
-			BypassTextChangedEvent = true;
-			textEditor.Text = "function Start()\n	print(\"preview\")\nend";
-			*/
-
-            //Alle icoontjes
-            //PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
-            //DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
-            //RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AQUA_RefreshIcon64x64);
-            //AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
-            //SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
-            //RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
-            #endregion
-            ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
-		}
+            BypassTextChangedEvent = true;
+			textEditor.Text = "function Start()\n	print(\"preview\")\nend\n\n\n\n\n\n\n\n";
 
 
-		#region TitleBarButtonHandlers
-		private void MinimizeWindow(object sender, EventArgs e){
-			App.Current.MainWindow.WindowState = WindowState.Minimized;
-		}
-		private void MaximizeWindow(object sender, EventArgs e){
-			if (App.Current.MainWindow.WindowState == WindowState.Maximized)
-			{
-				restoreButonPath.Data = Geometry.Parse("M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z");
-
-
-				App.Current.MainWindow.WindowState = WindowState.Normal;
-			}
-			else if (App.Current.MainWindow.WindowState == WindowState.Normal)
-			{
-				restoreButonPath.Data = Geometry.Parse("M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5");
-				App.Current.MainWindow.WindowState = WindowState.Maximized;
-			}
-		}
-		private void CloseWindow(object sender, EventArgs e){
-			//App.Current.MainWindow.Close();
-			App.Current.Shutdown();
-		}
-		private void DragStart(object sender, MouseButtonEventArgs e)
-		{
-			this.DragMove();
-		}
-        #endregion
-
-        #region MenuFunctionality_button_clicks
-		//It just hides and makes other usercontrols visible, I don't want to fuck with adding child elements to the dockpanel, can't be bothered to be honest
-        private void SimpleButton_Load(object sender, RoutedEventArgs e)
-		{
-			AdvancedModeWindow.Visibility = System.Windows.Visibility.Hidden;
-			//SimpleModewindow.Visibility = System.Windows.Visibility.Visible;
-			//PresetsModewindow.Visibility = System.Windows.Visibility.Hidden;
+			//Alle icoontjes
+			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
+			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
+			//RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AQUA_RefreshIcon64x64);
+			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
+			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
+			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
 		}
 
-		private void AdvancedButton_Load(object sender, RoutedEventArgs e)
-		{
-			AdvancedModeWindow.Visibility = System.Windows.Visibility.Visible;
-			//SimpleModewindow.Visibility = System.Windows.Visibility.Hidden;
-			//PresetsModewindow.Visibility = System.Windows.Visibility.Hidden;
 		}
-		
-		private void PresetsButton_Load(object sender, RoutedEventArgs e)
-		{
-			AdvancedModeWindow.Visibility = System.Windows.Visibility.Hidden;
-			//SimpleModewindow.Visibility = System.Windows.Visibility.Hidden;
-			//PresetsModewindow.Visibility = System.Windows.Visibility.Visible;
-		}
-        #endregion
-    }
 }
