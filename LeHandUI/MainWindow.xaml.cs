@@ -17,6 +17,7 @@ using WPFCustomMessageBox;
 
 namespace LeHandUI
 {
+	
 	public class SaveCommand : ICommand
 	{
 		public event EventHandler CanExecuteChanged;
@@ -263,7 +264,7 @@ namespace LeHandUI
 
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
-				new KeyGesture(Key.S, ModifierKeys.Control)
+				new MouseGesture(MouseAction.WheelClick, ModifierKeys.Control)
 				
 				));
 

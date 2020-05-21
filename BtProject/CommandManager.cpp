@@ -230,8 +230,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			if (*command.c_str() != '\0') {
 				int cmdsplit = findinstr(command.c_str(), '\n');
 				if (cmdsplit >= 0) {
-					end = command.substr(-1, command.size() - 1);
-					command = command.substr(0, findinstr(command.c_str(), '\n') - 1);
+					end = command.substr(cmdsplit, command.size() - 1);
+					command = command.substr(0, cmdsplit);
+					end.erase(0, 1);
 				}
 
 
@@ -462,7 +463,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				}
 				else if (command._Equal("start"))
 				{
-					keysend->startSender();
+					keysend->startSender(false);
 					command = "";
 
 					//std::this_thread::sleep_for(std::chrono::microseconds(500));
@@ -506,10 +507,12 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				}
 				else if (command._Equal("load")) {
 					std::string full(args[1]);
-					if (findinstr(full.c_str(), '\"')) {
+					if (findinstr(full.c_str(), '\"') >= 0) {
 						for (int i = 2; i < args.size(); i++) {
+							full.append(" ");
 							full.append(args[i]);
-							if (findinstr(args[i].c_str(), '\"'))
+							
+							if (findinstr(args[i].c_str(), '\"') >= 0)
 								break;
 						}
 

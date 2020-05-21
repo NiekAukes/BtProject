@@ -111,7 +111,7 @@ public:
 
 	static void Keythreading();
 	Keysender();
-	void startSender();
+	void startSender(bool);
 
 };
 

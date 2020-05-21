@@ -105,10 +105,10 @@ Keysender::Keysender()
 {
 	inst = this;
 }
-void Keysender::startSender() {
+void Keysender::startSender(bool wait) {
 	keysendActive = true;
 	keythread = new std::thread(Keythreading);
-	while (true) {
+	while (true && wait) {
 		//end states, now only enter press
 		if (GetKeyState(VK_RETURN) & 0x8000) {
 			break;
