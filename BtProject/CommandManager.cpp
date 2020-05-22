@@ -135,16 +135,24 @@ void CommandManager::doData(BTService service, Keysender* keysend, std::string* 
 
 			DisconnectNamedPipe(Keysender::inst->inputpipe);
 		}
-		/*bool c = ConnectNamedPipe(Keysender::inst->inputpipe, NULL);
-
-		bool w = WriteFile(Keysender::inst->inputpipe, "hello", 6, &dwWrite, NULL);
-		DWORD last = GetLastError();
 		
-		bool r = ReadFile(Keysender::inst->inputpipe, buf, 1023, &dwRead, NULL);
-		last = GetLastError();*/
 
 
 		std::vector<short> dat = service.GetGeneratedData();
+
+		short* sdat = new short[dat.size()];
+		for (int i = 0; i < dat.size(); i++) {
+			*(sdat + i) = dat[i];
+		}
+
+		WriteFile(keysend->datapipe, (char*)sdat, dat.size() * 2, &keysend->dwdataread, NULL);
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	}
+}
+std::thread* datagen = nullptr;
+void datgen(BTService* service, Keysender* keysend) {
+	while (1) {
+		std::vector<short> dat = service->GetGeneratedData();
 
 		short* sdat = new short[dat.size()];
 		for (int i = 0; i < dat.size(); i++) {
@@ -465,6 +473,8 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				{
 					keysend->startSender(false);
 					command = "";
+					
+					datagen = new std::thread(datgen, &service, keysend);
 
 					//std::this_thread::sleep_for(std::chrono::microseconds(500));
 					std::cout << "commandline active\n";
@@ -546,9 +556,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				//}
 				else if (command._Equal("quit"))
 				{
-					CloseHandle(keysend->datapipe);
-					CloseHandle(keysend->errorpipe);
-					CloseHandle(keysend->inputpipe);
+					//CloseHandle(keysend->datapipe);
+					//CloseHandle(keysend->errorpipe);
+					//CloseHandle(keysend->inputpipe);
 					return;
 				}
 				else if (command._Equal("help") || command._Equal("--help"))

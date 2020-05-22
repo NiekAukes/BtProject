@@ -39,6 +39,8 @@ void SetProtocolValue(int Protocol, double value, wchar_t* screen)
 	valstream << value;
 	InsertStrInScreen(screen, valstream.str(), position + 45);
 }
+
+
 void Keysender::Keythreading()
 {
 	system("cls");
@@ -49,14 +51,15 @@ void Keysender::Keythreading()
 	lu.start(LuaFile, BTService::inst);
 	while (lu.running)
 	{
-		BTService::inst->pipedata.append("hello");
-		if (inst->datapipe != INVALID_HANDLE_VALUE) {
+		//BTService::inst->pipedata.append("hello");
+		/*if (inst->datapipe != INVALID_HANDLE_VALUE) {
 			if (ConnectNamedPipe(inst->datapipe, NULL) != FALSE) {
 				if (BTService::inst->pipedata.size() > 0)
 					WriteFile(inst->datapipe, BTService::inst->pipedata.c_str(), BTService::inst->pipedata.size() + 1, &inst->dwdataread, NULL);
 				BTService::inst->pipedata.clear();
 			}
-		}
+		}*/
+		
 		if (inst->errorpipe != INVALID_HANDLE_VALUE) {
 			if (ConnectNamedPipe(inst->errorpipe, NULL) != FALSE) {
 				if (inst->error != S_OK)
