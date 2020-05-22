@@ -110,11 +110,11 @@
     <Compile Include="Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SwitchWindow.xaml.cs">
-      <DependentUpon>SwitchWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdvancedMode.xaml.cs">
+      <DependentUpon>AdvancedMode.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -133,11 +133,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SwitchWindow.xaml">
+    <Page Include="Switch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Switch.xaml">
+    <Page Include="AdvancedMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

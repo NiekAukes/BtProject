@@ -1,12 +1,12 @@
 LF = 0 --Little Finger
-RF = 1
-MF = 2
-IF = 3
-Th = 4
-AX = 5
-AY = 6
-AZ = 7
-RY = 8
+RF = 1 --Ring Finger
+MF = 2 --Middle Finger
+IF = 3 --Index Finger
+Th = 4 --Thumb
+AX = 5 --Axis X
+AY = 6 --Axis Y
+AZ = 7 --Axis Z
+RY = 8 --Rotation Y
 Prot9 = 9 -- undefined, for later use
 Prot10 =10
 Prot11 =11
@@ -16,11 +16,8 @@ Prot14 =14
 Prot15 =15
 Prot16 =16
 
-
 Mode_Press = 0
 Mode_Absolute = 1
-
-
 
 Button_MLD = 0x0002 -- left button down
 Button_MLU = 0x0004 --left button up

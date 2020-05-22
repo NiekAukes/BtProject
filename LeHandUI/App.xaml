@@ -5,13 +5,9 @@
              StartupUri="MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
-
-        
-        
-        
-        
+        <local:FirstDegreeFunctionConverter x:Key="convertVal" A="0.8"/>
         <Style TargetType="ScrollBar">
-            <Setter Property="Background" Value="#212121"/>
+            <Setter Property="Background" Value="#F2F2F2"/>
             <Setter Property="Foreground" Value="#34acbc"/>
         </Style>
         
@@ -22,6 +18,16 @@
             </Style.Setters>
         </Style>
 
+        <Style x:Key="MenuText" TargetType="TextBox">
+            <Setter Property="Foreground" Value="#F2F2F2"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            
+        </Style>
         <Style x:Key="TranspButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Margin" Value="5"/>
