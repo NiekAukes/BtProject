@@ -1,7 +1,7 @@
 # Headline
 
 > An awesome project.
-```CPP
+```Lua
 LeHand = require "LeHand"
 --Functions:
 ----Kpress(Character, Mode) -> registers Keypress
