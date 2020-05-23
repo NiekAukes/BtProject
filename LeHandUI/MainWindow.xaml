@@ -43,21 +43,21 @@
         <!--Custom title bar-->
         <Image
 		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1"
-		Width="32" Height="32" x:Name="ProgramIcon" Margin="-20,0,0,0"
+		Width="26" Height="26" x:Name="ProgramIcon" Margin="-20,5,0,10"
 		Panel.ZIndex="9999999" />
-        <TextBlock Grid.Column="1" Margin="4,13,0,12"	VerticalAlignment="Center"
+        <!--<TextBlock Grid.Column="1" Margin="4,13,0,12"	VerticalAlignment="Center"
 		FontSize="14"
 		Text="{Binding WindowTitle}">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
-                            <!--<Setter Property="Foreground" Value="{DynamicResource WindowTitleBarInactiveText}" />-->
-                        </DataTrigger>
+                           --> <!--<Setter Property="Foreground" Value="{DynamicResource WindowTitleBarInactiveText}" />-->
+                        <!--</DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
-        </TextBlock>
+        </TextBlock> -->
         <Button
 		Grid.Column="7" Name="minimizeButton" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased"
 		Style="{StaticResource TitleBarButtonStyle}"  Grid.ColumnSpan="2" ToolTip="Minimize Window">

@@ -39,7 +39,7 @@ namespace LeHandUI
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             StartupValues values = new StartupValues();
-            values.StartFontSize = Convert.ToInt32(AdvancedMode.inst.FontSize);
+            values.StartFontSize = Convert.ToInt32(AdvancedMode.inst.textEditor.FontSize);
             values.StartupFileId = FileManager.currentFileId;
 
             LHregistry.SetStartupValues(values);
