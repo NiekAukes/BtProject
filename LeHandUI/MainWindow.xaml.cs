@@ -13,7 +13,9 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Xml;
 using WPFCustomMessageBox;
+using Brush = System.Windows.Media.Brush;
 
 namespace LeHandUI
 {
@@ -21,6 +23,9 @@ namespace LeHandUI
 	{
 		public static MainWindow inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
+
+		public static Brush greyedOutColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(150, 40, 40, 40));
+		public static Brush FocusedColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(180,242,242,242));
 
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -305,22 +310,19 @@ namespace LeHandUI
 		{
 			AdvancedModeWindow.Visibility = System.Windows.Visibility.Hidden;
 			//SimpleModewindow.Visibility = System.Windows.Visibility.Visible;
-			//PresetsModewindow.Visibility = System.Windows.Visibility.Hidden;
+
+			SimpleButton.BorderBrush = FocusedColour; SimpleButton.Foreground = FocusedColour;
+			AdvancedButton.BorderBrush = greyedOutColour; AdvancedButton.Foreground = greyedOutColour;
 		}
 
 		private void AdvancedButton_Load(object sender, RoutedEventArgs e)
 		{
 			AdvancedModeWindow.Visibility = System.Windows.Visibility.Visible;
 			//SimpleModewindow.Visibility = System.Windows.Visibility.Hidden;
-			//PresetsModewindow.Visibility = System.Windows.Visibility.Hidden;
+
+			SimpleButton.BorderBrush = greyedOutColour; SimpleButton.Foreground = greyedOutColour;
+			AdvancedButton.BorderBrush = FocusedColour; AdvancedButton.Foreground = FocusedColour;
 		}
-		
-		private void PresetsButton_Load(object sender, RoutedEventArgs e)
-		{
-			AdvancedModeWindow.Visibility = System.Windows.Visibility.Hidden;
-			//SimpleModewindow.Visibility = System.Windows.Visibility.Hidden;
-			//PresetsModewindow.Visibility = System.Windows.Visibility.Visible;
-		}
-        #endregion
-    }
+		#endregion
+	}
 }
