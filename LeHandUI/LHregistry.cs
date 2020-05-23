@@ -9,10 +9,58 @@ using Microsoft.Win32;
 
 namespace LeHandUI
 {
-    
-    class LHregistry
+    public struct StartupValues
     {
-        static string keyName = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames";
+        public static string[] keynames =
+        {
+            "FontSize",
+            "StartupFile"
+        };
+        public int StartFontSize;
+        public int StartupFileId;
+    }
+    public class LHregistry
+    {
+        static string FileNameKey = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames";
+        static string StartupValKey = "HKEY_CURRENT_USER\\Software\\LeHand\\StartupData";
+        public static StartupValues GetStartupValues()
+        {
+            StartupValues values = new StartupValues();
+
+            values.StartFontSize = 14;
+            values.StartupFileId = -1;
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\StartupData", true);
+            if (rk == null)
+            {
+                rk = Registry.CurrentUser.CreateSubKey("Software\\LeHand\\StartupData");
+            }
+            string[] names = rk.GetValueNames();
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (names[i] == StartupValues.keynames[0])
+                    values.StartFontSize = (int)rk.GetValue(names[i]);
+                if (names[i] == StartupValues.keynames[1])
+                    values.StartupFileId = (int)rk.GetValue(names[i]);
+            }
+
+            return values;
+        }
+        
+        public static void SetStartupValues(StartupValues values)
+        {
+            if (values.StartFontSize > 0)
+            {
+                Registry.SetValue(StartupValKey, StartupValues.keynames[0],
+                    values.StartFontSize, RegistryValueKind.DWord);
+            }
+
+            if (values.StartFontSize >= 0)
+            {
+                Registry.SetValue(StartupValKey, StartupValues.keynames[1],
+                    values.StartupFileId, RegistryValueKind.DWord);
+            }
+        }
+        
         public static string[] GetAllFilenames()
         {
             RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\Filenames");
@@ -60,7 +108,7 @@ namespace LeHandUI
         }
         public static void SetFile(string filename, int id)
         {
-            Registry.SetValue(keyName, id.ToString(), filename);
+            Registry.SetValue(FileNameKey, id.ToString(), filename);
         }
 
         public static void RemoveFile(int id)
@@ -73,7 +121,7 @@ namespace LeHandUI
         }
         public static string GetFile(int id)
         {
-            string s = (string)Registry.GetValue(keyName, id.ToString(), "");
+            string s = (string)Registry.GetValue(FileNameKey, id.ToString(), "");
             return s;
         }
 

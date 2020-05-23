@@ -6,8 +6,12 @@
              xmlns:local="clr-namespace:LeHandUI"
              mc:Ignorable="d" Background="#2A2A2C"
              Height="580" Width="auto" MinHeight="300" MinWidth="400" FontSize="25" 
-             FontFamily="Futura Lt BT" Foreground="#F2F2F2">
-    <Grid>
+             FontFamily="Futura Lt BT" Foreground="#F2F2F2"
+             Mouse.MouseEnter="FocusMouseEnter"
+             >
+    <Grid
+        FocusManager.FocusedElement="{Binding ElementName=textEditor}"
+        >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
@@ -95,7 +99,11 @@
             BorderThickness="1" BorderBrush="#F2F2F2" FontSize="15"
             Grid.Column="6" Grid.ColumnSpan="5" Grid.Row="3" Grid.RowSpan="2" Background="#212121" Foreground="#F2F2F2"
             Margin="10,5,0,0" Padding="5,5,5,10" xml:space="preserve" 
-            SyntaxHighlighting="Lua" VerticalScrollBarVisibility="Visible">
+            SyntaxHighlighting="Lua" VerticalScrollBarVisibility="Visible"
+            MouseEnter="FocusMouseEnter"
+            MouseLeave="textEditor_MouseLeave"
+            PreviewMouseWheel="EditorBox_PreviewMouseWheel"
+            >
         </avalonEdit:TextEditor>
 
 

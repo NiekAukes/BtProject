@@ -5,7 +5,6 @@
              StartupUri="MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
-        <local:FirstDegreeFunctionConverter x:Key="convertVal" A="0.8"/>
         <Style TargetType="ScrollBar">
             <Setter Property="Background" Value="#F2F2F2"/>
             <Setter Property="Foreground" Value="#34acbc"/>

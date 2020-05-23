@@ -16,7 +16,7 @@ namespace LeHandUI
         public static bool[] isFileNotSaved = new bool[50];
         public static string[] FileCache = new string[50];
         public static string[] files = new string[50];
-        public static int currentFile = -1;
+        public static int currentFileId = -1;
         public static int currentLoadedIndex = -1;
         /// <summary>
         /// creates new file, returns -1 if failed
@@ -78,7 +78,7 @@ namespace LeHandUI
             {
                 fileContents = FileCache[id];
             }
-            currentFile = id;
+            currentFileId = id;
             return fileContents;
         }
 
