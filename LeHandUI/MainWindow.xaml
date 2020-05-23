@@ -84,19 +84,20 @@
         </Button>
         <!--end of custom titlebar -->
 
-        <DockPanel x:Name="MenuOptionsGrid" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="20,0,0,0">
-            <Button Style="{StaticResource TranspButton}" Width="auto" Height="auto" 
-                    Margin="0,0,5,0" x:Name="SimpleButton" Click="SimpleButton_Load" >
+        <DockPanel x:Name="MenuOptionsGrid" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
+                   Margin="15,0,0,0">
+            <Button Style="{StaticResource MenuButtons}" Width="auto" Height="auto" 
+                    Margin="0,0,5,0" x:Name="SimpleButton" Click="SimpleButton_Load">
                 <TextBox Text="Simple" Style="{StaticResource MenuText}"/>
             </Button>
-            <Button Style="{StaticResource TranspButton}" Width="auto" Height="auto" 
-                    Margin="0,0,5,0" x:Name="AdvancedButton" Click="AdvancedButton_Load" >
-                <TextBox Text="Advanced" Style="{StaticResource MenuText}" />
+            <Button Style="{StaticResource MenuButtons}" Width="auto" Height="auto" 
+                    Margin="0,0,0,0" x:Name="AdvancedButton" Click="AdvancedButton_Load">
+                <TextBox Text="Advanced" Style="{StaticResource MenuText}"/>
             </Button>
-            <Button Style="{StaticResource TranspButton}" Width="auto" Height="auto" 
+           <!-- <Button Style="{StaticResource TranspButton}" Width="auto" Height="auto" 
                     Margin="0,0,0,0" x:Name="PresetsButton" Click="PresetsButton_Load" >
                 <TextBox Text="Presets" Style="{StaticResource MenuText}"/>
-            </Button>
+            </Button> -->
         </DockPanel>
         
         <StackPanel x:Name="ViewSwitcher" Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="11" Margin="0,0,0,0">
