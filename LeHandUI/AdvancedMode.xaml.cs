@@ -365,7 +365,7 @@ namespace LeHandUI
 
 				));
 
-			textEditor.ShowLineNumbers = val.ShowLineNumbers;
+			textEditor.ShowLineNumbers = Convert.ToBoolean(val.ShowLineNumbers);
 			
 			//set file view to the listbox
 			Listbox = LuaFileView;
@@ -377,6 +377,7 @@ namespace LeHandUI
 				LuaNames[i] = LHregistry.getSimpleName(LuaNames[i]);
 				LuaFileView.Items.Add(LuaNames[i]);
 			}
+			
 
             BypassTextChangedEvent = true;
 			

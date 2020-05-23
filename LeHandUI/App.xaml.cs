@@ -41,6 +41,7 @@ namespace LeHandUI
             StartupValues values = new StartupValues();
             values.StartFontSize = Convert.ToInt32(AdvancedMode.inst.textEditor.FontSize);
             values.StartupFileId = FileManager.currentFileId;
+            values.ShowLineNumbers = Convert.ToInt32(AdvancedMode.inst.textEditor.ShowLineNumbers);
 
             LHregistry.SetStartupValues(values);
             Communicator.quit();
