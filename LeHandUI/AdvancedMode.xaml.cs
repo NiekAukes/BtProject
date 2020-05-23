@@ -25,44 +25,7 @@ using WPFCustomMessageBox;
 
 namespace LeHandUI
 {
-	public class FirstDegreeFunctionConverter : IValueConverter
-	{
-		public double A { get; set; }
-
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-		{
-			double a = GetDoubleValue(parameter, A);
-
-			double x = GetDoubleValue(value, 0.0);
-
-			return (a * x);
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-		{
-			double a = GetDoubleValue(parameter, A);
-
-			double y = GetDoubleValue(value, 0.0);
-
-			return (y) / a;
-		}
-		private double GetDoubleValue(object parameter, double defaultValue)
-		{
-			double a;
-			if (parameter != null)
-				try
-				{
-					a = System.Convert.ToDouble(parameter);
-				}
-				catch
-				{
-					a = defaultValue;
-				}
-			else
-				a = defaultValue;
-			return a;
-		}
-	}
+	
 	public class SaveCommand : ICommand
 	{
 		public event EventHandler CanExecuteChanged;
@@ -76,8 +39,8 @@ namespace LeHandUI
 		public void Execute(object parameter)
 		{
 			//MessageBox.Show("HelloWorld");
-			string writePath = LHregistry.GetFile(FileManager.currentFile);
-			AdvancedMode.advancedInst.textEditor.Save(writePath);
+			string writePath = LHregistry.GetFile(FileManager.currentFileId);
+			AdvancedMode.inst.textEditor.Save(writePath);
 			AdvancedMode.UnChangedFile(AdvancedMode.Listbox);
 
 		}
@@ -85,8 +48,10 @@ namespace LeHandUI
 	
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
-		public static AdvancedMode advancedInst = null;
+		public static AdvancedMode inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
+		public static int SelectedItemIndex = -1;
+		public static bool hasRefreshOccurredWithinSeconds = false;
 
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -106,48 +71,141 @@ namespace LeHandUI
 		}
         #endregion
 
-	//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-	//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-	//List<string> LuaNames = new List<string>();
+        //Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
+        //DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
+        //List<string> LuaNames = new List<string>();
 
-	public void TextSizeChangeByAmount(MouseWheelEventArgs e)
+
+
+        #region environmentEvents
+
+        private void FocusMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			double changeByAmount = 2;
-				if (e.Delta < 0 && (Keyboard.IsKeyDown(Key.LeftCtrl)||Keyboard.IsKeyDown(Key.RightCtrl)))
-				{
-					textEditor.FontSize -= changeByAmount;
-				}
-				if (e.Delta > 0 && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
-				{
-					textEditor.FontSize += changeByAmount;
-				}
+			//Debug.WriteLine(Keyboard.FocusedElement.ToString());
+			UIElement UIE = (UIElement)sender;
+			bool succes = UIE.Focus();
+
 		}
 
-		Stopwatch refreshTimer = new Stopwatch();
-		int SelectedItemIndex;
-		bool hasRefreshOccurredWithinSeconds = false;
-
-		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
+		private void textEditor_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
-			SelectedItemIndex = naam.SelectedIndex;
-			if (SelectedItemIndex < 0)
+
+		}
+
+		private void EditorBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			bool ctrl = (Keyboard.Modifiers == ModifierKeys.Control);
+			if (ctrl)
+			{
+				UpdateFontSize(e.Delta > 0);
+				e.Handled = true;
+			}
+		}
+
+		// Reasonable max and min font size values
+		private const double FONT_MAX_SIZE = 30d;
+		private const double FONT_MIN_SIZE = 10d;
+
+		// Update function, increases/decreases by a specific increment
+		public void UpdateFontSize(bool increase)
+		{
+			double currentSize = textEditor.FontSize;
+
+			if (increase)
+			{
+				if (currentSize < FONT_MAX_SIZE)
+				{
+					double newSize = Math.Min(FONT_MAX_SIZE, currentSize + 2);
+					textEditor.FontSize = newSize;
+				}
+			}
+			else
+			{
+				if (currentSize > FONT_MIN_SIZE)
+				{
+					double newSize = Math.Max(FONT_MIN_SIZE, currentSize - 2);
+					textEditor.FontSize = newSize;
+				}
+			}
+		}
+
+		public void ChangeLabel(string label, int index)
+		{
+			LuaFileView.Items.RemoveAt(index);
+			LuaFileView.Items.Insert(index, label);
+		}
+		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index)
+		{
+			list.Items.RemoveAt(index);
+			list.Items.Insert(index, label);
+		}
+		public static void UnChangedFile(System.Windows.Controls.ListBox list)
+		{
+			int index = FileManager.currentLoadedIndex;
+			if (index > -1 && FileManager.currentFileId > -1)
+			{
+				if (FileManager.isFileNotSaved[FileManager.currentFileId])
+				{
+
+					FileManager.isFileNotSaved[FileManager.currentFileId] = false;
+					string label = (string)(list.Items[index]);
+					label = label.Remove(label.Length - 1);
+					ChangeLabel(list, label, index);
+				}
+			}
+		}
+		public bool BypassTextChangedEvent = true;
+		private void ChangedFile(object sender, EventArgs e)
+		{
+			if (!BypassTextChangedEvent)
+			{
+				int index = FileManager.currentLoadedIndex;
+				if (index > -1 && FileManager.currentFileId > -1)
+				{
+					if (!FileManager.isFileNotSaved[FileManager.currentFileId])
+					{
+						FileManager.isFileNotSaved[FileManager.currentFileId] = true;
+						string label = (string)(LuaFileView.Items[index]) + "*";
+						ChangeLabel(label, index);
+					}
+				}
+			}
+			BypassTextChangedEvent = false;
+		}
+#endregion
+        #region ButtonEvents
+		void LoadFileFromId(int index)
+		{
+
+			if (index < 0)
 				return;
-			int[] id = LHregistry.GetAllFileIds();
-			int ActualFileId = id[SelectedItemIndex];
-			FileManager.currentLoadedIndex = SelectedItemIndex;
 
 			//save old on memory
-			if (FileManager.currentFile >= 0)
-				FileManager.FileCache[FileManager.currentFile] = textEditor.Text;
+			if (FileManager.currentFileId >= 0)
+				FileManager.FileCache[FileManager.currentFileId] = textEditor.Text;
 
 
-			string FileContents = FileManager.LoadFile(ActualFileId);
+			string FileContents = FileManager.LoadFile(index);
 			if (FileContents != null)
 			{
 				BypassTextChangedEvent = true;
 				textEditor.Text = FileContents;
 			}
+		}
+        private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
+		{
+			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
+			SelectedItemIndex = naam.SelectedIndex;
+			if (SelectedItemIndex < 0)
+				return;
+
+			FileManager.currentLoadedIndex = SelectedItemIndex;
+
+
+			int[] id = LHregistry.GetAllFileIds();
+			int ActualFileId = id[SelectedItemIndex];
+
+			LoadFileFromId(ActualFileId);
 
 		}
 		private void RemoveLuaScript(object sender, EventArgs e)
@@ -191,49 +249,7 @@ namespace LeHandUI
 
 			hasRefreshOccurredWithinSeconds = true;
 		}
-		public void ChangeLabel(string label, int index)
-		{
-			LuaFileView.Items.RemoveAt(index);
-			LuaFileView.Items.Insert(index, label);
-		}
-		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index)
-		{
-			list.Items.RemoveAt(index);
-			list.Items.Insert(index, label);
-		}
-		public static void UnChangedFile(System.Windows.Controls.ListBox list)
-		{
-			int index = FileManager.currentLoadedIndex;
-			if (index > -1 && FileManager.currentFile > -1)
-			{
-				if (FileManager.isFileNotSaved[FileManager.currentFile])
-				{
 
-					FileManager.isFileNotSaved[FileManager.currentFile] = false;
-					string label = (string)(list.Items[index]);
-					label = label.Remove(label.Length - 1);
-					ChangeLabel(list, label, index);
-				}
-			}
-		}
-		public bool BypassTextChangedEvent = true;
-		private void ChangedFile(object sender, EventArgs e)
-		{
-			if (!BypassTextChangedEvent)
-			{
-				int index = FileManager.currentLoadedIndex;
-				if (index > -1 && FileManager.currentFile > -1)
-				{
-					if (!FileManager.isFileNotSaved[FileManager.currentFile])
-					{
-						FileManager.isFileNotSaved[FileManager.currentFile] = true;
-						string label = (string)(LuaFileView.Items[index]) + "*";
-						ChangeLabel(label, index);
-					}
-				}
-			}
-			BypassTextChangedEvent = false;
-		}
 		private void AddReferenceScript(object sender, EventArgs e)
 		{
 			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog()
@@ -257,7 +273,7 @@ namespace LeHandUI
 		}
 		private void SaveScript(object sender, EventArgs e)
 		{
-			string writePath = LHregistry.GetFile(FileManager.currentFile);
+			string writePath = LHregistry.GetFile(FileManager.currentFileId);
 			try
 			{
 				textEditor.Save(writePath);
@@ -270,7 +286,7 @@ namespace LeHandUI
 		}
 		private void RunLuaScript(object sender, EventArgs e)
 		{
-			if (FileManager.currentFile < 0)
+			if (FileManager.currentFileId < 0)
 				return;
 			//check if files are saved
 			bool unsavedFiles = false;
@@ -291,7 +307,7 @@ namespace LeHandUI
 					);
 				if (res == MessageBoxResult.Yes)
 				{
-					string writePath = LHregistry.GetFile(FileManager.currentFile);
+					string writePath = LHregistry.GetFile(FileManager.currentFileId);
 					textEditor.Save(writePath);
 					UnChangedFile(Listbox);
 				}
@@ -301,28 +317,28 @@ namespace LeHandUI
 			}
 			//load and run lua script
 
-			Communicator.load(FileManager.files[FileManager.currentFile]);
+			Communicator.load(FileManager.files[FileManager.currentFileId]);
 			Communicator.start();
 			//start monitoring
 			Startwindow sw = new Startwindow();
 			sw.Show();
 			return;
 		}
-
-		void OnWindowLoaded(object sender, EventArgs e)
-		{
-
-			Communicator.Init();
-
-		}		
-	
+        #endregion
+        #region Construction 
+        
 		public AdvancedMode()
         {
 			InitializeComponent();
 			FileManager.LoadAllFiles();
-			advancedInst = this;
+			inst = this;
+			Focusable = true;
 
-
+			StartupValues val = LHregistry.GetStartupValues();
+			textEditor.FontSize = val.StartFontSize;
+			textEditor.Text = "function Start()\n	print(\"preview\")\nend\n\n\n\n\n\n\n\n";
+			LoadFileFromId(val.StartupFileId);
+			
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
 				new KeyGesture(Key.S, ModifierKeys.Control)
@@ -342,7 +358,7 @@ namespace LeHandUI
 			}
 
             BypassTextChangedEvent = true;
-			textEditor.Text = "function Start()\n	print(\"preview\")\nend\n\n\n\n\n\n\n\n";
+			
 
 
 			//Alle icoontjes
@@ -353,6 +369,7 @@ namespace LeHandUI
 			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
 			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
 		}
-
-		}
+        #endregion
+        
+	}
 }
