@@ -1,6 +1,5 @@
-# Headline
+# How to use Lua in Lehand
 
-> An awesome project.
 ```CPP
 LeHand = require "LeHand"
 --Functions:
