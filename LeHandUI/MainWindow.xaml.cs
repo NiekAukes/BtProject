@@ -238,18 +238,18 @@ namespace LeHandUI
 			InitializeComponent();
 			FileManager.LoadAllFiles();
 
-			Logic[] logics =
-				{
-					new Logic(1, 0.2, 0.4, new Kpress('k')),
-					new Logic(3, 0.6, 0.8, new Kpress('l')),
-					new Logic(5, 0.152, 0.534, new Kpress('m')),
-				};
-			string s = LuaParser.Parse(logics);
-			FileStream stream = File.OpenWrite("yeshere.lua");
-			StreamWriter writer = new StreamWriter(stream);
-			writer.Write(s);
-			writer.Close();
-			stream.Close();
+			//Logic[] logics =
+			//	{
+			//		new Logic(1, 0.2, 0.4, new Kpress('k')),
+			//		new Logic(3, 0.6, 0.8, new Kpress('l')),
+			//		new Logic(5, 0.152, 0.534, new Kpress('m')),
+			//	};
+			//string s = LuaParser.Parse(logics);
+			//FileStream stream = File.OpenWrite("yeshere.lua");
+			//StreamWriter writer = new StreamWriter(stream);
+			//writer.Write(s);
+			//writer.Close();
+			//stream.Close();
 
 
             #region Old Code
