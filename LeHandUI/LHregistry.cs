@@ -14,10 +14,12 @@ namespace LeHandUI
         public static string[] keynames =
         {
             "FontSize",
-            "StartupFile"
+            "StartupFile",
+            "ShowLineNumbers"
         };
         public int StartFontSize;
         public int StartupFileId;
+        public int ShowLineNumbers;
     }
     public class LHregistry
     {
@@ -41,11 +43,13 @@ namespace LeHandUI
                     values.StartFontSize = (int)rk.GetValue(names[i]);
                 if (names[i] == StartupValues.keynames[1])
                     values.StartupFileId = (int)rk.GetValue(names[i]);
+                if (names[i] == StartupValues.keynames[2])
+                    values.ShowLineNumbers = (int)rk.GetValue(names[i]);
             }
 
             return values;
         }
-        
+
         public static void SetStartupValues(StartupValues values)
         {
             if (values.StartFontSize > 0)
@@ -59,6 +63,9 @@ namespace LeHandUI
                 Registry.SetValue(StartupValKey, StartupValues.keynames[1],
                     values.StartupFileId, RegistryValueKind.DWord);
             }
+
+            Registry.SetValue(StartupValKey, StartupValues.keynames[2],
+                values.ShowLineNumbers, RegistryValueKind.DWord);
         }
         
         public static string[] GetAllFilenames()

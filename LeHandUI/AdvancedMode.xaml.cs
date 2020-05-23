@@ -45,7 +45,22 @@ namespace LeHandUI
 
 		}
 	}
-	
+	public class LineToggleCommand : ICommand
+	{
+		public event EventHandler CanExecuteChanged;
+
+		public LineToggleCommand() { }
+		public bool CanExecute(object parameter)
+		{
+			return true;
+		}
+
+		public void Execute(object parameter)
+		{
+			AdvancedMode.inst.textEditor.ShowLineNumbers = !AdvancedMode.inst.textEditor.ShowLineNumbers;
+
+		}
+	}
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
 		public static AdvancedMode inst = null;
@@ -344,7 +359,13 @@ namespace LeHandUI
 				new KeyGesture(Key.S, ModifierKeys.Control)
 
 				));
+			textEditor.InputBindings.Add(
+				new InputBinding(new LineToggleCommand(),
+				new KeyGesture(Key.L, ModifierKeys.Control)
 
+				));
+
+			textEditor.ShowLineNumbers = val.ShowLineNumbers;
 			
 			//set file view to the listbox
 			Listbox = LuaFileView;
