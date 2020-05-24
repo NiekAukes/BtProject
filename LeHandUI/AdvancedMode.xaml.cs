@@ -187,40 +187,34 @@ namespace LeHandUI
 			}
 			BypassTextChangedEvent = false;
 		}
-#endregion
-        #region ButtonEvents
-		void LoadFileFromId(int index)
+        #endregion
+        #region Button Click Events
+		private void AddButton_Click(object sender, EventArgs e)
 		{
-
-			if (index < 0)
-				return;
-
-			//save old on memory
-			if (FileManager.currentFileId >= 0)
-				FileManager.FileCache[FileManager.currentFileId] = textEditor.Text;
-
-
-			string FileContents = FileManager.LoadFile(index);
-			if (FileContents != null)
-			{
-				BypassTextChangedEvent = true;
-				textEditor.Text = FileContents;
-			}
+			AddReferenceScript();
 		}
-        private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
+
+        #endregion
+        #region ButtonEvents
+        private void AddReferenceScript()
 		{
-			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
-			SelectedItemIndex = naam.SelectedIndex;
-			if (SelectedItemIndex < 0)
-				return;
+			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog()
+			{
+				CheckFileExists = true,
+				CheckPathExists = true,
+				InitialDirectory = @"Documents",
+				ShowReadOnly = true,
+				Filter = " All files(*.*) 'cuz .lua doesn't work|*.*"
+			};
 
-			FileManager.currentLoadedIndex = SelectedItemIndex;
+			Nullable<bool> result = openFileExplorer.ShowDialog();
+			if (result == true)
+			{
+				string newFilePath = openFileExplorer.FileName;
+				int newFileId = FileManager.AddReference(newFilePath);
+				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
 
-
-			int[] id = LHregistry.GetAllFileIds();
-			int ActualFileId = id[SelectedItemIndex];
-
-			LoadFileFromId(ActualFileId);
+			}
 
 		}
 		private void RemoveLuaScript(object sender, EventArgs e)
@@ -242,11 +236,58 @@ namespace LeHandUI
 					LuaFileView.Items.RemoveAt(idToBeRemoved);
 				}
 			}
+		}
+		private void SaveScript(object sender, EventArgs e)
+		{
+			string writePath = LHregistry.GetFile(FileManager.currentFileId);
+				try
+				{
+					textEditor.Save(writePath);
+				}
+				catch (System.ArgumentException)
+				{ Debug.WriteLine("Caught Argument Exception error, propably that the file can't be empty string, so yeah..."); }
 
-			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
+				UnChangedFile(Listbox);
+				return;
+		}
+		void LoadFileFromId(int index)
+		{
+
+			if (index < 0)
+				return;
+
+			//save old on memory
+			if (FileManager.currentFileId >= 0)
+				FileManager.FileCache[FileManager.currentFileId] = textEditor.Text;
+
+
+			string FileContents = FileManager.LoadFile(index);
+				if (FileContents != null)
+				{
+					BypassTextChangedEvent = true;
+					textEditor.Text = FileContents;
+				}
+		} 
+
+        private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
+		{
+			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
+			SelectedItemIndex = naam.SelectedIndex;
+			if (SelectedItemIndex < 0)
+				return;
+
+			FileManager.currentLoadedIndex = SelectedItemIndex;
+
+
+			int[] id = LHregistry.GetAllFileIds();
+			int ActualFileId = id[SelectedItemIndex];
+
+			LoadFileFromId(ActualFileId);
 			LuaFileView.Items.Refresh();
+			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
 
 		}
+
 		private void RefreshLuaScript(object sender, EventArgs e)
 		{
 
@@ -262,43 +303,12 @@ namespace LeHandUI
 			}
 			else { }
 
+			LuaFileView.Items.Refresh();
 			hasRefreshOccurredWithinSeconds = true;
 		}
 
-		private void AddReferenceScript(object sender, EventArgs e)
-		{
-			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog()
-			{
-				CheckFileExists = true,
-				CheckPathExists = true,
-				InitialDirectory = @"Documents",
-				ShowReadOnly = true,
-				Filter = " All files(*.*) 'cuz .lua doesn't work|*.*"
-			};
-
-			Nullable<bool> result = openFileExplorer.ShowDialog();
-			if (result == true)
-			{
-				string newFilePath = openFileExplorer.FileName;
-				int newFileId = FileManager.AddReference(newFilePath);
-				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
-
-			}
-
-		}
-		private void SaveScript(object sender, EventArgs e)
-		{
-			string writePath = LHregistry.GetFile(FileManager.currentFileId);
-			try
-			{
-				textEditor.Save(writePath);
-			}
-			catch (System.ArgumentException)
-			{ Debug.WriteLine("Caught Argument Exception error, propably that the file can't be empty string, so yeah..."); }
-
-			UnChangedFile(Listbox);
-			return;
-		}
+		
+		
 		private void RunLuaScript(object sender, EventArgs e)
 		{
 			if (FileManager.currentFileId < 0)
@@ -337,6 +347,8 @@ namespace LeHandUI
 			//start monitoring
 			Startwindow sw = new Startwindow();
 			sw.Show();
+
+			LuaFileView.Items.Refresh();
 			return;
 		}
         #endregion

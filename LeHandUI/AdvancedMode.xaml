@@ -24,7 +24,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="00"/>
+            <ColumnDefinition Width="0"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
@@ -49,19 +49,14 @@
 
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
         <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="15,10,40,0">
-            <Button Style="{StaticResource TranspButton}"  Click="AddReferenceScript"
-                    
-                    ToolTip="Add Reference"
-                x:Name="AddButton">
-                <Image x:Name="PlusIcon" Height="16" Width="auto" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+            <Button Style="{StaticResource TranspButton}"  Click="AddButton_Click"
+                ToolTip="Add Reference" x:Name="AddButton">
+                <Image x:Name="PlusIcon" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </Button>
             <Button Style="{StaticResource TranspButton}" Click="RemoveLuaScript"
                 x:Name="DeleteButton"
-                    ToolTipService.InitialShowDelay="2000"
-                    ToolTipService.ShowDuration="2000"
-                    ToolTipService.BetweenShowDelay="1000"
                     ToolTip="Remove Selected File">
-                <Image x:Name="DeleteIcon" Height="auto" Width="auto" Stretch="UniformToFill"/>
+                <Image x:Name="DeleteIcon" Stretch="UniformToFill"/>
             </Button>
             <!--<Button Style="{StaticResource TranspButton}" Click="RefreshLuaScript"
                 x:Name="RefreshButton" Margin="5,5,0,5">
