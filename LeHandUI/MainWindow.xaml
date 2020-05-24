@@ -100,11 +100,10 @@
             </Button> -->
         </DockPanel>
         
-        <StackPanel x:Name="ViewSwitcher" Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="11" Margin="0,0,0,0">
-            
-            <local:AdvancedMode x:Name="AdvancedModeWindow"  Visibility="Visible"/>
-            
-        </StackPanel>
+        <DockPanel Height="auto" x:Name="ViewSwitcher" Grid.Row="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="11" Margin="0,0,0,0">
+
+            <local:AdvancedMode x:Name="AdvancedModeWindow" Height="auto" Visibility="Visible"/>
+        </DockPanel>
 
 
 
