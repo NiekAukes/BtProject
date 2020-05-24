@@ -391,7 +391,8 @@ namespace LeHandUI
 			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
 			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
 		}
-        #endregion
-        
+		#endregion
+
+		
 	}
 }
