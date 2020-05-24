@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Xml;
-using WPFCustomMessageBox;
 using Brush = System.Windows.Media.Brush;
 
 namespace LeHandUI
@@ -25,8 +16,10 @@ namespace LeHandUI
 		public static MainWindow inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
 
-		public static Brush greyedOutColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(150, 40, 40, 40));
-		public static Brush FocusedColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(180,242,242,242));
+		AdvancedMode advancedModeChild = new AdvancedMode();
+		SimpleMode simpleModeChild = new SimpleMode();
+		public static Brush greyedOutColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(30, 40, 40, 40));
+		public static Brush FocusedColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(30,242,242,242));
 
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -243,6 +236,7 @@ namespace LeHandUI
 			InitializeComponent();
 			FileManager.LoadAllFiles();
 
+			
 			//Logic[] logics =
 			//	{
 			//		new Logic(1, 0.2, 0.4, new Kpress('k')),
@@ -257,8 +251,8 @@ namespace LeHandUI
 			//stream.Close();
 
 
-            #region Old Code
-            /*
+			#region Old Code
+			/*
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
 				new MouseGesture(MouseAction.WheelClick, ModifierKeys.Control)
@@ -279,15 +273,15 @@ namespace LeHandUI
 			textEditor.Text = "function Start()\n	print(\"preview\")\nend";
 			*/
 
-            //Alle icoontjes
-            //PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
-            //DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
-            //RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AQUA_RefreshIcon64x64);
-            //AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
-            //SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
-            //RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
-            #endregion
-            ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
+			//Alle icoontjes
+			//PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
+			//DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
+			//RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AQUA_RefreshIcon64x64);
+			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
+			//SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
+			//RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
+			#endregion
+			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 		}
 
 
@@ -320,23 +314,29 @@ namespace LeHandUI
         #endregion
 
         #region MenuFunctionality_button_clicks
+		public void addElementToPanelAndRemoveOtherElement(DockPanel panel, UIElement element, UIElement elementToRemove)
+		{
+			if (!panel.Children.Contains(element))
+			{
+				panel.Children.Add(element);
+			}
+			if (panel.Children.Contains(elementToRemove))
+			{
+				panel.Children.Remove(elementToRemove);
+			}
+		}
+
 		//It just hides and makes other usercontrols visible, I don't want to fuck with adding child elements to the dockpanel, can't be bothered to be honest
         private void SimpleButton_Load(object sender, RoutedEventArgs e)
 		{
-			AdvancedModeWindow.Visibility = System.Windows.Visibility.Hidden;
-			//SimpleModewindow.Visibility = System.Windows.Visibility.Visible;
+			addElementToPanelAndRemoveOtherElement(ViewSwitcher, simpleModeChild, advancedModeChild);
 
-			SimpleButton.BorderBrush = FocusedColour; SimpleButton.Foreground = FocusedColour;
-			AdvancedButton.BorderBrush = greyedOutColour; AdvancedButton.Foreground = greyedOutColour;
 		}
 
 		private void AdvancedButton_Load(object sender, RoutedEventArgs e)
 		{
-			AdvancedModeWindow.Visibility = System.Windows.Visibility.Visible;
-			//SimpleModewindow.Visibility = System.Windows.Visibility.Hidden;
+			addElementToPanelAndRemoveOtherElement(ViewSwitcher, advancedModeChild,simpleModeChild);
 
-			SimpleButton.BorderBrush = greyedOutColour; SimpleButton.Foreground = greyedOutColour;
-			AdvancedButton.BorderBrush = FocusedColour; AdvancedButton.Foreground = FocusedColour;
 		}
 		#endregion
 	}

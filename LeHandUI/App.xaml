@@ -49,8 +49,8 @@
                                     <Condition Property="Button.IsPressed" Value="True"/>
                                     <Condition Property="Button.IsMouseOver" Value="True"/>
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#CECECE" />
-                                <Setter Property="Background" Value="#1BB52A" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="#BFFFFFFF" />
+                                <Setter Property="Background" Value="#BFFFFFFF" />
                                 <Setter Property="Cursor" Value="Hand"/>
                             </MultiTrigger>
                             <MultiTrigger>
@@ -58,14 +58,9 @@
                                     <Condition  Property="IsMouseOver" Value="True"/>
                                     <Condition  Property="IsPressed" Value="False"/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Background" Value="#464646"/>
-<<<<<<< HEAD
+                                <Setter Property="Background" Value="#3FFFFFFF"/>
                                 <Setter Property="Cursor" Value="Hand"/>
                             </MultiTrigger>
-=======
-
-                            </Trigger>
->>>>>>> 195990504e42fb5c61f5c1f980dee77d928a9797
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -85,18 +80,14 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Button.IsPressed" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#686868" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FFB4B4B4" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#727272"/>
+                                <Setter Property="Background" Value="#4CD4D4D4"/>
                             </Trigger>
 
                             <Trigger Property="IsPressed" Value="True">
-<<<<<<< HEAD
-                                <Setter Property="Background" Value="#FFFFFF"/>
-=======
-
->>>>>>> 195990504e42fb5c61f5c1f980dee77d928a9797
+                                <Setter Property="Background" Value="#7FFFFFFF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

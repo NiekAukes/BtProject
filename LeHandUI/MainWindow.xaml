@@ -1,4 +1,4 @@
-﻿<Window x:Class="LeHandUI.MainWindow"
+﻿ <Window x:Class="LeHandUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -59,7 +59,7 @@
             </TextBlock.Style>
         </TextBlock> -->
         <Button
-		Grid.Column="7" Name="minimizeButton" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased"
+		Grid.Column="7" Name="minimizeButton" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
 		Style="{StaticResource TitleBarButtonStyle}"  Grid.ColumnSpan="2" ToolTip="Minimize Window">
             <Path Width="46" Height="32" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -101,8 +101,6 @@
         </DockPanel>
         
         <DockPanel Height="auto" x:Name="ViewSwitcher" Grid.Row="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="11" Margin="0,0,0,0">
-
-            <local:AdvancedMode x:Name="AdvancedModeWindow" Height="auto" Visibility="Visible"/>
         </DockPanel>
 
 

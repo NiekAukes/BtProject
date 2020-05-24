@@ -107,6 +107,9 @@
     <Compile Include="FileManager.cs" />
     <Compile Include="LHregistry.cs" />
     <Compile Include="LuaParser.cs" />
+    <Compile Include="SimpleMode.xaml.cs">
+      <DependentUpon>SimpleMode.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
     </Compile>
@@ -129,6 +132,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SimpleMode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Startwindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -251,6 +258,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons\icon64\AddFile64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons\icon64\RemoveFile64x64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -7,6 +7,7 @@
              mc:Ignorable="d" Background="#2A2A2C"
              Height="Auto" Width="auto" MinHeight="300" MinWidth="400" FontSize="25" 
              FontFamily="Futura Lt BT" Foreground="#F2F2F2"
+             d:DesignHeight="580" d:DesignWidth="760"
              Mouse.MouseEnter="FocusMouseEnter"             >
     <Grid
         FocusManager.FocusedElement="{Binding ElementName=textEditor}"
@@ -16,7 +17,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="10*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="100*"/>
             <ColumnDefinition Width="auto" />
@@ -47,7 +48,7 @@
         
 
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
-        <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="15,10,40,0">
+        <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="15,10,0,0">
             <Button Style="{StaticResource TranspButton}"  Click="AddButton_Click"
                 ToolTip="Add Reference" x:Name="AddButton">
                 <Image x:Name="PlusIcon" Stretch="UniformToFill" VerticalAlignment="Bottom"/>

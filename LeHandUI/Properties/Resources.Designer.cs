@@ -63,6 +63,16 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AddFile64x64 {
+            get {
+                object obj = ResourceManager.GetObject("AddFile64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AddIcon16x16 {
             get {
                 object obj = ResourceManager.GetObject("AddIcon16x16", resourceCulture);
@@ -176,6 +186,16 @@ namespace LeHandUI.Properties {
         internal static System.Drawing.Bitmap RefreshIcon16x16 {
             get {
                 object obj = ResourceManager.GetObject("RefreshIcon16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RemoveFile64x64 {
+            get {
+                object obj = ResourceManager.GetObject("RemoveFile64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
