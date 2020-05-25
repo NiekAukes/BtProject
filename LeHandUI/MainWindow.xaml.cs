@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -13,6 +14,8 @@ namespace LeHandUI
 {
 	public partial class MainWindow : Window
 	{
+		public static string Directory = (string)Registry.CurrentUser.OpenSubKey("Software\\LeHand").GetValue("Dir");
+
 		public static MainWindow inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
 
@@ -236,6 +239,7 @@ namespace LeHandUI
 			InitializeComponent();
 			FileManager.LoadAllFiles();
 
+			SimpleFileMangaer.AddFile("SomeFile");
 			
 			//Logic[] logics =
 			//	{
@@ -305,7 +309,7 @@ namespace LeHandUI
 		}
 		private void CloseWindow(object sender, EventArgs e){
 			//App.Current.MainWindow.Close();
-			App.Current.Shutdown();
+			this.Close();
 		}
 		private void DragStart(object sender, MouseButtonEventArgs e)
 		{

@@ -147,6 +147,8 @@ void CommandManager::doData(BTService service, Keysender* keysend, std::string* 
 
 		WriteFile(keysend->datapipe, (char*)sdat, dat.size() * 2, &keysend->dwdataread, NULL);
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		delete[] buf;
+		delete[] sdat;
 	}
 }
 std::thread* datagen = nullptr;
@@ -161,6 +163,7 @@ void datgen(BTService* service, Keysender* keysend) {
 
 		WriteFile(keysend->datapipe, (char*)sdat, dat.size() * 2, &keysend->dwdataread, NULL);
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		delete[] sdat;
 	}
 }
 int findinstr(const char* string, char c) {
@@ -516,28 +519,30 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 #endif
 				}
 				else if (command._Equal("load")) {
-					std::string full(args[1]);
-					if (findinstr(full.c_str(), '\"') >= 0) {
-						for (int i = 2; i < args.size(); i++) {
-							full.append(" ");
-							full.append(args[i]);
-							
-							if (findinstr(args[i].c_str(), '\"') >= 0)
-								break;
-						}
+					if (args.size() > 1) {
+						std::string full(args[1]);
+						if (findinstr(full.c_str(), '\"') >= 0) {
+							for (int i = 2; i < args.size(); i++) {
+								full.append(" ");
+								full.append(args[i]);
 
-						for (int i = 0; i < full.size(); i++) {
-							if (full[i] == '\"') {
-								full.erase(i, i + 1);
-								i--;
+								if (findinstr(args[i].c_str(), '\"') >= 0)
+									break;
 							}
-						}
+
+							for (int i = 0; i < full.size(); i++) {
+								if (full[i] == '\"') {
+									full.erase(i, i + 1);
+									i--;
+								}
+							}
 
 #ifdef Obsolete
-						loadbtdfile(arg1);
+							loadbtdfile(arg1);
 #else 
-						Keysender::LuaFile = full;
+							Keysender::LuaFile = full;
 #endif
+						}
 					}
 				}
 				//else if (command._Equal("pipe")) {
