@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeHandUI"
              mc:Ignorable="d" Height="Auto" Width="auto" 
-             MinHeight="300" MinWidth="400" FontSize="25" 
+             MinHeight="100" MinWidth="100" FontSize="25" 
              FontFamily="Futura Lt BT" Foreground="#F2F2F2"
              Background="#2a2a2c"
              d:DesignHeight="580" d:DesignWidth="760">
@@ -14,16 +14,17 @@
             <ColumnDefinition Width="15"/>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="auto" MinWidth="20"/>
-            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="13*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="auto" MinHeight="20"/>
+            <RowDefinition Height="auto" MinHeight="0"/>
             <RowDefinition Height="25*"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Column="1" Grid.Row="0" 
+        <DockPanel Grid.Column="1" Grid.Row="1" 
                    FlowDirection="LeftToRight" HorizontalAlignment="Left" >
             <Button x:Name="addFileButton" Style="{StaticResource TranspButton}"
                     Click="addFileButton_Click">
@@ -34,11 +35,13 @@
                 <Image x:Name="removeFileImage"/>
             </Button>
         </DockPanel>
-        <ListBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,0"
+        <ListBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
                  Background="Transparent">
         </ListBox>
 
-        <DockPanel Grid.Column="3" Grid.Row="0" 
+        <GridSplitter Grid.Column="2" Grid.Row="0" Grid.RowSpan="1000" 
+                      HorizontalAlignment="Stretch" Background="Transparent"/>
+        <DockPanel Grid.Column="3" Grid.Row="1" 
                    FlowDirection="LeftToRight" HorizontalAlignment="Left" >
             <Button x:Name="addRuleButton" Style="{StaticResource TranspButton}"
                     Click="addRuleButton_Click">
@@ -49,9 +52,9 @@
                 <Image x:Name="removeRuleImage"/>
             </Button>
         </DockPanel>
-        <ListBox Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2"
+        <ListBox Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="1"
                  Background="Transparent">
         </ListBox>
-        
+
     </Grid>
 </UserControl>

@@ -538,5 +538,4 @@ typedef DeviceDetails* lpDeviceDetails;
 		*length = 11;
 		return values;
 	}
-
 	BTService* BTService::inst;

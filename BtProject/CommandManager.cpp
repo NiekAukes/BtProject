@@ -1,4 +1,4 @@
-#include "CommandManager.h"
+﻿#include "CommandManager.h"
 #include <limits>
 #include <sstream>
 #include <string>
@@ -564,17 +564,18 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				else if (command._Equal("help") || command._Equal("--help"))
 				{
 					//todo
-					std::cout << "Command\t\t | Args\t\t\t\t\t | Description\n";
-					std::cout << "help\t\t | None \t\t\t\t | provides help\n";
-					std::cout << "rule add\t | <Id> <Value> <key> <Condit>\t | creates new rule\n";
-					std::cout << "rule rem\t | <Id> \t\t\t\t | removes rule\n";
-					std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 1] | edit rule\n";
-					std::cout << "rule list\t | None\t\t\t\t\t | lists rules\n";
-					std::cout << "save\t\t | [filename]\t\t\t\t | saves file\n";
-					std::cout << "load\t\t | <filename>\t\t\t\t | loads file\n";
-					std::cout << "device discover\t | <Amount> \t\t\t\t | Discovers BTDevices\n";
-					std::cout << "device connect\t | <Id> \t\t\t\t | Connects to the device\n";
-					std::cout << "device auto\t | None \t\t\t\t | Discovers and connects automatically with the device\n";
+					std::cout << "Command\t\t | Args\t\t\t\t\t\t | Description\n";
+					std::cout << "============================================================================================================\n";
+					std::cout << "help\t\t | None \t\t\t\t\t | provides help\n";
+					std::cout << "rule add\t | <Id> <Value> <key> <Condit>\t\t\t | creates new rule\n";
+					std::cout << "rule rem\t | <Id> \t\t\t\t\t | removes rule\n";
+					std::cout << "rule edit\t | <Id> <NewValue> <NewCondit> [Part-Id = 1]\t | edit rule\n";
+					std::cout << "rule list\t | None\t\t\t\t\t\t | lists rules\n";
+					std::cout << "save\t\t | [filename]\t\t\t\t\t | saves file\n";
+					std::cout << "load\t\t | <filename>\t\t\t\t\t | loads file\n";
+					std::cout << "device discover\t | <Amount> \t\t\t\t\t | Discovers BTDevices\n";
+					std::cout << "device connect\t | <Id> \t\t\t\t\t | Connects to the device\n";
+					std::cout << "device auto\t | None \t\t\t\t\t | Discovers and connects automatically with the device\n";
 				}
 				else
 				{

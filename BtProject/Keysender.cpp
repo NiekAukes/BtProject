@@ -122,5 +122,4 @@ void Keysender::startSender(bool wait) {
 	std::cout << "cancelled monitoring";
 	//setup monitoring
 	//get current conditions (BtService)
-
 }

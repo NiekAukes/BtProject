@@ -48,4 +48,3 @@ int main(int argc, char* argv[])
 	cmdMgr->startcommander(false, file.size() > 1 ? file : "");
 	return 0;
 }
-

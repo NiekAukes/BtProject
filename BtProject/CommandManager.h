@@ -41,4 +41,3 @@ public:
 	void startcommander(bool intro, std::string loadfile = "");
 	void stopcommander();
 };
-
