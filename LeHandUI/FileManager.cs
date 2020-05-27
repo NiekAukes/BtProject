@@ -16,7 +16,7 @@ namespace LeHandUI
         public int arg1;
         public int arg2;
     }
-    class SimpleFileMangaer
+    class SimpleFileManager
     {
         private static int Loopdistance = 26;
         public static string[] FileNames()
