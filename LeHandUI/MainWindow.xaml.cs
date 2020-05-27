@@ -239,7 +239,7 @@ namespace LeHandUI
 			InitializeComponent();
 			FileManager.LoadAllFiles();
 
-			SimpleFileMangaer.AddFile("SomeFile");
+			SimpleFileManager.FileNames();
 			
 			//Logic[] logics =
 			//	{

@@ -10,17 +10,31 @@ namespace LeHandUI
 {
     public struct FileData
     {
+        public FileData(byte var, double begin, double end, byte action, int a1, int a2)
+        {
+            variable = var;
+            beginRange = begin;
+            endRange = end;
+            actionId = action;
+            arg1 = a1;
+            arg2 = a2;
+        }
         public byte variable;
         public double beginRange, endRange;
         public byte actionId;
         public int arg1;
         public int arg2;
     }
-    class SimpleFileMangaer
+    class SimpleFileManager
     {
         private static int Loopdistance = 26;
         public static string[] FileNames()
         {
+            string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
+            for (int i = 0; i < outstr.Length; i++)
+            {
+
+            }
             return null;
         }
         public static void ChangeFile(string name, FileData fileData)
