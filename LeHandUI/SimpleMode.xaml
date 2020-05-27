@@ -12,7 +12,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="4*" MinWidth="60"/>
             <ColumnDefinition Width="auto" MinWidth="20"/>
             <ColumnDefinition Width="13*" />
         </Grid.ColumnDefinitions>
@@ -35,8 +35,8 @@
                 <Image x:Name="removeFileImage"/>
             </Button>
         </DockPanel>
-        <ListBox x:Name="simpleModeFileListBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
-                 Background="Transparent" Foreground="#FFF2F2F2" FontSize="16">
+        <ListBox x:Name="simpleModeFileListBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" Padding="5"
+                 Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch">
         </ListBox>
 
         <GridSplitter Grid.Column="2" Grid.Row="0" Grid.RowSpan="1000" 

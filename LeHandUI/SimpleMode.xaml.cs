@@ -43,6 +43,8 @@ namespace LeHandUI
 			InitializeComponent();
 			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
+			addRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
+			removeRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
 
 			FileData data = new FileData();
 			data.actionId = 1;
@@ -52,6 +54,9 @@ namespace LeHandUI
 			data.endRange = 1;
 			data.variable = 1;
 			SimpleFileManager.ChangeFile("SomeFile", data);
+			refreshFiles();
+
+			SimpleFileManager.ChangeFile("BigDingdongdikkeBingBong", data);
 			refreshFiles();
 		}
 		public void refreshFiles()
