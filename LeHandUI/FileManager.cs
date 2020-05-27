@@ -33,9 +33,9 @@ namespace LeHandUI
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
             for (int i = 0; i < outstr.Length; i++)
             {
-
+                outstr[i] = LHregistry.getSimpleName(outstr[i]);
             }
-            return null;
+            return outstr;
         }
         public static void ChangeFile(string name, FileData fileData)
         {
