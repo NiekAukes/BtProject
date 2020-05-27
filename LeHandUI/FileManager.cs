@@ -37,7 +37,7 @@ namespace LeHandUI
             }
             return outstr;
         }
-        public static void ChangeFile(string name, FileData fileData)
+        public static void ChangeFile(string name, FileData[] fileData)
         {
             FileStream stream = null;
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh"))
@@ -46,12 +46,15 @@ namespace LeHandUI
             StreamWriter streamWriter = new StreamWriter(stream);
 
             streamWriter.Write(name + "\0");
-            streamWriter.Write(fileData.variable);
-            streamWriter.Write(fileData.beginRange);
-            streamWriter.Write(fileData.endRange);
-            streamWriter.Write(fileData.actionId);
-            streamWriter.Write(fileData.arg1);
-            streamWriter.Write(fileData.arg2);
+            for (int i = 0; i < fileData.Length; i++)
+            {
+                streamWriter.Write(fileData[i].variable);
+                streamWriter.Write(fileData[i].beginRange);
+                streamWriter.Write(fileData[i].endRange);
+                streamWriter.Write(fileData[i].actionId);
+                streamWriter.Write(fileData[i].arg1);
+                streamWriter.Write(fileData[i].arg2);
+            }
 
 
             streamWriter.Close();
