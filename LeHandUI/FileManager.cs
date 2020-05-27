@@ -10,7 +10,11 @@ namespace LeHandUI
 {
     public struct FileData
     {
-
+        public byte variable;
+        public double beginRange, endRange;
+        public byte actionId;
+        public int arg1;
+        public int arg2;
     }
     class SimpleFileMangaer
     {
@@ -19,11 +23,23 @@ namespace LeHandUI
         {
             return null;
         }
-        public static void AddFile(string name)
+        public static void ChangeFile(string name, FileData fileData)
         {
-            FileStream stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".txt");
+            FileStream stream = null;
+            if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".txt"))
+                File.Delete(MainWindow.Directory + "\\Files\\" + name + ".txt");
+            stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".txt");
             StreamWriter streamWriter = new StreamWriter(stream);
-            streamWriter.WriteLine(name + "\0");
+
+            streamWriter.Write(name + "\0");
+            streamWriter.Write(fileData.variable);
+            streamWriter.Write(fileData.beginRange);
+            streamWriter.Write(fileData.endRange);
+            streamWriter.Write(fileData.actionId);
+            streamWriter.Write(fileData.arg1);
+            streamWriter.Write(fileData.arg2);
+
+
             streamWriter.Close();
             stream.Close();
         }
