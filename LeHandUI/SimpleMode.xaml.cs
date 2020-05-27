@@ -40,7 +40,10 @@ namespace LeHandUI
 		public SimpleMode()
         {
             InitializeComponent();
-
+			string[] fileNames = SimpleFileManager.FileNames();
+			for (int i = 0; i < fileNames.Length; i++) {
+				simpleModeFileListBox.Items.Add(fileNames[i]);
+			}
 
 			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);

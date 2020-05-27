@@ -35,7 +35,7 @@
                 <Image x:Name="removeFileImage"/>
             </Button>
         </DockPanel>
-        <ListBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
+        <ListBox x:Name="simpleModeFileListBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
                  Background="Transparent">
         </ListBox>
 

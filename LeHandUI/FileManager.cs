@@ -27,7 +27,6 @@ namespace LeHandUI
     }
     class SimpleFileManager
     {
-        private static int Loopdistance = 26;
         public static string[] FileNames()
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
@@ -40,9 +39,9 @@ namespace LeHandUI
         public static void ChangeFile(string name, FileData fileData)
         {
             FileStream stream = null;
-            if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".txt"))
-                File.Delete(MainWindow.Directory + "\\Files\\" + name + ".txt");
-            stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".txt");
+            if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh"))
+                File.Delete(MainWindow.Directory + "\\Files\\" + name + ".lh");
+            stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".lh");
             StreamWriter streamWriter = new StreamWriter(stream);
 
             streamWriter.Write(name + "\0");
