@@ -59,7 +59,9 @@ namespace LeHandUI
         }
         public static void DeleteFile(int id)
         {
-
+            string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
+            if (File.Exists(outstr[id]))
+                File.Delete(outstr[id]);
         }
 
     }
