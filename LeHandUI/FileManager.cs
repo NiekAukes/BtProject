@@ -8,8 +8,30 @@ using System.ComponentModel;
 
 namespace LeHandUI
 {
-    struct FileData
+    public struct FileData
     {
+
+    }
+    class SimpleFileMangaer
+    {
+        private static int Loopdistance = 26;
+        public static string[] FileNames()
+        {
+            return null;
+        }
+        public static void AddFile(string name)
+        {
+            FileStream stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".txt");
+            StreamWriter streamWriter = new StreamWriter(stream);
+            streamWriter.WriteLine(name + "\0");
+            streamWriter.Close();
+            stream.Close();
+        }
+        public static void DeleteFile(int id)
+        {
+
+        }
+
     }
     class FileManager
     {
