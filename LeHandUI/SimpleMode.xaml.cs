@@ -20,6 +20,7 @@ namespace LeHandUI
 {
 	public partial class SimpleMode : UserControl
     {
+		public static string[] fileNames = SimpleFileManager.FileNames();
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -39,17 +40,30 @@ namespace LeHandUI
 		#endregion
 		public SimpleMode()
         {
-            InitializeComponent();
-			string[] fileNames = SimpleFileManager.FileNames();
-			for (int i = 0; i < fileNames.Length; i++) {
-				simpleModeFileListBox.Items.Add(fileNames[i]);
-			}
-
+			InitializeComponent();
 			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
 
-        }
-
+			FileData data = new FileData();
+			data.actionId = 1;
+			data.arg1 = 1;
+			data.arg2 = 1;
+			data.beginRange = 1;
+			data.endRange = 1;
+			data.variable = 1;
+			SimpleFileManager.ChangeFile("SomeFile", data);
+			refreshFiles();
+		}
+		public void refreshFiles()
+		{
+			fileNames = null;
+			simpleModeFileListBox.Items.Clear();
+			fileNames = SimpleFileManager.FileNames();
+			for (int i = 0; i < fileNames.Length; i++)
+			{
+				simpleModeFileListBox.Items.Add(fileNames[i]);
+			}
+		}
 		private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a filename + registry key for ruleset

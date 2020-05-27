@@ -33,6 +33,7 @@ namespace LeHandUI
             for (int i = 0; i < outstr.Length; i++)
             {
                 outstr[i] = LHregistry.getSimpleName(outstr[i]);
+                outstr[i] = outstr[i].Split('.')[0];
             }
             return outstr;
         }
