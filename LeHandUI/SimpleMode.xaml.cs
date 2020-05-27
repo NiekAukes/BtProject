@@ -41,6 +41,7 @@ namespace LeHandUI
         {
             InitializeComponent();
 
+
 			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
 
