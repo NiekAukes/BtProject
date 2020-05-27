@@ -239,59 +239,6 @@ namespace LeHandUI
 			InitializeComponent();
 			FileManager.LoadAllFiles();
 
-			FileData data = new FileData();
-			data.actionId = 1;
-			data.arg1 = 1;
-			data.arg2 = 1;
-			data.beginRange = 1;
-			data.endRange = 1;
-			data.variable = 1;
-			SimpleFileManager.ChangeFile("SomeFile", data);
-			
-			//Logic[] logics =
-			//	{
-			//		new Logic(1, 0.2, 0.4, new Kpress('k')),
-			//		new Logic(3, 0.6, 0.8, new Kpress('l')),
-			//		new Logic(5, 0.152, 0.534, new Kpress('m')),
-			//	};
-			//string s = LuaParser.Parse(logics);
-			//FileStream stream = File.OpenWrite("yeshere.lua");
-			//StreamWriter writer = new StreamWriter(stream);
-			//writer.Write(s);
-			//writer.Close();
-			//stream.Close();
-
-
-			#region Old Code
-			/*
-			textEditor.InputBindings.Add(
-				new InputBinding(new SaveCommand(),
-				new MouseGesture(MouseAction.WheelClick, ModifierKeys.Control)
-				
-				));
-
-			Listbox = LuaFileView;
-
-			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-
-			for(int i = 0; i < LuaNames.Count; i++)
-			{
-				LuaNames[i] = LHregistry.getSimpleName(LuaNames[i]);
-				LuaFileView.Items.Add(LuaNames[i]);
-			}
-
-			BypassTextChangedEvent = true;
-			textEditor.Text = "function Start()\n	print(\"preview\")\nend";
-			*/
-
-			//Alle icoontjes
-			//PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
-			//DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
-			//RefreshIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AQUA_RefreshIcon64x64);
-			//AddReferenceIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.AddReference16x16);
-			//SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
-			//RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
-			#endregion
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 		}
 
