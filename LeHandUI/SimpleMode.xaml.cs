@@ -1,4 +1,6 @@
-﻿using Microsoft.TeamFoundation.Server;
+﻿using LeHandUI.Properties;
+using Microsoft.TeamFoundation.Server;
+using Microsoft.VisualStudio.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,16 +21,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Color = System.Windows.Media.Color;
+using TextBox = System.Windows.Controls.TextBox;
+
+/*COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
+                   (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
+                 very dark blue, dark blue, aqua, pale aqua,     greyish
+*/
 
 namespace LeHandUI
 {
 	public partial class SimpleMode : System.Windows.Controls.UserControl
 	{
-		private string _popuptxt = "New name of file";
-		public string popupText { get { return _popuptxt; } set { if (value != _popuptxt) { _popuptxt = value; OnPropertyChanged("popupText"); } } }
-
-
 		public static string[] fileNames = SimpleFileManager.FileNames();
+		public static List<TextBox> textBoxes = new List<TextBox>();
+
+		SolidColorBrush transparent =	new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
+		SolidColorBrush off_white	=	new SolidColorBrush(Color.FromArgb(255,242,242,242));
+		SolidColorBrush white		=	new SolidColorBrush(Color.FromArgb(255,255,255,255));
+		SolidColorBrush dark_blue	=	new SolidColorBrush(Color.FromArgb(178, 6, 84, 100));
+
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -46,43 +58,26 @@ namespace LeHandUI
 			finally { DeleteObject(handle); }
 		}
 		#endregion
-            
+
 		public SimpleMode()
 		{
 			InitializeComponent();
+		
+			addFileImage.Source		=	ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
+			removeFileImage.Source	=	ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
+			addRuleImage.Source		=	ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
+			removeRuleImage.Source	=	ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
 
-			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
-			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
-			addRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
-			removeRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
-
-			popupText = "Type your new name here";
 			FileData[] data = new FileData[6];
 			FileData[] newdata = new FileData[1];
 			newdata[0] = new FileData(0, 0.2, 0.8, 0, 30, 0);
 
-			SimpleFileManager.ChangeFile("SomeFile", data);
-			refreshFiles();
-
-			SimpleFileManager.ChangeFile("BigDingdongdikkeBingBong", newdata);
 			refreshFiles();
 
 			FileData dat = SimpleFileManager.GetFileData(0)[0];
 		}
 
 
-		private void simpleModeFileListBox_doubleClick(object sender, EventArgs e)
-		{
-			int selectedIndex = simpleModeFileListBox.SelectedIndex;
-			if(selectedIndex != -1)
-			{
-				simpleModeFileListBox_editName(selectedIndex);
-			}
-		}
-		private void simpleModeFileListBox_editName(int index)
-		{
-
-		}
 		public void refreshFiles()
 		{
 			fileNames = null;
@@ -90,9 +85,66 @@ namespace LeHandUI
 			fileNames = SimpleFileManager.FileNames();
 			for (int i = 0; i < fileNames.Length; i++)
 			{
-				simpleModeFileListBox.Items.Add(fileNames[i]);
+				var txtbox = new TextBox();
+				txtbox.Text = fileNames[i];
+				txtbox.Focusable = true;
+				txtbox.MouseDown += onListItemSelected;
+				txtbox.MouseLeave += onListItemLeave;
+				txtbox.TextChanged += onTextChanged;
+				textBoxes.Add(txtbox);
+				simpleModeFileListBox.Items.Add(textBoxes[i]);
 			}
 		}
+
+		private void onTextChanged(object sender, TextChangedEventArgs e)
+		{
+			/*TextBox listitem = (TextBox)sender;
+			int index = simpleModeFileListBox.SelectedIndex;
+			if (index != -1)
+			{
+				SimpleFileManager.ChangeName(fileNames[index], listitem.Text);
+				refreshFiles();
+				dosumShit(sender);
+			}*/
+		}
+
+		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
+		{
+			int index = simpleModeFileListBox.SelectedIndex;
+			TextBox selectedTextBox = (TextBox)simpleModeFileListBox.SelectedItem;
+			if (index != -1)
+			{
+				SimpleFileManager.ChangeName(fileNames[index], selectedTextBox.Text);
+				refreshFiles();
+				dosumShit(sender);
+			}
+		}
+
+		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			UIElement UIE = (UIElement)sender;
+			UIE.Focus();
+			TextBox listitem = (TextBox)sender;
+			listitem.Background			= dark_blue;
+			listitem.Foreground			= white;
+			listitem.BorderThickness	= new Thickness(2);
+			listitem.BorderBrush		= white;
+
+		}
+		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			dosumShit(sender);
+		}
+		private void dosumShit(object sender)
+		{
+			TextBox listitem = (TextBox)sender;
+			MainWindow.inst.Focus();
+			listitem.Background = transparent;
+			listitem.Foreground = off_white;
+			listitem.BorderThickness = new Thickness(2);
+			listitem.BorderBrush = transparent;
+		}
+
 		private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a filename + registry key for ruleset
@@ -117,11 +169,24 @@ namespace LeHandUI
 			//remove the shit above
 
 		}
+		private void simpleModeFileListBox_doubleClick(object sender, EventArgs e)
+		{
+			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+			if (selectedIndex != -1)
+			{
+				simpleModeFileListBox_editName(selectedIndex);
+			}
+		}
+		private void simpleModeFileListBox_editName(int index)
+		{
+
+		}
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected void OnPropertyChanged(string propertyName)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
+
 	}
 }

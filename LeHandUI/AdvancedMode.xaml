@@ -8,7 +8,7 @@
              Height="Auto" Width="auto" MinHeight="100" MinWidth="100" FontSize="25" 
              FontFamily="Futura Lt BT" Foreground="#F2F2F2"
              d:DesignHeight="580" d:DesignWidth="760"
-             Mouse.MouseEnter="FocusMouseEnter"             >
+             Mouse.MouseEnter="FocusMouseEnter">
     <Grid
         FocusManager.FocusedElement="{Binding ElementName=textEditor}"
         >
