@@ -75,8 +75,11 @@ namespace LeHandUI
             FileStream stream;
             if (File.Exists(MainWindow.Directory + "\\Files\\" + path + ".lh"))
             {
+                //open the file
                 stream = File.OpenRead(MainWindow.Directory + "\\Files\\" + path + ".lh");
                 StreamReader reader = new StreamReader(stream);
+
+                //read the name before proceeding
                 string name = "";
                 char c = 'a';
                 do
@@ -85,25 +88,31 @@ namespace LeHandUI
                     name += c;
                 } while (c != '\0');
 
+                //read all other data
                 string data = reader.ReadToEnd();
 
                 FileData[] ret = new FileData[data.Length / 26];
 
+                //fill in the filedata
                 int bytesread = 0;
                 for (int i = 0; i < data.Length / 26; i++) 
                 {
+                    //variable
                     string s = data.Substring(bytesread, bytesread + 1);
                     bytesread += 1;
                     ret[i].variable = (byte)s[0];
 
+                    //beginrange
                     s = data.Substring(bytesread, bytesread + 8);
                     bytesread += 8;
                     ret[i].beginRange = BitConverter.ToDouble(Encoding.ASCII.GetBytes(s), 0);
 
+                    //endrange
                     s = data.Substring(bytesread, bytesread + 8);
                     bytesread += 8;
                     ret[i].endRange = BitConverter.ToDouble(Encoding.ASCII.GetBytes(s), 0);
 
+                    //action
                     s = data.Substring(bytesread, bytesread + 1);
                     bytesread += 1;
                     ret[i].actionId = (byte)s[0];
@@ -113,6 +122,7 @@ namespace LeHandUI
                     bytesread += 4;
                     ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);
 
+                    //arg2
                     s = data.Substring(bytesread, bytesread + 4);
                     bytesread += 4;
                     ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);

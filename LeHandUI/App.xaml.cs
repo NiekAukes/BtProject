@@ -20,6 +20,7 @@ namespace LeHandUI
     /// </summary>
     public partial class App : Application
     {
+        public static bool LeHandExited = false;
         public App()
         {
             this.InitializeComponent();
@@ -38,13 +39,16 @@ namespace LeHandUI
         
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            if (!LeHandExited)
+                Communicator.quit();
+            LeHandExited = true;
+
             StartupValues values = new StartupValues();
             values.StartFontSize = Convert.ToInt32(AdvancedMode.inst.textEditor.FontSize);
             values.StartupFileId = FileManager.currentFileId;
             values.ShowLineNumbers = Convert.ToInt32(AdvancedMode.inst.textEditor.ShowLineNumbers);
 
             LHregistry.SetStartupValues(values);
-            Communicator.quit();
         }
 
     }
