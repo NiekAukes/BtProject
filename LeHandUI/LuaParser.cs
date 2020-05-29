@@ -27,6 +27,10 @@ namespace LeHandUI
     public class Mpress : LeHandAction
     {
         short Button;
+        public Mpress(short b)
+        {
+            Button = b;
+        }
         public override string Parse()
         {
             string s = "Kpress(" + Button + ")\n";
@@ -37,6 +41,11 @@ namespace LeHandUI
     {
         double dX;
         double dY;
+        public MMove(double deltaX, double deltaY)
+        {
+            dX = deltaX;
+            dY = deltaY;
+        }
         public override string Parse()
         {
             string s = "Kpress(" + dX + ", " + dY + ")\n";

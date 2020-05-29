@@ -10,7 +10,12 @@ namespace LeHandUI
 {
     public struct FileData
     {
-        public FileData(byte var, double begin, double end, byte action, int a1, int a2)
+        public byte variable;
+        public double beginRange, endRange;
+        public byte actionId;
+        public long arg1;
+        public long arg2;
+        public FileData(byte var, double begin, double end, byte action, long a1, long a2)
         {
             variable = var;
             beginRange = begin;
@@ -19,11 +24,31 @@ namespace LeHandUI
             arg1 = a1;
             arg2 = a2;
         }
-        public byte variable;
-        public double beginRange, endRange;
-        public byte actionId;
-        public int arg1;
-        public int arg2;
+        public Logic toLogic()
+        {
+            Logic logic = new Logic();
+            logic.variable = variable;
+            logic.beginrange = beginRange;
+            logic.endrange = endRange;
+            switch(actionId)
+            {
+                case 0:
+                    //Kpress
+                    logic.action = new Kpress(Convert.ToChar(arg1));
+                    break;
+                case 1:
+                    //Mpress
+                    logic.action = new Mpress((short)arg1);
+                    break;
+                case 2:
+                    //Mpress
+                    logic.action = new MMove(BitConverter.Int64BitsToDouble(arg1),
+                        BitConverter.Int64BitsToDouble(arg2));
+                    break;
+            }
+            return logic;
+        }
+       
     }
     class SimpleFileManager
     {
@@ -36,6 +61,63 @@ namespace LeHandUI
                 outstr[i] = outstr[i].Split('.')[0];
             }
             return outstr;
+        }
+        public static FileData[] GetFileData(int id)
+        {
+            string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
+            if (outstr.Length <= id && File.Exists(outstr[id]))
+                return GetFileData(outstr[id]);
+            return null;
+        }
+        public static FileData[] GetFileData(string path)
+        {
+            FileStream stream;
+            if (File.Exists(MainWindow.Directory + "\\Files\\" + path + ".lh"))
+            {
+                stream = File.OpenRead(MainWindow.Directory + "\\Files\\" + path + ".lh");
+                StreamReader reader = new StreamReader(stream);
+                string name = "";
+                char c = 'a';
+                do
+                {
+                    c = (char)reader.Read();
+                    name += c;
+                } while (c != '\0');
+
+                string data = reader.ReadToEnd();
+
+                FileData[] ret = new FileData[data.Length / 26];
+
+                int bytesread = 0;
+                for (int i = 0; i < data.Length / 26; i++) 
+                {
+                    string s = data.Substring(bytesread, bytesread + 1);
+                    bytesread += 1;
+                    ret[i].variable = (byte)s[0];
+
+                    s = data.Substring(bytesread, bytesread + 8);
+                    bytesread += 8;
+                    ret[i].beginRange = BitConverter.ToDouble(Encoding.ASCII.GetBytes(s), 0);
+
+                    s = data.Substring(bytesread, bytesread + 8);
+                    bytesread += 8;
+                    ret[i].endRange = BitConverter.ToDouble(Encoding.ASCII.GetBytes(s), 0);
+
+                    s = data.Substring(bytesread, bytesread + 1);
+                    bytesread += 1;
+                    ret[i].actionId = (byte)s[0];
+
+                    s = data.Substring(bytesread, bytesread + 4);
+                    bytesread += 4;
+                    ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);
+
+                    s = data.Substring(bytesread, bytesread + 4);
+                    bytesread += 4;
+                    ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);
+                }
+                return ret;
+            }
+            return null;
         }
         public static void ChangeFile(string name, FileData[] fileData)
         {
