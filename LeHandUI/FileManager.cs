@@ -65,66 +65,53 @@ namespace LeHandUI
         public static FileData[] GetFileData(int id)
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
-            if (outstr.Length <= id && File.Exists(outstr[id]))
+            if (outstr.Length >= id && File.Exists(outstr[id]))
                 return GetFileData(outstr[id]);
             return null;
         }
         public static FileData[] GetFileData(string path)
         {
             FileStream stream;
-            if (File.Exists(MainWindow.Directory + "\\Files\\" + path + ".lh"))
+            if (File.Exists(path))
             {
                 //open the file
-                stream = File.OpenRead(MainWindow.Directory + "\\Files\\" + path + ".lh");
-                StreamReader reader = new StreamReader(stream);
+                stream = File.OpenRead(path);
+                BinaryReader reader = new BinaryReader(stream);
 
                 //read the name before proceeding
-                string name = "";
-                char c = 'a';
-                do
-                {
-                    c = (char)reader.Read();
-                    name += c;
-                } while (c != '\0');
+                string name = reader.ReadString();
+                //char c = 'a';
+                //while (c != '\0')
+                //{
+                //    c = (char)reader.Read();
+                //    name += c;
+                //};
 
                 //read all other data
-                string data = reader.ReadToEnd();
 
-                FileData[] ret = new FileData[data.Length / 26];
+                FileData[] ret = new FileData[reader.BaseStream.Length / 34];
 
                 //fill in the filedata
                 int bytesread = 0;
-                for (int i = 0; i < data.Length / 26; i++) 
+                for (int i = 0; i < Math.Floor(reader.BaseStream.Length / 34.0f); i++) 
                 {
                     //variable
-                    string s = data.Substring(bytesread, bytesread + 1);
-                    bytesread += 1;
-                    ret[i].variable = (byte)s[0];
+                    ret[i].variable = reader.ReadByte();
 
                     //beginrange
-                    s = data.Substring(bytesread, bytesread + 8);
-                    bytesread += 8;
-                    ret[i].beginRange = BitConverter.ToDouble(Encoding.ASCII.GetBytes(s), 0);
+                    ret[i].beginRange = reader.ReadDouble();
 
                     //endrange
-                    s = data.Substring(bytesread, bytesread + 8);
-                    bytesread += 8;
-                    ret[i].endRange = BitConverter.ToDouble(Encoding.ASCII.GetBytes(s), 0);
+                    ret[i].endRange = reader.ReadDouble();
 
                     //action
-                    s = data.Substring(bytesread, bytesread + 1);
-                    bytesread += 1;
-                    ret[i].actionId = (byte)s[0];
-                    
+                    ret[i].actionId = reader.ReadByte();
+
                     //arg1
-                    s = data.Substring(bytesread, bytesread + 4);
-                    bytesread += 4;
-                    ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);
+                    ret[i].arg1 = reader.ReadInt64();
 
                     //arg2
-                    s = data.Substring(bytesread, bytesread + 4);
-                    bytesread += 4;
-                    ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);
+                    ret[i].arg2 = reader.ReadInt64();
                 }
                 return ret;
             }
@@ -136,11 +123,13 @@ namespace LeHandUI
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh"))
                 File.Delete(MainWindow.Directory + "\\Files\\" + name + ".lh");
             stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".lh");
-            StreamWriter streamWriter = new StreamWriter(stream);
+            BinaryWriter streamWriter = new BinaryWriter(stream);
 
             streamWriter.Write(name + "\0");
             for (int i = 0; i < fileData.Length; i++)
             {
+                byte[] bb = BitConverter.GetBytes(fileData[i].beginRange);
+                double d = BitConverter.ToDouble(bb, 0);
                 streamWriter.Write(fileData[i].variable);
                 streamWriter.Write(fileData[i].beginRange);
                 streamWriter.Write(fileData[i].endRange);

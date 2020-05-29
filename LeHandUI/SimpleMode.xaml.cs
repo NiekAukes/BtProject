@@ -58,12 +58,16 @@ namespace LeHandUI
 
 			popupText = "Type your new name here";
 			FileData[] data = new FileData[6];
+			FileData[] newdata = new FileData[1];
+			newdata[0] = new FileData(0, 0.2, 0.8, 0, 30, 0);
 
 			SimpleFileManager.ChangeFile("SomeFile", data);
 			refreshFiles();
 
-			SimpleFileManager.ChangeFile("BigDingdongdikkeBingBong", data);
+			SimpleFileManager.ChangeFile("BigDingdongdikkeBingBong", newdata);
 			refreshFiles();
+
+			FileData dat = SimpleFileManager.GetFileData(0)[0];
 		}
 
 
