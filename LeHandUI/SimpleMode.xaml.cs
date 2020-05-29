@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
+using ListBox = System.Windows.Controls.ListBox;
 using TextBox = System.Windows.Controls.TextBox;
 
 /*COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
@@ -72,10 +73,14 @@ namespace LeHandUI
 			FileData[] data = new FileData[6];
 			FileData[] newdata = new FileData[1];
 			newdata[0] = new FileData(0, 0.2, 0.8, 0, 30, 0);
+			SimpleFileManager.ChangeFile("kiekoek", newdata);
+			SimpleFileManager.ChangeFile("halloe", newdata);
 
 			refreshFiles();
 
+			//getfiledata returns null, pls fix volvo
 			FileData dat = SimpleFileManager.GetFileData(0)[0];
+			
 		}
 
 
@@ -160,14 +165,17 @@ namespace LeHandUI
 
 		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
 		{
-			int index = simpleModeFileListBox.SelectedIndex;
-			TextBox selectedTextBox = (TextBox)simpleModeFileListBox.SelectedItem;
-			if (index != -1)
+			ItemCollection boxItemsshit = simpleModeFileListBox.Items;
+			for (int index = 0; index < fileNames.Length; index++)
 			{
-				SimpleFileManager.ChangeName(fileNames[index], selectedTextBox.Text);
-				refreshFiles();
-				dosumShit(sender);
+				//splits the given name (something like something.something.TextBox: name) and gets the actual name
+				string updatedName = (boxItemsshit[index].ToString()).Split(':')[1]; 
+
+				SimpleFileManager.ChangeName(fileNames[index], updatedName);
 			}
+			refreshFiles();
+			dosumShit(sender);
+			
 		}
 
 		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
