@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Windows;
 
 namespace LeHandUI
 {
@@ -114,6 +115,8 @@ namespace LeHandUI
                     //arg2
                     ret[i].arg2 = reader.ReadInt64();
                 }
+                reader.Close();
+                stream.Close();
                 return ret;
             }
             return null;
@@ -149,9 +152,13 @@ namespace LeHandUI
         {
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh")){
 
-                FileData[] fileDataOfOriginal = GetFileData(name);
-                File.Create(MainWindow.Directory + "\\Files\\" + newName + ".lh");
-
+                FileData[] fileDataOfOriginal = GetFileData(MainWindow.Directory + "\\Files\\" + name + ".lh");
+                if (fileDataOfOriginal == null)
+                {
+                    MessageBox.Show("File corrupted, cannot change filename");
+                    return;
+                }
+                    
                 ChangeFile(newName, fileDataOfOriginal);
 
                 DeleteFile(name);

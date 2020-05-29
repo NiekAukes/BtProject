@@ -39,6 +39,7 @@ namespace LeHandUI
 		SolidColorBrush transparent =	new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
 		SolidColorBrush off_white	=	new SolidColorBrush(Color.FromArgb(255,242,242,242));
 		SolidColorBrush white		=	new SolidColorBrush(Color.FromArgb(255,255,255,255));
+		SolidColorBrush black =			new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
 		SolidColorBrush dark_blue	=	new SolidColorBrush(Color.FromArgb(178, 6, 84, 100));
 
 		#region ImageSourceFromBitmap_func
@@ -85,15 +86,64 @@ namespace LeHandUI
 			fileNames = SimpleFileManager.FileNames();
 			for (int i = 0; i < fileNames.Length; i++)
 			{
+
 				var txtbox = new TextBox();
+				txtbox.IsReadOnly = true;
 				txtbox.Text = fileNames[i];
 				txtbox.Focusable = true;
+
+				txtbox.KeyDown += Txtbox_KeyDown;
+				txtbox.LostKeyboardFocus += Txtbox_LostKeyboardFocus;
+				txtbox.MouseDoubleClick += Txtbox_MouseDoubleClick;
 				txtbox.MouseDown += onListItemSelected;
 				txtbox.MouseLeave += onListItemLeave;
 				txtbox.TextChanged += onTextChanged;
 				textBoxes.Add(txtbox);
 				simpleModeFileListBox.Items.Add(textBoxes[i]);
 			}
+		}
+
+		private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				lostfocus(sender);
+			}
+		}
+		private void lostfocus(object sender)
+		{
+			TextBox txtbox = (TextBox)sender;
+			txtbox.IsReadOnly = true;
+
+			TextBox listitem = (TextBox)sender;
+			listitem.Background = transparent;
+			listitem.Foreground = off_white;
+			listitem.BorderThickness = new Thickness(2);
+			listitem.BorderBrush = transparent;
+
+			int index = simpleModeFileListBox.Items.IndexOf(sender);
+			if (index != -1 && listitem.Text.Length > 4)
+			{
+				SimpleFileManager.ChangeName(fileNames[index], listitem.Text);
+				refreshFiles();
+			}
+		}
+		private void Txtbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+		{
+			lostfocus(sender);
+			
+		}
+
+		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			TextBox txtbox = (TextBox)sender;
+			txtbox.IsReadOnly = false;
+
+			TextBox listitem = (TextBox)sender;
+			listitem.Background = white;
+			listitem.Foreground = black;
+			listitem.BorderThickness = new Thickness(2);
+			listitem.BorderBrush = white;
 		}
 
 		private void onTextChanged(object sender, TextChangedEventArgs e)
@@ -133,7 +183,7 @@ namespace LeHandUI
 		}
 		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			dosumShit(sender);
+			//dosumShit(sender);
 		}
 		private void dosumShit(object sender)
 		{
