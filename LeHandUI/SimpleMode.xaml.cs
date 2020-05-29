@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.TeamFoundation.Server;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -7,8 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -18,8 +22,12 @@ using System.Windows.Shapes;
 
 namespace LeHandUI
 {
-	public partial class SimpleMode : UserControl
-    {
+	public partial class SimpleMode : System.Windows.Controls.UserControl
+	{
+		private string _popuptxt = "New name of file";
+		public string popupText { get { return _popuptxt; } set { if (value != _popuptxt) { _popuptxt = value; OnPropertyChanged("popupText"); } } }
+
+
 		public static string[] fileNames = SimpleFileManager.FileNames();
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -38,26 +46,38 @@ namespace LeHandUI
 			finally { DeleteObject(handle); }
 		}
 		#endregion
+            
 		public SimpleMode()
-        {
+		{
 			InitializeComponent();
+
 			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
 			addRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
 			removeRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
 
-			FileData data = new FileData();
-			data.actionId = 1;
-			data.arg1 = 1;
-			data.arg2 = 1;
-			data.beginRange = 1;
-			data.endRange = 1;
-			data.variable = 1;
+			popupText = "Type your new name here";
+			FileData[] data = new FileData[6];
+
 			SimpleFileManager.ChangeFile("SomeFile", data);
 			refreshFiles();
 
 			SimpleFileManager.ChangeFile("BigDingdongdikkeBingBong", data);
 			refreshFiles();
+		}
+
+
+		private void simpleModeFileListBox_doubleClick(object sender, EventArgs e)
+		{
+			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+			if(selectedIndex != -1)
+			{
+				simpleModeFileListBox_editName(selectedIndex);
+			}
+		}
+		private void simpleModeFileListBox_editName(int index)
+		{
+
 		}
 		public void refreshFiles()
 		{
@@ -72,6 +92,7 @@ namespace LeHandUI
 		private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a filename + registry key for ruleset
+			
 			
 		}
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
@@ -91,6 +112,12 @@ namespace LeHandUI
 		{
 			//remove the shit above
 
+		}
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

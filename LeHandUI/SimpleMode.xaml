@@ -19,7 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="auto" MinHeight="0"/>
+            <RowDefinition Height="auto" MinHeight="40"/>
             <RowDefinition Height="25*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
@@ -35,8 +35,18 @@
                 <Image x:Name="removeFileImage"/>
             </Button>
         </DockPanel>
-        <ListBox x:Name="simpleModeFileListBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" Padding="5"
-                 Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch">
+        
+        <Popup Grid.Row="2" Grid.Column="1" x:Name="nameChangePopup">
+            <DockPanel>
+                <TextBox Text="{Binding Path=}"/>
+                <Button/>
+            </DockPanel>
+        </Popup>
+        
+        <ListBox x:Name="simpleModeFileListBox" Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Padding="5"
+                 Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch"
+                 SelectedItem="{Binding SelectedIdInListBox,Mode=OneWayToSource}"
+                 MouseDoubleClick="simpleModeFileListBox_doubleClick">
         </ListBox>
 
         <GridSplitter Grid.Column="2" Grid.Row="0" Grid.RowSpan="1000" 
@@ -52,7 +62,8 @@
                 <Image x:Name="removeRuleImage"/>
             </Button>
         </DockPanel>
-        <ListBox Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="1"
+        
+        <ListBox Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="2"
                  Background="Transparent">
         </ListBox>
 
