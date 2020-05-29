@@ -62,6 +62,7 @@ namespace LeHandUI
             }
             return outstr;
         }
+
         public static FileData[] GetFileData(int id)
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
@@ -107,7 +108,8 @@ namespace LeHandUI
                     bytesread += 1;
                     ret[i].actionId = (byte)s[0];
 
-                    s = data.Substring(bytesread, bytesread + 4);
+                    s = data.Substring(bytesread, bytesread + 4); //HELP ERROR HERE
+
                     bytesread += 4;
                     ret[i].arg1 = BitConverter.ToInt32(Encoding.ASCII.GetBytes(s), 0);
 
@@ -119,11 +121,12 @@ namespace LeHandUI
             }
             return null;
         }
+
         public static void ChangeFile(string name, FileData[] fileData)
         {
             FileStream stream = null;
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh"))
-                File.Delete(MainWindow.Directory + "\\Files\\" + name + ".lh");
+               File.Delete(MainWindow.Directory + "\\Files\\" + name + ".lh");
             stream = File.Create(MainWindow.Directory + "\\Files\\" + name + ".lh");
             StreamWriter streamWriter = new StreamWriter(stream);
 
@@ -142,12 +145,35 @@ namespace LeHandUI
             streamWriter.Close();
             stream.Close();
         }
+
+        public static void ChangeName(string name, string newName)
+        {
+            if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh")){
+
+                FileData[] fileDataOfOriginal = GetFileData(name);
+                File.Create(MainWindow.Directory + "\\Files\\" + newName + ".lh");
+
+                ChangeFile(newName, fileDataOfOriginal);
+
+                DeleteFile(name);
+            }
+        }
+
         public static void DeleteFile(int id)
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
             if (File.Exists(outstr[id]))
                 File.Delete(outstr[id]);
         }
+        public static void DeleteFile(string name)
+        {
+            string filepath = MainWindow.Directory + "\\Files\\" + name + ".lh";
+            if (File.Exists(filepath)){
+                File.Delete(filepath);
+            }
+                
+        }
+
 
     }
     class FileManager
