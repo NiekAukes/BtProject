@@ -275,7 +275,8 @@ namespace LeHandUI
 			}
 		}
 		private void CloseWindow(object sender, EventArgs e){
-			//App.Current.MainWindow.Close();
+			Communicator.quit();
+			App.LeHandExited = true;
 			this.Close();
 		}
 		private void DragStart(object sender, MouseButtonEventArgs e)

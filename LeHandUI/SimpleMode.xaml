@@ -38,7 +38,7 @@
         
         <Popup Grid.Row="2" Grid.Column="1" x:Name="nameChangePopup">
             <DockPanel>
-                <TextBox Text="{Binding Path=}"/>
+                <TextBox Text="{Binding Path=popupText}"/>
                 <Button/>
             </DockPanel>
         </Popup>
