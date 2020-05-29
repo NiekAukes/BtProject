@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using Microsoft.TeamFoundation.Common;
 
 namespace LeHandUI
 {
@@ -66,7 +67,7 @@ namespace LeHandUI
         public static FileData[] GetFileData(int id)
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
-            if (outstr.Length >= id && File.Exists(outstr[id]))
+            if (outstr.Length > id && File.Exists(outstr[id]))
                 return GetFileData(outstr[id]);
             return null;
         }
@@ -80,6 +81,10 @@ namespace LeHandUI
                 BinaryReader reader = new BinaryReader(stream);
 
                 //read the name before proceeding
+                if (reader.BaseStream.Length <= 0)
+                {
+                    return null;
+                }
                 string name = reader.ReadString();
                 //char c = 'a';
                 //while (c != '\0')
@@ -150,11 +155,12 @@ namespace LeHandUI
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh")){
 
                 FileData[] fileDataOfOriginal = GetFileData(name);
-                File.Create(MainWindow.Directory + "\\Files\\" + newName + ".lh");
+                DeleteFile(name);
 
+                File.Create(MainWindow.Directory + "\\Files\\" + newName + ".lh");
                 ChangeFile(newName, fileDataOfOriginal);
 
-                DeleteFile(name);
+                
             }
         }
 
