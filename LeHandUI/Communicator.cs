@@ -319,13 +319,13 @@ namespace LeHandUI
             //process = new Process();
 
 
-            
+
             //Thread.Sleep(3000);
             //process.BeginOutputReadLine();
-
-            dataStream = new NamedPipeClientStream(@".", @"LeHandData");
-            errorStream = new NamedPipeClientStream(@".", @"LeHandError");
-            inputStream = new NamedPipeClientStream(@".", @"LeHandInput");
+            int pid = process.Id;
+            dataStream = new NamedPipeClientStream(@".", @"LeHandData" + pid);
+            errorStream = new NamedPipeClientStream(@".", @"LeHandError" + pid);
+            inputStream = new NamedPipeClientStream(@".", @"LeHandInput" + pid);
 
             dataStream.Connect();
             inputStream.Connect();

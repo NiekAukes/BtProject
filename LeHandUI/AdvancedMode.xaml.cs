@@ -411,13 +411,13 @@ namespace LeHandUI
 			//set file view to the listbox
 			Listbox = LuaFileView;
 			//get all the filenames from registry
-			List<TextBox> LuaNames = new List<TextBox>(LHregistry.GetAllFilenames().Length);
-			//display them
-			for (int i = 0; i < LuaNames.Count; i++)
+			int len = LHregistry.GetAllFilenames().Length;
+			for (int i = 0; i < len; i++)
 			{
+				TextBox txtbox = new TextBox();
 				string wholePath = LHregistry.GetAllFilenames()[i];
-				LuaNames[i].Text = LHregistry.getSimpleName(wholePath);
-				LuaFileView.Items.Add(LuaNames[i]);
+				txtbox.Text = LHregistry.getSimpleName(wholePath);
+				LuaFileView.Items.Add(txtbox);
 			}
 			
 
