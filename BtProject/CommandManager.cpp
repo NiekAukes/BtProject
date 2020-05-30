@@ -208,7 +208,6 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		//setup pipes
 		std::fstream fileStream;
 		fileStream.open(TEXT("\\\\.\\pipe\\LeHandData"));
-		//if (fileStream.fail()) {
 		auto pid = GetCurrentProcessId();
 		std::string datstr("\\\\.\\pipe\\LeHandData");
 		datstr.append(std::to_string(pid));
@@ -224,7 +223,6 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 			inpstr.append(std::to_string(pid));
 			keysend->inputpipe = CreateNamedPipe(TEXT(inpstr.c_str()), PIPE_ACCESS_DUPLEX, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
 				1, 1024 * 16, 1024 * 16, NMPWAIT_USE_DEFAULT_WAIT, NULL);
-		//}
 
 		std::string command;
 
