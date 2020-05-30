@@ -194,8 +194,8 @@ namespace LeHandUI
 				SimpleFileManager.ChangeName(fileNames[index], updatedName);
 			}
 			refreshFiles();
-			dosumShit(sender);
-			
+
+			MainWindow.inst.Focus();
 		}
 
 		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
@@ -210,10 +210,6 @@ namespace LeHandUI
 
 		}
 		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			//dosumShit(sender);
-		}
-		private void dosumShit(object sender)
 		{
 			TextBox listitem = (TextBox)sender;
 			MainWindow.inst.Focus();

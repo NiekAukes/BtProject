@@ -5,7 +5,6 @@
              StartupUri="MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
-
         <Style TargetType="ListBoxItem" x:Name="listBoxItemStyle">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#FFF2F2F2"/>
@@ -17,13 +16,21 @@
                         <Border Name="border" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" CornerRadius="3">
                             <ContentPresenter HorizontalAlignment="Left"/>
                         </Border>
+                        <!--IsMouseCaptured IsFocused -->
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsFocused" Value="True">
+                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#BF065464"/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="BorderBrush" Value="#FFFFFFFF"/>
                                 <Setter Property="Cursor" Value="Hand"/>
                             </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="#D8097287"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#FFFFFFFF"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
                             <Trigger Property="IsFocused" Value="False">
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="Foreground" Value="#FFF2F2F2"/>

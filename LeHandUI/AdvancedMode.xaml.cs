@@ -22,6 +22,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPFCustomMessageBox;
+using ListBox = System.Windows.Controls.ListBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace LeHandUI
 {
@@ -99,11 +101,6 @@ namespace LeHandUI
 			//Debug.WriteLine(Keyboard.FocusedElement.ToString());
 			UIElement UIE = (UIElement)sender;
 			bool succes = UIE.Focus();
-
-		}
-
-		private void textEditor_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-		{
 
 		}
 
@@ -376,17 +373,17 @@ namespace LeHandUI
 				new KeyGesture(Key.L, ModifierKeys.Control)
 
 				));
-
 			textEditor.ShowLineNumbers = Convert.ToBoolean(val.ShowLineNumbers);
 			
 			//set file view to the listbox
 			Listbox = LuaFileView;
 			//get all the filenames from registry
-			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
+			List<TextBox> LuaNames = new List<TextBox>(LHregistry.GetAllFilenames().Length);
 			//display them
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
-				LuaNames[i] = LHregistry.getSimpleName(LuaNames[i]);
+				string wholePath = LHregistry.GetAllFilenames()[i];
+				LuaNames[i].Text = LHregistry.getSimpleName(wholePath);
 				LuaFileView.Items.Add(LuaNames[i]);
 			}
 			
