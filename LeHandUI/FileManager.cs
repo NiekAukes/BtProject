@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Windows;
 using Microsoft.TeamFoundation.Common;
 
+
 namespace LeHandUI
 {
     public struct FileData
@@ -54,6 +55,7 @@ namespace LeHandUI
     }
     class SimpleFileManager
     {
+
         public static string[] FileNames()
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
@@ -166,7 +168,7 @@ namespace LeHandUI
                     
                 ChangeFile(newName, fileDataOfOriginal);
 
-                
+                DeleteFile(name);
             }
         }
 
