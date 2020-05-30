@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
+using Cursors = System.Windows.Input.Cursors;
 using ListBox = System.Windows.Controls.ListBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -107,10 +108,12 @@ namespace LeHandUI
 				txtbox.MouseLeave += onListItemLeave;
 				txtbox.TextChanged += onTextChanged;
 
-				txtbox.Background = dark_blue;
-				txtbox.Foreground = white;
+				txtbox.Cursor = Cursors.Arrow;
+
+				txtbox.Background = transparent;
+				txtbox.Foreground = off_white;
 				txtbox.BorderThickness = new Thickness(2);
-				txtbox.BorderBrush = white;
+				txtbox.BorderBrush = transparent;
 				textBoxes.Add(txtbox);
 				
 			}
@@ -136,7 +139,7 @@ namespace LeHandUI
 			listitem.BorderBrush = transparent;
 
 			int index = simpleModeFileListBox.Items.IndexOf(sender);
-			if (listitem.Text.Length > 4)
+			if (listitem.Text.Length > 1)
 			{
 				SimpleFileManager.ChangeName(prevname, listitem.Text);
 				refreshFiles();
@@ -164,6 +167,8 @@ namespace LeHandUI
 			listitem.Foreground = black;
 			listitem.BorderThickness = new Thickness(2);
 			listitem.BorderBrush = white;
+
+			listitem.Cursor = Cursors.IBeam;
 		}
 
 		private void onTextChanged(object sender, TextChangedEventArgs e)
