@@ -3,7 +3,7 @@ LeHand = require "LeHand"
 ----Kpress(Character, Mode) -> registers Keypress
 ----Mpress(Button, doRelease) -> registers Mousepress
 
-sadadad
+
 --begin, will be executed on startup
 print("Hello LeHand")
 

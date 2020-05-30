@@ -21,7 +21,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using WPFCustomMessageBox;
+using Color = System.Windows.Media.Color;
 using ListBox = System.Windows.Controls.ListBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -65,6 +67,12 @@ namespace LeHandUI
 	}
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
+		SolidColorBrush transparent	 = new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
+		SolidColorBrush off_white	 = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
+		SolidColorBrush white		 = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+		SolidColorBrush black		 = new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
+		SolidColorBrush dark_blue	 = new SolidColorBrush(Color.FromArgb(178,  6 ,  84, 100));
+
 		public static AdvancedMode inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
 		public static int SelectedItemIndex = -1;
@@ -141,15 +149,19 @@ namespace LeHandUI
 			}
 		}
 
-		public void ChangeLabel(string label, int index)
+		public void ChangeTextBoxText(string label, int index)
 		{
 			LuaFileView.Items.RemoveAt(index);
-			LuaFileView.Items.Insert(index, label);
+			TextBox newTextBox = new TextBox();
+			newTextBox.Text = label;
+			LuaFileView.Items.Insert(index, newTextBox);
 		}
-		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index)
+		public static void ChangeTextBoxText(System.Windows.Controls.ListBox list, string label, int index)
 		{
 			list.Items.RemoveAt(index);
-			list.Items.Insert(index, label);
+			TextBox newTextBox = new TextBox();
+			newTextBox.Text = label;
+			list.Items.Insert(index, newTextBox);
 		}
 		public static void UnChangedFile(System.Windows.Controls.ListBox list)
 		{
@@ -160,9 +172,11 @@ namespace LeHandUI
 				{
 
 					FileManager.isFileNotSaved[FileManager.currentFileId] = false;
-					string label = (string)(list.Items[index]);
+					TextBox textshitthingdinges = (TextBox)inst.LuaFileView.Items[index];
+
+					string label = textshitthingdinges.Text;
 					label = label.Remove(label.Length - 1);
-					ChangeLabel(list, label, index);
+					ChangeTextBoxText(list, label, index);
 				}
 			}
 		}
@@ -177,8 +191,10 @@ namespace LeHandUI
 					if (!FileManager.isFileNotSaved[FileManager.currentFileId])
 					{
 						FileManager.isFileNotSaved[FileManager.currentFileId] = true;
-						string label = (string)(LuaFileView.Items[index]) + "*";
-						ChangeLabel(label, index);
+
+						TextBox fileshitthing = (TextBox)LuaFileView.Items[index];
+						string label = fileshitthing.Text + "*";
+						ChangeTextBoxText(label, index);
 					}
 				}
 			}
@@ -209,11 +225,26 @@ namespace LeHandUI
 			{
 				string newFilePath = openFileExplorer.FileName;
 				int newFileId = FileManager.AddReference(newFilePath);
-				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
 
+				//OLD	LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
+				TextBox newTextBoxToAdd = new TextBox();
+				newTextBoxToAdd.Text = LHregistry.getSimpleName(newFilePath);
+				newTextBoxToAdd.IsReadOnly = true;
+				newTextBoxToAdd.IsEnabled = false;
+				newTextBoxToAdd.Foreground = off_white;
+				newTextBoxToAdd.GotFocus += NewTextBoxToAdd_GotFocus;
+				LuaFileView.Items.Add(newTextBoxToAdd);
 			}
 
 		}
+
+		private void NewTextBoxToAdd_GotFocus(object sender, RoutedEventArgs e)
+		{
+			TextBox lelele = (TextBox)sender;
+			lelele.Foreground = white;
+			lelele.Background = dark_blue;
+		}
+
 		private void RemoveLuaScript(object sender, EventArgs e)
 		{
 			int idToBeRemoved = -1; //some ridiculous number, i. e. -1 just isn't possible
@@ -227,8 +258,6 @@ namespace LeHandUI
 				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1)
 				{
 					LHregistry.RemoveFile(allIds[idToBeRemoved]);
-
-
 
 					LuaFileView.Items.RemoveAt(idToBeRemoved);
 				}
@@ -291,10 +320,14 @@ namespace LeHandUI
 			if (hasRefreshOccurredWithinSeconds == false)
 			{ //if the refresh has not occurred in x milliseconds
 				List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
+				TextBox[] textboxarray = new TextBox[LuaNames.Count];
 				for (int i = 0; i < LuaNames.Count; i++)
 				{
-					LuaNames.Add(LHregistry.getSimpleName(LuaNames[i]));
-					LuaFileView.Items.Add(LuaNames[i]);
+					textboxarray[i] = new TextBox();
+					textboxarray[i].Name = "TxtBox-" + i.ToString();
+					textboxarray[i].Text = LHregistry.getSimpleName(LuaNames[i]);
+
+					LuaFileView.Items.Add(textboxarray[i]);
 				}
 
 			}

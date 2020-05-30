@@ -111,11 +111,11 @@ namespace LeHandUI
 
 			hasRefreshOccurredWithinSeconds = true;
 		}
-		public void ChangeLabel(string label, int index){
+		public void ChangeTextBoxText(string label, int index){
 			LuaFileView.Items.RemoveAt(index);
 			LuaFileView.Items.Insert(index, label);
 		}
-		public static void ChangeLabel(System.Windows.Controls.ListBox list, string label, int index){
+		public static void ChangeTextBoxText(System.Windows.Controls.ListBox list, string label, int index){
 			list.Items.RemoveAt(index);
 			list.Items.Insert(index, label);
 		}
@@ -130,7 +130,7 @@ namespace LeHandUI
 					FileManager.isFileNotSaved[FileManager.currentFile] = false;
 					string label = (string)(list.Items[index]);
 					label = label.Remove(label.Length - 1);
-					ChangeLabel(list, label, index);
+					ChangeTextBoxText(list, label, index);
 				}
 			}
 		}
@@ -146,7 +146,7 @@ namespace LeHandUI
 					{
 						FileManager.isFileNotSaved[FileManager.currentFile] = true;
 						string label = (string)(LuaFileView.Items[index]) + "*";
-						ChangeLabel(label, index);
+						ChangeTextBoxText(label, index);
 					}
 				}
 			}
