@@ -158,17 +158,19 @@ namespace LeHandUI
         public static void ChangeName(string name, string newName)
         {
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh")){
-
+                if (File.Exists(MainWindow.Directory + "\\Files\\" + newName + ".lh"))
+                    return;
                 FileData[] fileDataOfOriginal = GetFileData(MainWindow.Directory + "\\Files\\" + name + ".lh");
                 if (fileDataOfOriginal == null)
                 {
                     MessageBox.Show("File corrupted, cannot change filename");
                     return;
                 }
-                    
-                ChangeFile(newName, fileDataOfOriginal);
 
                 DeleteFile(name);
+                ChangeFile(newName, fileDataOfOriginal);
+
+                
             }
         }
 
