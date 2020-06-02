@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -15,6 +16,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -71,11 +73,11 @@ namespace LeHandUI
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
 
-		SolidColorBrush transparent	 = new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
-		SolidColorBrush off_white	 = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
-		SolidColorBrush white		 = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-		SolidColorBrush black		 = new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
-		SolidColorBrush dark_blue	 = new SolidColorBrush(Color.FromArgb(178,  6 ,  84, 100));
+		static SolidColorBrush transparent	 = new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
+		static SolidColorBrush off_white	 = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
+		static SolidColorBrush white		 = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+		static SolidColorBrush black		 = new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
+		static SolidColorBrush dark_blue	 = new SolidColorBrush(Color.FromArgb(178,  6 ,  84, 100));
 
 		public static AdvancedMode inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
@@ -156,17 +158,21 @@ namespace LeHandUI
 		public void ChangeLabelText(string label, int index)
 		{
 			LuaFileView.Items.RemoveAt(index);
-			Label newTextBox = new Label();
-			newTextBox.Content = label;
-			LuaFileView.Items.Insert(index, newTextBox);
+			Label newLabel = new Label();
+			newLabel.Content = label;
+			styleLabel(newLabel);
+			LuaFileView.Items.Insert(index, newLabel);
 		}
+
 		public static void ChangeLabelText(System.Windows.Controls.ListBox list, string label, int index)
 		{
 			list.Items.RemoveAt(index);
 			Label newTextBox = new Label();
 			newTextBox.Content = label;
+			styleLabel(newTextBox);
 			list.Items.Insert(index, newTextBox);
 		}
+
 		public static void UnChangedFile(System.Windows.Controls.ListBox list)
 		{
 			int index = FileManager.currentLoadedIndex;
@@ -180,6 +186,7 @@ namespace LeHandUI
 
 					string label = textshitthingdinges.Content.ToString();
 					label = label.Remove(label.Length - 1);
+					textshitthingdinges.Content = label;
 					ChangeLabelText(list, label, index);
 				}
 			}
@@ -198,6 +205,8 @@ namespace LeHandUI
 
 						Label fileshitthing = (Label)LuaFileView.Items[index];
 						string label = fileshitthing.Content + "*";
+						styleLabel(fileshitthing);
+
 						ChangeLabelText(label, index);
 					}
 				}
@@ -231,18 +240,12 @@ namespace LeHandUI
 				int newFileId = FileManager.AddReference(newFilePath);
 
 				//OLD	LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
-				Label newTextBoxToAdd = new Label();
-				newTextBoxToAdd.Content = LHregistry.getSimpleName(newFilePath);
-				newTextBoxToAdd.Cursor = Cursors.Hand;
-				//newTextBoxToAdd.IsReadOnly = true;
-				//newTextBoxToAdd.IsEnabled = false;
-				newTextBoxToAdd.Background.Opacity = 0;
-				newTextBoxToAdd.Foreground = off_white;
-				newTextBoxToAdd.Background = transparent;
-				newTextBoxToAdd.GotFocus += NewTextBoxToAdd_GotFocus;
-				Style listBoxItemStyle = this.FindResource("MenuText") as Style;
-				newTextBoxToAdd.Style = listBoxItemStyle;
-				LuaFileView.Items.Add(newTextBoxToAdd);
+				Label newLabelToAdd = new Label();
+				newLabelToAdd.Content = LHregistry.getSimpleName(newFilePath);
+				newLabelToAdd.Cursor = Cursors.Hand;
+				styleLabel(newLabelToAdd);
+				newLabelToAdd.GotFocus += NewTextBoxToAdd_GotFocus;
+				LuaFileView.Items.Add(newLabelToAdd);
 			}
 
 		}
@@ -272,6 +275,7 @@ namespace LeHandUI
 				}
 			}
 		}
+
 		private void SaveScript(object sender, EventArgs e)
 		{
 			string writePath = LHregistry.GetFile(FileManager.currentFileId);
@@ -285,6 +289,7 @@ namespace LeHandUI
 				UnChangedFile(Listbox);
 				return;
 		}
+
 		void LoadFileFromId(int index)
 		{
 
@@ -335,7 +340,7 @@ namespace LeHandUI
 					labelarray[i] = new Label();
 					labelarray[i].Name = "TxtBox-" + i.ToString();
 					labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
-
+					styleLabel(labelarray[i]);
 					LuaFileView.Items.Add(labelarray[i]);
 				}
 
@@ -391,6 +396,7 @@ namespace LeHandUI
 			return;
 		}
         #endregion
+
         #region Construction 
         
 		public AdvancedMode()
@@ -426,6 +432,8 @@ namespace LeHandUI
 				Label txtbox = new Label();
 				string wholePath = LHregistry.GetAllFilenames()[i];
 				txtbox.Content = LHregistry.getSimpleName(wholePath);
+				styleLabel(txtbox);
+
 				LuaFileView.Items.Add(txtbox);
 			}
 			
@@ -444,6 +452,13 @@ namespace LeHandUI
 		}
 		#endregion
 
-		
+		public static void styleLabel(Label label)
+		{
+			label.Foreground = off_white;
+			label.Background = transparent;
+			label.BorderBrush = dark_blue;
+			label.BorderThickness = new Thickness(1);
+			label.Margin = new Thickness(0, 0, 0, 5);
+		}
 	}
 }

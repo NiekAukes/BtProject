@@ -160,14 +160,18 @@ namespace LeHandUI
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh")){
                 if (File.Exists(MainWindow.Directory + "\\Files\\" + newName + ".lh"))
                     return;
+
                 FileData[] fileDataOfOriginal = GetFileData(MainWindow.Directory + "\\Files\\" + name + ".lh");
+
                 if (fileDataOfOriginal == null)
                 {
-                    MessageBox.Show("File corrupted, cannot change filename");
+                    MessageBox.Show("File" + name + "corrupted, cannot change filename");
                     return;
                 }
 
                 DeleteFile(name);
+
+                
                 ChangeFile(newName, fileDataOfOriginal);
 
                 
@@ -234,7 +238,7 @@ namespace LeHandUI
         {
             string fileContents = "";
             //check if file is cached
-            if (!isFileNotSaved[id])
+            if (!isFileNotSaved[id] && files[id] != null)
             {
                 //load new file
                 byte[] cont = new byte[files[id].Length];
