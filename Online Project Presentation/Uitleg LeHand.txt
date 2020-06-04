@@ -1,0 +1,29 @@
+Functionaliteit die we nu aan het ontwikkelen zijn:
+	-Mogelijkheid om voor de gebruiker zelf acties te binden aan het programma, eventueel
+	 met data van de hand zelf, dus in wat voor positie in ruimte de hand of vingers zich
+	 bevinden.
+	-Doen we met lua files, te programmeren key- en mousepresses in de lua bestanden.
+	
+Informatieverwerkingscyclus:
+	-Terwijl hand aan staat meet de hand alle vingers, plus de oriëntatie en 
+	 snelheid van de hand zelf
+	-De gegevens worden via een protocol verstuurt via Bluetooth naar een computer
+	-Computer ontvangt gegevens, decodeert informatie op basis van voorgenoemde protocol
+	-Die bruikbare informatie wordt gegeven aan gebruiker om acties op te baseren
+	 en wordt live aangegeven in grafiek, de huidige waarde en de voorgaande paar waarden
+
+In detail:
+	-De hand leest 5 vingers, gyroscoop X,Y,Z en acceleratie X,Y,Z af
+	-Stopt de rauwe data in protocol; 
+		1 Header (0x00ii om aan te geven welke data het heeft,
+			de ii staat voor de waarde van elke vinger, gyroscoop- of acceleratieas)
+		1 Data length (om de lengte X van de te komen package aan te geven)
+		X aantal shorts met rauwe data, de waarde die gelezen is verpakt in shorts
+		1 Footer (0xFFFF om het einde van de data stream aan te geven)
+	-BT module verstuurt de package naar computer
+	-Computer ontvangt package, verstuurt data naar een named pipe, 
+	 zodat andere programma's dezelfde data kunnen lezen.
+	 Hij decodeert de info dan op basis van het hierboven beschreven protocol
+	 en maakt bruikbare info beschikbaar in LUA en WPF (waarmee de applicatie is gemaakt).
+	-De gebruiker bepaalt vervolgens met code hoe en wat voor acties op basis van
+	 de informatie genomen worden
