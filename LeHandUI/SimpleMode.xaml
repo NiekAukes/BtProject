@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
         <!--COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
                    (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
-                 very dark blue, dark blue,    aqua,      pale aqua,     greyish-->
+                    very dark,    dark blue,    aqua,      pale aqua,     greyish-->
         <DockPanel Grid.Column="1" Grid.Row="1" 
                    FlowDirection="LeftToRight" HorizontalAlignment="Left" >
             <Button x:Name="addFileButton" Style="{StaticResource TranspButton}"
