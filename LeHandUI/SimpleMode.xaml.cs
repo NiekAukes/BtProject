@@ -185,17 +185,17 @@ namespace LeHandUI
 
 		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
 		{
-			ItemCollection boxItemsshit = simpleModeFileListBox.Items;
-			for (int index = 0; index < fileNames.Length; index++)
-			{
-				//splits the given name (something like something.something.TextBox: name) and gets the actual name
-				string updatedName = (boxItemsshit[index].ToString()).Split(':')[1]; 
+			//ItemCollection boxItemsshit = simpleModeFileListBox.Items;
+			//for (int index = 0; index < fileNames.Length; index++)
+			//{
+			//	//splits the given name (something like something.something.TextBox: name) and gets the actual name
+			//	string updatedName = (boxItemsshit[index].ToString()).Split(':')[1]; 
 
-				SimpleFileManager.ChangeName(fileNames[index], updatedName);
-			}
-			refreshFiles();
+			//	SimpleFileManager.ChangeName(fileNames[index], updatedName);
+			//}
+			//refreshFiles();
 
-			MainWindow.inst.Focus();
+			//MainWindow.inst.Focus();
 		}
 
 		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
