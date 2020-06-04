@@ -102,7 +102,7 @@ namespace LeHandUI
 
                 //fill in the filedata
                 int bytesread = 0;
-                for (int i = 0; i < Math.Floor(reader.BaseStream.Length / 34.0f); i++) 
+                for (int i = 0; i < Math.Floor(reader.BaseStream.Length / 34.001f); i++) 
                 {
                     //variable
                     ret[i].variable = reader.ReadByte();
