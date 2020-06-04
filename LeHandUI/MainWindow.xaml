@@ -29,7 +29,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -37,14 +37,14 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
 
         <!--Custom title bar-->
         <Image
 		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1"
-		Width="26" Height="20" x:Name="ProgramIcon" Margin="-20,5,0,10"
+		Width="30" Height="30" x:Name="ProgramIcon" Margin="-15,10,0,10"
 		Panel.ZIndex="9999999" />
 
         <Button
@@ -64,7 +64,7 @@
 			StrokeThickness="1" />
         </Button>
         <Button
-		Grid.Column="10" Name="closeButton" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
+		Grid.Column="10" Grid.ColumnSpan="1000" Name="closeButton" Click="CloseWindow" Foreground="White" Style="{StaticResource TitleBarCloseButtonStyle}">
             <Path Width="46" Height="32" Data="M 18,11 27,20 M 18,20 27,11" ToolTip="Close Program"
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -73,7 +73,7 @@
         <!--end of custom titlebar -->
 
         <DockPanel x:Name="MenuOptionsGrid" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
-                   Margin="15,0,0,0">
+                   Margin="10,0,0,0">
             <Button Style="{StaticResource MenuButtons}" Width="auto" Height="auto" 
                     Margin="0,0,5,0" x:Name="SimpleButton" Click="SimpleButton_Load">
                 <TextBox Text="Simple" Style="{StaticResource MenuText}"/>
