@@ -90,7 +90,6 @@ namespace LeHandUI
         #endregion
 
         private string prevname = "something wrong";
-        
         public void refreshFiles()
 		{
 			fileNames = null;
@@ -248,14 +247,17 @@ namespace LeHandUI
 				SimpleFileManager.DeleteFile(selectedItemIndex);
 			}
 			refreshFiles();
-
 		}
+
 		private void addRuleButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a rule to the ruleset file:
 			//naam character: 0x00 + character voor variabele + 2 doubles + character voor action id + 2 keer 4 bytes voor args
 			//voorbeeld: 0x01 (als variabele in deze range zit) + 0x01 (één v.d. vingers, xyz as van acceleratie of rotatie) + 0x03 (...) + arg1 t/m arg4
 			//voorbeeld: 0x01 0x01 0x03 0x45 0x74 0x19 0x20
+
+			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+
 
 		}
 		private void removeRuleButton_Click(object sender, RoutedEventArgs e)
