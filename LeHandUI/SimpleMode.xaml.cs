@@ -60,9 +60,10 @@ namespace LeHandUI
 			}
 			finally { DeleteObject(handle); }
 		}
-		#endregion
+        #endregion
 
-		public SimpleMode()
+        #region initialisation
+        public SimpleMode()
 		{
 			InitializeComponent();
 		
@@ -73,11 +74,12 @@ namespace LeHandUI
 
 			simpleModeFileListBox.ItemsSource = textBoxes;
 
+			/* //DATA FOR TEST FILES
 			FileData[] data = new FileData[6];
 			FileData[] newdata = new FileData[1];
 			newdata[0] = new FileData(0, 0.2, 0.8, 0, 30, 0);
 			SimpleFileManager.ChangeFile("kiekoek", newdata);
-			SimpleFileManager.ChangeFile("halloe", newdata);
+			SimpleFileManager.ChangeFile("halloe", newdata);*/
 
 			refreshFiles();
 
@@ -85,9 +87,11 @@ namespace LeHandUI
 			FileData dat = SimpleFileManager.GetFileData(0)[0];
 			
 		}
+        #endregion
 
-		private string prevname = "something wrong";
-		public void refreshFiles()
+        private string prevname = "something wrong";
+        
+        public void refreshFiles()
 		{
 			fileNames = null;
 			textBoxes.Clear();
@@ -120,12 +124,48 @@ namespace LeHandUI
 			simpleModeFileListBox.Items.Refresh();
 		}
 
-		private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
+		{
+			//ItemCollection boxItemsshit = simpleModeFileListBox.Items;
+			//for (int index = 0; index < fileNames.Length; index++)
+			//{
+			//	//splits the given name (something like something.something.TextBox: name) and gets the actual name
+			//	string updatedName = (boxItemsshit[index].ToString()).Split(':')[1]; 
+
+			//	SimpleFileManager.ChangeName(fileNames[index], updatedName);
+			//}
+			//refreshFiles();
+
+			//MainWindow.inst.Focus();
+		}
+
+        #region Txtbox Handlers
+        private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
 			{
 				lostfocus(sender);
 			}
+		}
+		private void Txtbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+		{
+			lostfocus(sender);
+			
+		}
+		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+
+			TextBox txtbox = (TextBox)sender;
+			txtbox.IsReadOnly = false;
+			prevname = txtbox.Text;
+
+			TextBox listitem = (TextBox)sender;
+			listitem.Background = white;
+			listitem.Foreground = black;
+			listitem.BorderThickness = new Thickness(2);
+			listitem.BorderBrush = white;
+
+			listitem.Cursor = Cursors.IBeam;
 		}
 		private void lostfocus(object sender)
 		{
@@ -149,29 +189,10 @@ namespace LeHandUI
 				listitem.Text = prevname;
 			}
 		}
-		private void Txtbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-		{
-			lostfocus(sender);
-			
-		}
+        #endregion
 
-		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-
-			TextBox txtbox = (TextBox)sender;
-			txtbox.IsReadOnly = false;
-			prevname = txtbox.Text;
-
-			TextBox listitem = (TextBox)sender;
-			listitem.Background = white;
-			listitem.Foreground = black;
-			listitem.BorderThickness = new Thickness(2);
-			listitem.BorderBrush = white;
-
-			listitem.Cursor = Cursors.IBeam;
-		}
-
-		private void onTextChanged(object sender, TextChangedEventArgs e)
+        #region ListBox Handlers
+        private void onTextChanged(object sender, TextChangedEventArgs e)
 		{
 			/*TextBox listitem = (TextBox)sender;
 			int index = simpleModeFileListBox.SelectedIndex;
@@ -181,21 +202,6 @@ namespace LeHandUI
 				refreshFiles();
 				dosumShit(sender);
 			}*/
-		}
-
-		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
-		{
-			//ItemCollection boxItemsshit = simpleModeFileListBox.Items;
-			//for (int index = 0; index < fileNames.Length; index++)
-			//{
-			//	//splits the given name (something like something.something.TextBox: name) and gets the actual name
-			//	string updatedName = (boxItemsshit[index].ToString()).Split(':')[1]; 
-
-			//	SimpleFileManager.ChangeName(fileNames[index], updatedName);
-			//}
-			//refreshFiles();
-
-			//MainWindow.inst.Focus();
 		}
 
 		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
@@ -209,6 +215,7 @@ namespace LeHandUI
 			listitem.BorderBrush		= white;
 
 		}
+
 		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			TextBox listitem = (TextBox)sender;
@@ -218,16 +225,29 @@ namespace LeHandUI
 			listitem.BorderThickness = new Thickness(2);
 			listitem.BorderBrush = transparent;
 		}
+		#endregion
 
-		private void addFileButton_Click(object sender, RoutedEventArgs e)
+		#region Button Handlers
+		public int totaladdedfiles = 0;
+        private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a filename + registry key for ruleset
-			
-			
+			FileData[] emptyfiledata = new FileData[1];
+			string newFileName = "New file " + totaladdedfiles.ToString();
+			SimpleFileManager.ChangeFile(newFileName, emptyfiledata);
+			totaladdedfiles++;
+
+			refreshFiles();
+			simpleModeFileListBox.Focus();
 		}
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
 		{
-			//remove the shit above
+			int selectedItemIndex = simpleModeFileListBox.SelectedIndex;
+			if (selectedItemIndex != -1)
+			{
+				SimpleFileManager.DeleteFile(selectedItemIndex);
+			}
+			refreshFiles();
 
 		}
 		private void addRuleButton_Click(object sender, RoutedEventArgs e)
@@ -243,20 +263,9 @@ namespace LeHandUI
 			//remove the shit above
 
 		}
-		private void simpleModeFileListBox_doubleClick(object sender, EventArgs e)
-		{
-			int selectedIndex = simpleModeFileListBox.SelectedIndex;
-			if (selectedIndex != -1)
-			{
-				simpleModeFileListBox_editName(selectedIndex);
-			}
-		}
-		private void simpleModeFileListBox_editName(int index)
-		{
+        #endregion
 
-		}
 		public event PropertyChangedEventHandler PropertyChanged;
-
 		protected void OnPropertyChanged(string propertyName)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
