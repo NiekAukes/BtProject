@@ -89,13 +89,6 @@ namespace LeHandUI
                     return null;
                 }
                 string name = reader.ReadString();
-                //char c = 'a';
-                //while (c != '\0')
-                //{
-                //    c = (char)reader.Read();
-                //    name += c;
-                //};
-
                 //read all other data
 
                 FileData[] ret = new FileData[reader.BaseStream.Length / 34];
@@ -122,6 +115,8 @@ namespace LeHandUI
                     //arg2
                     ret[i].arg2 = reader.ReadInt64();
                 }
+
+                //close the stream
                 reader.Close();
                 stream.Close();
                 return ret;
@@ -129,7 +124,7 @@ namespace LeHandUI
             return null;
         }
 
-        public static void ChangeFile(string name, FileData[] fileData)
+        public static void ChangeFile(string name, IList<FileData> fileData)
         {
             FileStream stream = null;
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh"))
@@ -138,7 +133,7 @@ namespace LeHandUI
             BinaryWriter streamWriter = new BinaryWriter(stream);
 
             streamWriter.Write(name + "\0");
-            for (int i = 0; i < fileData.Length; i++)
+            for (int i = 0; i < fileData.Count; i++)
             {
                 byte[] bb = BitConverter.GetBytes(fileData[i].beginRange);
                 double d = BitConverter.ToDouble(bb, 0);
