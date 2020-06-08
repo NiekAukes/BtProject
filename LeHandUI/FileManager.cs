@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows;
 using Microsoft.TeamFoundation.Common;
-
+using System.Runtime.CompilerServices;
 
 namespace LeHandUI
 {
@@ -261,6 +261,7 @@ namespace LeHandUI
             else
             {
                 fileContents = FileCache[id];
+                
             }
             currentFileId = id;
             return fileContents;

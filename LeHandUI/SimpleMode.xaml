@@ -39,9 +39,9 @@
             </Button>
         </DockPanel>
 
-        <Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+        <!--<Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Content="Apply Name" FontSize="15" Click="ApplyNameListBoxItem" Foreground="#F2F2F2"
-                Style="{StaticResource TranspButton}" Height="auto" Width="auto" Panel.ZIndex="1000"/>
+                Style="{StaticResource TranspButton}" Height="auto" Width="auto" Panel.ZIndex="1000"/>-->
 
         <ListBox x:Name="simpleModeFileListBox" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Padding="5"
                  Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch"
