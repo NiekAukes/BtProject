@@ -22,7 +22,6 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="25*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         
         <!--COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
@@ -64,10 +63,12 @@
                 <Image x:Name="removeRuleImage"/>
             </Button>
         </DockPanel>
-        
-        <ListBox Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3"
-                 Background="Transparent" FlowDirection="LeftToRight" >
-        </ListBox>
+
+        <StackPanel Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3"
+                 Background="Transparent" FlowDirection="LeftToRight">
+            <local:simpleModeParameterEditor Height="auto" Width="auto" DockPanel.Dock="Top" MaxHeight="70"/>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

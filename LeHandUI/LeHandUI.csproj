@@ -270,6 +270,9 @@
     <Compile Include="SimpleMode.xaml.cs">
       <DependentUpon>SimpleMode.xaml</DependentUpon>
     </Compile>
+    <Compile Include="simpleModeParameterEditor.xaml.cs">
+      <DependentUpon>simpleModeParameterEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
     </Compile>
@@ -293,6 +296,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SimpleMode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="simpleModeParameterEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

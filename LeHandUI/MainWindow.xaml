@@ -84,8 +84,8 @@
             </Button>
         </DockPanel>
 
-        <DockPanel  Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="11"
-            Height="auto" x:Name="ViewSwitcher" Margin="0,0,0,0">
+        <DockPanel  Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="12"
+            Height="auto" x:Name="ViewSwitcher" Margin="0,0,10,0">
         </DockPanel>
     </Grid>
 
