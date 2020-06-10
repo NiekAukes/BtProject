@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="BTService.cpp" />
     <ClCompile Include="CommandManager.cpp" />
+    <ClCompile Include="DataStreamer.cpp" />
     <ClCompile Include="Keysender.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="LuaFTF.cpp" />
@@ -140,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="BTService.h" />
     <ClInclude Include="CommandManager.h" />
+    <ClInclude Include="DataStreamer.h" />
     <ClInclude Include="Keysender.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="LuaFTF.h" />

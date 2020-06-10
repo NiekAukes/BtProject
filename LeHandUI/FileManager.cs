@@ -67,14 +67,14 @@ namespace LeHandUI
             return outstr;
         }
 
-        public static FileData[] GetFileData(int id)
+        public static IList<FileData> GetFileData(int id)
         {
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
             if (outstr.Length > id && File.Exists(outstr[id]))
                 return GetFileData(outstr[id]);
             return null;
         }
-        public static FileData[] GetFileData(string path)
+        public static IList<FileData> GetFileData(string path)
         {
             FileStream stream;
             if (File.Exists(path))
@@ -156,7 +156,7 @@ namespace LeHandUI
                 if (File.Exists(MainWindow.Directory + "\\Files\\" + newName + ".lh"))
                     return;
 
-                FileData[] fileDataOfOriginal = GetFileData(MainWindow.Directory + "\\Files\\" + name + ".lh");
+                IList<FileData> fileDataOfOriginal = GetFileData(MainWindow.Directory + "\\Files\\" + name + ".lh");
 
                 if (fileDataOfOriginal == null)
                 {
