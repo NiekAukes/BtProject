@@ -263,7 +263,7 @@ namespace LeHandUI
 
 			if (LuaFileView.SelectedIndex != -1)
 			{
-
+				//check if file is open
 				idToBeRemoved = (LuaFileView.SelectedIndex);
 				int[] allIds = LHregistry.GetAllFileIds();
 
