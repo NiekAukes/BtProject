@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeHandUI"
              mc:Ignorable="d" Foreground="#FFF2F2F2" Background="Transparent"
-             FontFamily="Futura Lt BT" FontSize="20"
+             FontFamily="Futura Lt BT" FontSize="20" BorderBrush="#F2F2F2" BorderThickness="1"
              d:DesignHeight="70" d:DesignWidth="400" Loaded="control_loaded">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -96,14 +96,14 @@
                 <TextBlock Text="Actie:"/>
             </Viewbox>
             <ComboBox Width="Auto" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                      DockPanel.Dock="Right" Margin="10,0,0,0" MinWidth="50"/>
+                      DockPanel.Dock="Right" Margin="10,0,0,0" MinWidth="50" x:Name="actionChooser"/>
         </DockPanel>
         
         <DockPanel x:Name="Actionpart2" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0">
             <Viewbox>
                 <TextBlock Text="Toets/muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="10,0,0,0"/>
+            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="10,0,0,0" x:Name="keyMousePressChooser"/>
         </DockPanel>
             
     </Grid>

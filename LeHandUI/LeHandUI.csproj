@@ -270,8 +270,14 @@
     <Compile Include="Pages\SimpleMode.xaml.cs">
       <DependentUpon>SimpleMode.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\simpleModeParameterEditor.xaml.cs">
+      <DependentUpon>simpleModeParameterEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Switch.xaml.cs">
+      <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AdvancedMode.xaml.cs">
       <DependentUpon>AdvancedMode.xaml</DependentUpon>
@@ -303,7 +309,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\AdvancedMode.xaml">
+    <Page Include="UserControls\simpleModeParameterEditor.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\Switch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
