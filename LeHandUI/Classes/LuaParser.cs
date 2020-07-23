@@ -14,9 +14,9 @@ namespace LeHandUI
     {
         char character = 'a';
 
-        public Kpress(char c)
+        public Kpress(char Character)
         {
-            character = c;
+            character = Character;
         }
         public override string Parse()
         {
@@ -27,9 +27,9 @@ namespace LeHandUI
     public class Mpress : LeHandAction
     {
         short Button;
-        public Mpress(short b)
+        public Mpress(short button)
         {
-            Button = b;
+            Button = button;
         }
         public override string Parse()
         {

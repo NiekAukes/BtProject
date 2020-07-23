@@ -96,7 +96,12 @@
                 <TextBlock Text="Actie:"/>
             </Viewbox>
             <ComboBox Width="Auto" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                      DockPanel.Dock="Right" Margin="10,0,0,0" MinWidth="50" x:Name="actionChooser"/>
+                      DockPanel.Dock="Right" Margin="10,0,0,0" MinWidth="50" x:Name="actionChooser" SelectionChanged="actionChooser_SelectionChanged">
+                <ComboBoxItem >Keypress</ComboBoxItem>
+                <ComboBoxItem >Mousepress</ComboBoxItem>
+                <ComboBoxItem >Mouse move</ComboBoxItem>
+                <ComboBoxItem >Exit</ComboBoxItem>
+            </ComboBox>
         </DockPanel>
         
         <!--4 dockpanels voor de 4 cases voor acties: CASE 0 = KEYPRESS     CASE 1 = MOUSEPRESS      CASE2 = MOUSEMOVE     CASE3 = END/EXITPROGRAM -->

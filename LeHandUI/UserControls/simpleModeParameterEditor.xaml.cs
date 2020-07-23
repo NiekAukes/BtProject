@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,7 +13,7 @@ namespace LeHandUI
         public simpleModeParameterEditor()
         {
             InitializeComponent();
-
+            varChooser.ItemsSource = LuaParser.varnames;
         }
 
         #region Callbacks
@@ -157,5 +158,22 @@ namespace LeHandUI
             return logic;
         }
 
+        private void actionChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cbox = (ComboBox)sender;
+            switch(cbox.SelectedIndex)
+            {
+                case 0:
+
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+
+            }
+        }
     }
 }
