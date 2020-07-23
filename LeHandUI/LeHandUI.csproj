@@ -303,7 +303,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Startwindow.xaml">
+    <Page Include="Pages/Startwindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -432,9 +432,7 @@
   <ItemGroup>
     <None Include="Resources\Icons\icon64\RemoveFile64x64.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Base\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
