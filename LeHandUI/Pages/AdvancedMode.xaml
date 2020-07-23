@@ -73,7 +73,7 @@
 
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-            Name="textEditor" FontFamily="Consolas" 
+            x:Name="textEditor" FontFamily="Consolas" 
             TextChanged="ChangedFile" ClipToBounds="True" 
             BorderThickness="1" BorderBrush="#F2F2F2" FontSize="15"
             Grid.Column="2" Grid.ColumnSpan="5" Grid.Row="3"
