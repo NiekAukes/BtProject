@@ -73,11 +73,12 @@ namespace LeHandUI
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
 
-		static SolidColorBrush transparent	 = new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
-		static SolidColorBrush off_white	 = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
-		static SolidColorBrush white		 = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-		static SolidColorBrush black		 = new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
-		static SolidColorBrush dark_blue	 = new SolidColorBrush(Color.FromArgb(178,  6 ,  84, 100));
+		static SolidColorBrush transparent				= new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
+		static SolidColorBrush off_white				= new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
+		static SolidColorBrush almostTransparentWhite	= new SolidColorBrush(Color.FromArgb(80, 242, 242, 242));
+		static SolidColorBrush white					= new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+		static SolidColorBrush black					= new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
+		static SolidColorBrush dark_blue				= new SolidColorBrush(Color.FromArgb(178,  6 ,  84, 100));
 
 		public static AdvancedMode inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
@@ -155,22 +156,57 @@ namespace LeHandUI
 			}
 		}
 
+		private void label_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			Label lebbeltje = (Label)sender;
+			lebbeltje.BorderBrush = dark_blue;
+			lebbeltje.BorderThickness = new Thickness(1);
+			lebbeltje.Background = almostTransparentWhite;
+			lebbeltje.Focus();
+		}
+		private void label_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			Label lebbeltje = (Label)sender;
+			if (lebbeltje.IsFocused == false)
+			{
+				lebbeltje.BorderBrush = transparent;
+				lebbeltje.BorderThickness = new Thickness(0);
+				lebbeltje.Background = transparent;
+				AdvancedMode.inst.Focus(); //focust een ander UIelement dan het label
+			}
+		}
+
+		private void label_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			Label lebbeltje = (Label)sender;
+				lebbeltje.BorderBrush = dark_blue;
+				lebbeltje.BorderThickness = new Thickness(2);
+				lebbeltje.Background = almostTransparentWhite;
+			
+		}
+
+
 		public void ChangeLabelText(string label, int index)
 		{
 			LuaFileView.Items.RemoveAt(index);
 			Label newLabel = new Label();
 			newLabel.Content = label;
+            newLabel.MouseEnter += label_MouseEnter;
+            newLabel.MouseLeave += label_MouseLeave;
 			styleLabel(newLabel);
 			LuaFileView.Items.Insert(index, newLabel);
 		}
 
+
 		public static void ChangeLabelText(System.Windows.Controls.ListBox list, string label, int index)
 		{
 			list.Items.RemoveAt(index);
-			Label newTextBox = new Label();
-			newTextBox.Content = label;
-			styleLabel(newTextBox);
-			list.Items.Insert(index, newTextBox);
+			Label newLabel = new Label();
+			newLabel.Content = label;
+			newLabel.MouseEnter += inst.label_MouseEnter;
+			newLabel.MouseLeave += inst.label_MouseLeave;
+			styleLabel(newLabel);
+			list.Items.Insert(index, newLabel);
 		}
 
 		public static void UnChangedFile(System.Windows.Controls.ListBox list)
@@ -337,6 +373,8 @@ namespace LeHandUI
 				Label[] labelarray = new Label[LuaNames.Count];
 				for (int i = 0; i < LuaNames.Count; i++)
 				{
+					labelarray[i].MouseEnter += label_MouseEnter;
+					labelarray[i].MouseLeave += label_MouseLeave;
 					labelarray[i] = new Label();
 					labelarray[i].Name = "TxtBox-" + i.ToString();
 					labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
@@ -432,6 +470,9 @@ namespace LeHandUI
 				Label txtbox = new Label();
 				string wholePath = LHregistry.GetAllFilenames()[i];
 				txtbox.Content = LHregistry.getSimpleName(wholePath);
+				txtbox.MouseEnter += label_MouseEnter;
+				txtbox.MouseLeave += label_MouseLeave; //een grote teringzooi, alles 8 keer gekopieerd geplakt maar het werkt dus laat ook allemaal maar
+				txtbox.MouseDown += label_MouseDown;
 				styleLabel(txtbox);
 
 				LuaFileView.Items.Add(txtbox);
@@ -457,8 +498,9 @@ namespace LeHandUI
 			label.Foreground = off_white;
 			label.Background = transparent;
 			label.BorderBrush = dark_blue;
-			label.BorderThickness = new Thickness(1);
-			label.Margin = new Thickness(0, 0, 0, 5);
+			label.BorderThickness = new Thickness(0);
+			label.Margin = new Thickness(0, 0, 0, 0);
+			
 		}
 	}
 }
