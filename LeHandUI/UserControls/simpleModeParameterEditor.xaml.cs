@@ -122,11 +122,11 @@ namespace LeHandUI
             double lowerval = lowerSlider.Value; double upperval = upperSlider.Value;
             if(lowerval >= upperval)
             {
-                lowerSlider.Value--;
-            }
-            else if(upperval <= lowerval)
-            {
                 upperSlider.Value++;
+            }
+            if(upperval <= lowerval)
+            {
+                lowerSlider.Value--;
             }
 
         }
