@@ -136,7 +136,24 @@ namespace LeHandUI
             logic.beginrange = lowerSlider.Value / 100.0;
             logic.endrange = upperSlider.Value / 100.0;
             logic.variable = varChooser.SelectedIndex;
-            
+            //actionChooser
+            //keyMousePressChooser
+            switch(actionChooser.SelectedIndex)
+            {
+                case 0:
+                    logic.action = new Kpress('c');
+                    break;
+                case 1:
+                    logic.action = new Mpress(0);
+                    break;
+                case 2:
+                    logic.action = new MMove(0, 0);
+                    break;
+                case 3:
+                    logic.action = new end();
+                    break;
+            }
+
             return logic;
         }
 
