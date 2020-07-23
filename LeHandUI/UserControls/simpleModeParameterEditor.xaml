@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeHandUI"
              mc:Ignorable="d" Foreground="#FFF2F2F2" Background="Transparent"
-             FontFamily="Futura Lt BT" FontSize="20" BorderBrush="#F2F2F2" BorderThickness="1"
+             FontFamily="Futura Lt BT" FontSize="16" BorderBrush="#F2F2F2" BorderThickness="1"
              d:DesignHeight="70" d:DesignWidth="400" Loaded="control_loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="7*"/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="11*"/>
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>

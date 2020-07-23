@@ -63,12 +63,13 @@
                 <Image x:Name="removeRuleImage"/>
             </Button>
         </DockPanel>
-
-        <StackPanel Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3"
+        <Border BorderBrush="#f2f2f2" BorderThickness="1" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3">
+            <StackPanel 
                  Background="Transparent" FlowDirection="LeftToRight">
-            <local:simpleModeParameterEditor Height="auto" Width="auto" DockPanel.Dock="Top" MaxHeight="70"/>
+                <local:simpleModeParameterEditor Style="{StaticResource parameterStyle}" DockPanel.Dock="Top" />
 
-        </StackPanel>
+            </StackPanel>
+        </Border>
 
     </Grid>
 </UserControl>
