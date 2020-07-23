@@ -117,7 +117,7 @@
             <Viewbox>
                 <TextBlock Text="Toets/muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name=""/>
+            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser"/>
         </DockPanel>
             
     </Grid>
