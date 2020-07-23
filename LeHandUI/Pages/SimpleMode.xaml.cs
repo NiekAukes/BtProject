@@ -122,6 +122,17 @@ namespace LeHandUI
 			}
 			simpleModeFileListBox.Items.Refresh();
 		}
+		public void saveRuleFromCurrentFile()
+		{
+			//get all rules from current file
+			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+			if (selectedIndex != -1)
+			{
+				IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
+			}
+			//fix the rest lazy piece of shit douwe
+
+		}
 
 		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
 		{
@@ -202,7 +213,6 @@ namespace LeHandUI
 				dosumShit(sender);
 			}*/
 		}
-
 		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			UIElement UIE = (UIElement)sender;
@@ -214,7 +224,6 @@ namespace LeHandUI
 			listitem.BorderBrush		= white;
 
 		}
-
 		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			TextBox listitem = (TextBox)sender;
@@ -224,19 +233,24 @@ namespace LeHandUI
 			listitem.BorderThickness = new Thickness(2);
 			listitem.BorderBrush = transparent;
 		}
+		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			saveRuleFromCurrentFile();
+		}
 		#endregion
 
 		#region Button Handlers
 		public int totaladdedfiles = 0;
         private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
-			//add a filename + registry key for ruleset
+			//add a filename and ruleset
 			FileData[] emptyfiledata = new FileData[1];
 			string newFileName = "New file " + totaladdedfiles.ToString();
 			SimpleFileManager.ChangeFile(newFileName, emptyfiledata);
 			totaladdedfiles++;
 
 			refreshFiles();
+			saveRuleFromCurrentFile();
 			simpleModeFileListBox.Focus();
 		}
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
@@ -258,14 +272,15 @@ namespace LeHandUI
 
 			int selectedIndex = simpleModeFileListBox.SelectedIndex;
 
-
+			saveRuleFromCurrentFile();
 		}
 		private void removeRuleButton_Click(object sender, RoutedEventArgs e)
 		{
 			//remove the shit above
 
+			saveRuleFromCurrentFile();
 		}
-        #endregion
+		#endregion
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		protected void OnPropertyChanged(string propertyName)
@@ -273,5 +288,6 @@ namespace LeHandUI
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		
 	}
 }

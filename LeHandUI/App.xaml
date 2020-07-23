@@ -5,6 +5,31 @@
              StartupUri="Pages/MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
+        <ControlTemplate TargetType="Slider" x:Key="horizontalSlider">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!--<TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
+                        <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
+                    -->
+                    <Border x:Name="TrackBackground" Grid.Row="1" VerticalAlignment="center">
+                        <Canvas>
+                            <Ellipse x:Name="PART_SelectionRange" Cursor="Hand"/>
+                            <!--<Rectangle x:Name="PART_SelectionRange" RadiusX="3" RadiusY="3"/>-->
+                        </Canvas>
+                    </Border>
+                    <Track x:Name="PART_Track" Grid.Row="1">
+                        <Track.Thumb>
+                            <Thumb x:Name="Thumb" Foreground="White" OverridesDefaultStyle="False" Background="#f2f2f2" Focusable="False" Height="18" VerticalAlignment="Center" Width="11"/>
+                        </Track.Thumb>
+                    </Track>
+                </Grid>
+            </Border>
+        </ControlTemplate>
 
         <Style TargetType="ListBoxItem" x:Name="listBoxItemStyle">
             <Setter Property="Background" Value="Transparent"/>
