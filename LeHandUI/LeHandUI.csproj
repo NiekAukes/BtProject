@@ -264,22 +264,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FileManager.cs" />
-    <Compile Include="LHregistry.cs" />
-    <Compile Include="LuaParser.cs" />
-    <Compile Include="SimpleMode.xaml.cs">
+    <Compile Include="Classes\FileManager.cs" />
+    <Compile Include="Classes\LHregistry.cs" />
+    <Compile Include="Classes\LuaParser.cs" />
+    <Compile Include="Pages\SimpleMode.xaml.cs">
       <DependentUpon>SimpleMode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Startwindow.xaml.cs">
+    <Compile Include="Pages\Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Switch.xaml.cs">
+    <Compile Include="Pages\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AdvancedMode.xaml.cs">
+    <Compile Include="Pages\AdvancedMode.xaml.cs">
       <DependentUpon>AdvancedMode.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Pages\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -287,30 +287,30 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Communicator.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Classes\Communicator.cs" />
+    <Compile Include="Pages\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SimpleMode.xaml">
+    <Page Include="Pages\SimpleMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Startwindow.xaml">
+    <Page Include="Pages\Startwindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Switch.xaml">
+    <Page Include="Pages\Switch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AdvancedMode.xaml">
+    <Page Include="Pages\AdvancedMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyCompletionData.cs" />
+    <Compile Include="Classes\MyCompletionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -341,7 +341,7 @@
     <None Include="Properties\Highlighting.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Lua.xml" />
+    <Resource Include="Pages\Lua.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AddIcon.png" />
@@ -424,6 +424,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icons\icon64\RemoveFile64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Base\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
