@@ -270,17 +270,17 @@
     <Compile Include="Pages\SimpleMode.xaml.cs">
       <DependentUpon>SimpleMode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="simpleModeParameterEditor.xaml.cs">
-      <DependentUpon>simpleModeParameterEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Startwindow.xaml.cs">
       <DependentUpon>Startwindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Switch.xaml.cs">
-      <DependentUpon>Switch.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\AdvancedMode.xaml.cs">
       <DependentUpon>AdvancedMode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\simpleModeParameterEditor.xaml.cs">
+      <DependentUpon>simpleModeParameterEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Switch.xaml.cs">
+      <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Page Include="Pages\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -299,21 +299,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="simpleModeParameterEditor.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Pages\Startwindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages/Startwindow.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Switch.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AdvancedMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\simpleModeParameterEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\Switch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

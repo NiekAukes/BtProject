@@ -130,5 +130,15 @@ namespace LeHandUI
             }
 
         }
+        public Logic ParseToLogic()
+        {
+            Logic logic = new Logic();
+            logic.beginrange = lowerSlider.Value / 100.0;
+            logic.endrange = upperSlider.Value / 100.0;
+            logic.variable = varChooser.SelectedIndex;
+            
+            return logic;
+        }
+
     }
 }
