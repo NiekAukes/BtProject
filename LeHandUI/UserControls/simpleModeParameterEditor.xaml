@@ -110,14 +110,14 @@
             <Viewbox>
                 <TextBlock Text="Toets:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <TextBox x:Name="KeyPressChooser">Ingedrukte toets bij actie</TextBox>
+            <TextBox x:Name="KeyPressChooser" VerticalAlignment="Stretch">Ingedrukte toets bij actie</TextBox>
         </DockPanel>
         
-        <DockPanel x:Name="Actionpart2" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0">
+        <DockPanel x:Name="Actionpart2" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" IsEnabled="false" Opacity="0">
             <Viewbox>
                 <TextBlock Text="Toets/muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name=""/>
+            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser"/>
         </DockPanel>
             
     </Grid>
