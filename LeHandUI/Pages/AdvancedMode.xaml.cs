@@ -72,8 +72,6 @@ namespace LeHandUI
 	}
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
-		int selectedListItem;
-		int prevListItem;
 
 		static SolidColorBrush transparent				= new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
 		static SolidColorBrush off_white				= new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
@@ -103,17 +101,50 @@ namespace LeHandUI
 			}
 			finally { DeleteObject(handle); }
 		}
-        #endregion
+		#endregion
 
-        //Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-        //DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-        //List<string> LuaNames = new List<string>();
+		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
+		//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
+		//List<string> LuaNames = new List<string>();
+
+		#region BUTTON_HANDLERS
+
+		private void LuaFileView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			//bruh moment
+		}
+
+		private void Label_GotFocus(object sender, RoutedEventArgs e)
+		{
+			Label lelele = (Label)sender;
+			lelele.Foreground = white;
+			lelele.Background = dark_blue;
+			lelele.BorderBrush = off_white;
+			lelele.BorderThickness = new Thickness(2);
+		}
+		private void Label_MouseEnter(object sender, RoutedEventArgs e)
+		{
+			Label lelele = (Label)sender;
+			lelele.Foreground = white;
+			lelele.Background = almostTransparentWhite;
+		}
+
+		private void Label_MouseLeave(object sender, RoutedEventArgs e)
+		{
+			Label lelele = (Label)sender;
+			lelele.Foreground = white;
+			if (lelele.IsFocused == false)
+			{
+				lelele.Background = transparent;
+			}
+		}
 
 
+		#endregion
 
-        #region environmentEvents
+		#region environmentEvents
 
-        private void FocusMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+		private void FocusMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			//Debug.WriteLine(Keyboard.FocusedElement.ToString());
 			UIElement UIE = (UIElement)sender;
@@ -158,70 +189,7 @@ namespace LeHandUI
 			}
 		}
 
-		void StyleSelectedListItem(int id)
-        {
-			if(id == prevListItem)
-            {
-				return;
-            }
-
-			//code copy pasted from RefreshFiles
-			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-			Label[] labelarray = new Label[LuaNames.Count];
-			for (int i = 0; i < LuaNames.Count; i++)
-			{
-				labelarray[i].MouseEnter += label_MouseEnter;
-				labelarray[i].MouseLeave += label_MouseLeave;
-				labelarray[i] = new Label();
-				labelarray[i].Name = "TxtBox-" + i.ToString();
-				labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
-				LuaFileView.Items.Add(labelarray[i]);
-				
-				if (i == id)
-				{
-					labelarray[i].BorderBrush = dark_blue;
-					labelarray[i].BorderThickness = new Thickness(2);
-					//NEEDSTOBEFINISHED
-					sdlfkjsdflksjlfk trow error pls thanks
-				}
-				else
-				{
-					styleLabel(labelarray[i]);
-				}
-			}
-
-			prevListItem = id;
-        }
-
-
-
-		private void label_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			Label lebbeltje = (Label)sender;
-			lebbeltje.BorderBrush = dark_blue;
-			lebbeltje.BorderThickness = new Thickness(0);
-			lebbeltje.Background = almostTransparentWhite;
-			lebbeltje.Focus();
-		}
-		private void label_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			Label lebbeltje = (Label)sender;
-				//lebbeltje.BorderBrush = dark_blue;
-				//lebbeltje.BorderThickness = new Thickness(0);
-				lebbeltje.Background = transparent;
-				//AdvancedMode.inst.Focus(); //focust een ander UIelement dan het label
-			
-		}
-
-		private void label_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			/*Label lebbeltje = (Label)sender;
-				lebbeltje.BorderBrush = dark_blue;
-				lebbeltje.BorderThickness = new Thickness(2);
-				lebbeltje.Background = almostTransparentWhite;
-			*/
-		}
-
+		
 
 		public void ChangeLabelText(string label, int index)
 		{
@@ -229,8 +197,6 @@ namespace LeHandUI
 			Label newLabel = new Label();
 			newLabel.Content = label;
 
-            newLabel.MouseEnter += label_MouseEnter;
-            newLabel.MouseLeave += label_MouseLeave;
 			styleLabel(newLabel);
 
 			LuaFileView.Items.Insert(index, newLabel);
@@ -243,8 +209,6 @@ namespace LeHandUI
 			Label newLabel = new Label();
 			newLabel.Content = label;
 
-			newLabel.MouseEnter += inst.label_MouseEnter;
-			newLabel.MouseLeave += inst.label_MouseLeave;
 			styleLabel(newLabel);
 
 			list.Items.Insert(index, newLabel);
@@ -282,7 +246,6 @@ namespace LeHandUI
 
 						Label fileshitthing = (Label)LuaFileView.Items[index];
 						string label = fileshitthing.Content + "*";
-						styleLabel(fileshitthing);
 
 						ChangeLabelText(label, index);
 					}
@@ -291,15 +254,9 @@ namespace LeHandUI
 			BypassTextChangedEvent = false;
 		}
         #endregion
-        #region Button Click Events
-		private void AddButton_Click(object sender, EventArgs e)
-		{
-			AddReferenceScript();
-		}
 
-        #endregion
         #region ButtonEvents
-        private void AddReferenceScript()
+        private void AddReferenceScript(object sender, EventArgs e)
 		{
 			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog()
 			{
@@ -320,21 +277,15 @@ namespace LeHandUI
 				Label newLabelToAdd = new Label();
 				newLabelToAdd.Content = LHregistry.getSimpleName(newFilePath);
 				newLabelToAdd.Cursor = Cursors.Hand;
-				newLabelToAdd.MouseEnter += inst.label_MouseEnter;
-				newLabelToAdd.MouseLeave += inst.label_MouseLeave;
-				newLabelToAdd.GotFocus += NewTextBoxToAdd_GotFocus;
+
+
 				styleLabel(newLabelToAdd);
 				LuaFileView.Items.Add(newLabelToAdd);
 			}
 
 		}
 
-		private void NewTextBoxToAdd_GotFocus(object sender, RoutedEventArgs e)
-		{
-			Label lelele = (Label)sender;
-			lelele.Foreground = white;
-			lelele.Background = dark_blue;
-		}
+		
 
 		private void RemoveLuaScript(object sender, EventArgs e)
 		{
@@ -351,6 +302,7 @@ namespace LeHandUI
 					LHregistry.RemoveFile(allIds[idToBeRemoved]);
 
 					LuaFileView.Items.RemoveAt(idToBeRemoved);
+					LuaFileView.Items.Refresh();
 				}
 			}
 		}
@@ -390,8 +342,8 @@ namespace LeHandUI
 
         private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
 		{
-			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
-			SelectedItemIndex = naam.SelectedIndex;
+			System.Windows.Controls.ListBox lstbx = (System.Windows.Controls.ListBox)(sender);
+			SelectedItemIndex = lstbx.SelectedIndex;
 			if (SelectedItemIndex < 0)
 				return;
 
@@ -402,10 +354,6 @@ namespace LeHandUI
 			int ActualFileId = id[SelectedItemIndex];
 
 			LoadFileFromId(ActualFileId);
-
-			selectedListItem= ActualFileId;
-			StyleSelectedListItem(selectedListItem);
-
 			LuaFileView.Items.Refresh();
 			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
 
@@ -414,26 +362,18 @@ namespace LeHandUI
 		private void RefreshLuaScript(object sender, EventArgs e)
 		{
 
-			if (hasRefreshOccurredWithinSeconds == false)
-			{ //if the refresh has not occurred in x milliseconds
-				List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-				Label[] labelarray = new Label[LuaNames.Count];
-				for (int i = 0; i < LuaNames.Count; i++)
-				{
-					labelarray[i].MouseEnter += label_MouseEnter;
-					labelarray[i].MouseLeave += label_MouseLeave;
-					labelarray[i] = new Label();
-					labelarray[i].Name = "TxtBox-" + i.ToString();
-					labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
-					styleLabel(labelarray[i]);
-					LuaFileView.Items.Add(labelarray[i]);
-				}
-
+			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
+			Label[] labelarray = new Label[LuaNames.Count];
+			for (int i = 0; i < LuaNames.Count; i++)
+			{
+				labelarray[i] = new Label();
+				labelarray[i].Name = "TxtBox-" + i.ToString();
+				labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
+				styleLabel(labelarray[i]);
+				LuaFileView.Items.Add(labelarray[i]);
 			}
-			else { }
 
 			LuaFileView.Items.Refresh();
-			hasRefreshOccurredWithinSeconds = true;
 		}
 
 		
@@ -487,6 +427,7 @@ namespace LeHandUI
 		public AdvancedMode()
         {
 			InitializeComponent();
+            LuaFileView.SelectionChanged += LuaFileView_SelectionChanged;
 			FileManager.LoadAllFiles();
 			inst = this;
 			Focusable = true;
@@ -517,9 +458,7 @@ namespace LeHandUI
 				Label txtbox = new Label();
 				string wholePath = LHregistry.GetAllFilenames()[i];
 				txtbox.Content = LHregistry.getSimpleName(wholePath);
-				txtbox.MouseEnter += label_MouseEnter;
-				txtbox.MouseLeave += label_MouseLeave; //een grote teringzooi, alles 8 keer gekopieerd geplakt maar het werkt dus laat ook allemaal maar
-				txtbox.MouseDown += label_MouseDown;
+
 				styleLabel(txtbox);
 
 				LuaFileView.Items.Add(txtbox);
@@ -538,16 +477,22 @@ namespace LeHandUI
 			SaveIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.SaveScript64x64);
 			RunPrgmIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.StartScript64x64);
 		}
-		#endregion
 
-		public static void styleLabel(Label label)
+        
+
+
+        #endregion
+
+        public static void styleLabel(Label label)
 		{
 			label.Foreground = off_white;
 			label.Background = transparent;
 			label.BorderBrush = dark_blue;
 			label.BorderThickness = new Thickness(0);
-			label.Margin = new Thickness(0, 0, 0, 0);
-			
+
+			label.GotFocus += inst.Label_GotFocus;
+			label.MouseEnter += inst.
+
 		}
 	}
 }
