@@ -79,7 +79,7 @@ namespace LeHandUI
         {
             "LF", "RF", "MF", "IF", "Th", "AX", "AY", "AZ", "RY"
         };
-
+        //parses Logic into Lua
         public static string Parse(Logic[] logics)
         {
             int nestvalue = 0;
