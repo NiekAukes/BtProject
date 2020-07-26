@@ -5,11 +5,18 @@
              StartupUri="Pages/MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
+        <Style x:Key="itemcontainerstyle" TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#F2F2F2"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Padding" Value="2,5,0,5"/>
+            <Setter Property="Cursor"  Value="Hand"/>
+        </Style>
+        
         <Style x:Name="parameterStyle" x:Key="parameterStyle" TargetType="UserControl">
             <Setter Property="Height" Value="auto"/>
             <Setter Property="Width" Value="auto"/>
             <Setter Property="MaxHeight" Value="70"/>
-            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="Margin" Value="10,10,10,0"/>
         </Style>
         
         <ControlTemplate TargetType="Slider" x:Key="horizontalSlider">

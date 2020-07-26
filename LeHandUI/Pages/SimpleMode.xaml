@@ -67,7 +67,6 @@
             <StackPanel 
                  Background="Transparent" FlowDirection="LeftToRight">
                 <local:simpleModeParameterEditor Style="{StaticResource parameterStyle}" DockPanel.Dock="Top" />
-
             </StackPanel>
         </Border>
 

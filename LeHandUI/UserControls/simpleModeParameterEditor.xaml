@@ -95,12 +95,12 @@
             <Viewbox>
                 <TextBlock Text="Actie:"/>
             </Viewbox>
-            <ComboBox Width="Auto" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+            <ComboBox Width="Auto" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemContainerStyle="{StaticResource itemcontainerstyle}"
                       DockPanel.Dock="Right" Margin="10,0,0,0" MinWidth="50" x:Name="actionChooser" SelectionChanged="actionChooser_SelectionChanged">
-                <ComboBoxItem >Keypress</ComboBoxItem>
-                <ComboBoxItem >Mousepress</ComboBoxItem>
-                <ComboBoxItem >Mouse move</ComboBoxItem>
-                <ComboBoxItem >Exit</ComboBoxItem>
+                <ComboBoxItem>Keypress</ComboBoxItem>
+                <ComboBoxItem>Mousepress</ComboBoxItem>
+                <ComboBoxItem>Mouse move</ComboBoxItem>
+                <ComboBoxItem>Exit program</ComboBoxItem>
             </ComboBox>
         </DockPanel>
         
@@ -108,11 +108,11 @@
 
         <DockPanel x:Name="KeyPressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="True">
             <Viewbox>
-                <TextBlock Text="Toets:" HorizontalAlignment="Left"/>
+                <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0"/>
             </Viewbox>
             <TextBox x:Name="KeyPressChooser" Padding="2,4,0,0" 
-                     ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, 
-                              ArrowUp, ArrowDown, ArrowLeft, ArrowRight">Bijv. Enter, Backspace, K</TextBox>
+                     ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, ArrowUp, ArrowDown, ArrowLeft, ArrowRight">
+                     Bijv. Enter, Backspace, K</TextBox>
         </DockPanel>
 
         <DockPanel x:Name="MousePressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="False">
@@ -121,6 +121,16 @@
             </Viewbox>
             <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser" 
                       SelectionChanged="MousePressChooser_SelectionChanged"/>
+        </DockPanel>
+        
+        <DockPanel Panel.ZIndex="999" x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="False">
+            <Viewbox>
+                <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
+            </Viewbox>
+            <DockPanel>
+                <TextBox x:Name="MouseMoveBox1" Padding="5,0,5,0" HorizontalAlignment="Center" Text="xDirection"/>
+                <TextBox x:Name="MouseMoveBox2" Padding="5,0,5,0" HorizontalAlignment="Center" Text="yDirection"/>
+            </DockPanel>
         </DockPanel>
             
     </Grid>
