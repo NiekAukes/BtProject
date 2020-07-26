@@ -10,6 +10,7 @@ namespace LeHandUI
 
     public partial class simpleModeParameterEditor : UserControl
     {
+        public Control ActiveControl = null;
         public simpleModeParameterEditor()
         {
             InitializeComponent();

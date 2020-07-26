@@ -83,7 +83,7 @@ static int lua_KPress(lua_State* L/*, char Key, int mode*/) {
 	if (mode)
 		ip.ki.dwFlags = KEYEVENTF_KEYUP;
 	else
-		ip.ki.dwFlags = 0;
+		ip.ki.dwFlags = 0; 
 
 	ip.ki.wVk = toupper(Key);
 	SendInput(1, &ip, sizeof(INPUT));
