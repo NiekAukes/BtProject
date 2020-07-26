@@ -10,11 +10,13 @@ namespace LeHandUI
 
     public partial class simpleModeParameterEditor : UserControl
     {
-        public Control ActiveControl = null;
+        public DockPanel ActiveControl = null;
         public simpleModeParameterEditor()
         {
+            
             InitializeComponent();
             varChooser.ItemsSource = LuaParser.varnames;
+            ActiveControl = KeyPressInput;
         }
 
         #region Callbacks
@@ -162,19 +164,28 @@ namespace LeHandUI
         private void actionChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cbox = (ComboBox)sender;
-            switch(cbox.SelectedIndex)
+            ActiveControl.IsEnabled = false;
+            ActiveControl.Opacity = 0;
+            Panel.SetZIndex(ActiveControl, -1);
+            switch (cbox.SelectedIndex)
             {
                 case 0:
-
+                    ActiveControl = KeyPressInput;
                     break;
                 case 1:
+                    ActiveControl = MousePressInput;
                     break;
                 case 2:
+                    ActiveControl = KeyPressInput;
                     break;
                 case 3:
+                    ActiveControl = MousePressInput;
                     break;
 
             }
+            ActiveControl.IsEnabled = true;
+            ActiveControl.Opacity = 1;
+            Panel.SetZIndex(ActiveControl, 99);
         }
 
         private void MousePressChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
