@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.TeamFoundation.Framework.Client;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,11 @@ namespace LeHandUI
         public simpleModeParameterEditor()
         {
             InitializeComponent();
+            KeyPressInput.Opacity = 0; KeyPressInput.IsEnabled = false;
+            MousePressInput.Opacity = 0; MousePressInput.IsEnabled = false;
+            MouseMoveInput.Opacity = 0; MouseMoveInput.IsEnabled = false;
+
+
             varChooser.ItemsSource = LuaParser.varnames;
         }
 

@@ -95,7 +95,7 @@
             <Viewbox>
                 <TextBlock Text="Actie:"/>
             </Viewbox>
-            <ComboBox Width="Auto" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemContainerStyle="{StaticResource itemcontainerstyle}"
+            <ComboBox Background="#f2f2f2" Foreground="Black" Width="Auto" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemContainerStyle="{StaticResource itemcontainerstyle}"
                       DockPanel.Dock="Right" Margin="10,0,0,0" MinWidth="50" x:Name="actionChooser" SelectionChanged="actionChooser_SelectionChanged">
                 <ComboBoxItem>Keypress</ComboBoxItem>
                 <ComboBoxItem>Mousepress</ComboBoxItem>
@@ -115,15 +115,15 @@
                      Bijv. Enter, Backspace, K</TextBox>
         </DockPanel>
 
-        <DockPanel x:Name="MousePressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="False">
+        <DockPanel x:Name="MousePressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="True">
             <Viewbox>
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
             <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser" 
                       SelectionChanged="MousePressChooser_SelectionChanged"/>
         </DockPanel>
-        
-        <DockPanel Panel.ZIndex="999" x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="False">
+
+        <DockPanel x:Name="MouseMoveInput" Panel.ZIndex="999"  Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="True">
             <Viewbox>
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
