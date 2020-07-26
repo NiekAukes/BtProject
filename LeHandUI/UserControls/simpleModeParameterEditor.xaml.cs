@@ -176,5 +176,10 @@ namespace LeHandUI
 
             }
         }
+
+        private void MousePressChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

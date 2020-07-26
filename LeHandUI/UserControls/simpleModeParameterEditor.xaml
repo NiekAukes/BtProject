@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:LeHandUI"
              mc:Ignorable="d" Foreground="#FFF2F2F2" Background="Transparent"
              FontFamily="Futura Lt BT" FontSize="16" BorderBrush="#F2F2F2" BorderThickness="1"
-             d:DesignHeight="70" d:DesignWidth="400" Loaded="control_loaded">
+             d:DesignHeight="70" d:DesignWidth="550" Loaded="control_loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
@@ -105,19 +105,22 @@
         </DockPanel>
         
         <!--4 dockpanels voor de 4 cases voor acties: CASE 0 = KEYPRESS     CASE 1 = MOUSEPRESS      CASE2 = MOUSEMOVE     CASE3 = END/EXITPROGRAM -->
-        
-        <DockPanel x:Name="toetsmuisklik" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1">
+
+        <DockPanel x:Name="KeyPressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="True">
             <Viewbox>
                 <TextBlock Text="Toets:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <TextBox x:Name="KeyPressChooser" VerticalAlignment="Stretch">Ingedrukte toets bij actie</TextBox>
+            <TextBox x:Name="KeyPressChooser" Padding="2,4,0,0" 
+                     ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, 
+                              ArrowUp, ArrowDown, ArrowLeft, ArrowRight">Bijv. Enter, Backspace, K</TextBox>
         </DockPanel>
-        
-        <DockPanel x:Name="Actionpart2" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" IsEnabled="false" Opacity="0">
+
+        <DockPanel x:Name="MousePressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="False">
             <Viewbox>
-                <TextBlock Text="Toets/muisklik:" HorizontalAlignment="Left"/>
+                <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser"/>
+            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser" 
+                      SelectionChanged="MousePressChooser_SelectionChanged"/>
         </DockPanel>
             
     </Grid>
