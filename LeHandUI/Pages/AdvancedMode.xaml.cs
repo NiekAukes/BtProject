@@ -363,24 +363,32 @@ namespace LeHandUI
 		private void RefreshLuaScript(object sender, EventArgs e)
 		{
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
+			
 			Label[] labelarray = new Label[LuaNames.Count];
 			int currOpenedFileId = FileManager.currentLoadedIndex;
 
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
-				labelarray[i] = new Label();
-				labelarray[i].Name = "TxtBox-" + i.ToString();
-				labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
-
-				if(currOpenedFileId == i)
-                {
-					styleCurrentSelectedLabel(labelarray[i]);
-                }
-                else
-                {
-					styleLabel(labelarray[i]);
+				if (LuaNames[i] == (string)(LuaFileView.Items[i]))
+				{
+					continue;
 				}
-				LuaFileView.Items.Add(labelarray[i]);
+				else
+				{
+					labelarray[i] = new Label();
+					labelarray[i].Name = "TxtBox" + i.ToString();
+					labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
+
+					if (currOpenedFileId == i)
+					{
+						styleCurrentSelectedLabel(labelarray[i]);
+					}
+					else
+					{
+						styleLabel(labelarray[i]);
+					}
+					LuaFileView.Items.Add(labelarray[i]);
+				}
 			}
 			LuaFileView.Items.Refresh();
 		}
