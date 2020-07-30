@@ -369,7 +369,6 @@ namespace LeHandUI
 
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
-				
 				labelarray[i] = new Label();
 				string str = "TxtBox" + i.ToString();
 				labelarray[i].Name = str;
