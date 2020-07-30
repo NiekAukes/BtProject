@@ -72,13 +72,13 @@ namespace LeHandUI
 	}
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
-
 		static SolidColorBrush transparent				= new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
 		static SolidColorBrush off_white				= new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
-		static SolidColorBrush almostTransparentWhite	= new SolidColorBrush(Color.FromArgb(80, 242, 242, 242));
+		static SolidColorBrush almostTransparentWhite	= new SolidColorBrush(Color.FromArgb(80 , 242, 242, 242));
 		static SolidColorBrush white					= new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
 		static SolidColorBrush black					= new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
 		static SolidColorBrush dark_blue				= new SolidColorBrush(Color.FromArgb(180,  6 ,  84, 200));
+		static SolidColorBrush light_blue			    = new SolidColorBrush(Color.FromArgb(180, 110, 130, 255));
 
 		public static AdvancedMode inst = null;
 		public static System.Windows.Controls.ListBox Listbox = null;
@@ -357,22 +357,31 @@ namespace LeHandUI
 			LuaFileView.Items.Refresh();
 			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
 
+			RefreshLuaScript(sender, e);
 		}
 
 		private void RefreshLuaScript(object sender, EventArgs e)
 		{
-
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
 			Label[] labelarray = new Label[LuaNames.Count];
+			int currOpenedFileId = FileManager.currentLoadedIndex;
+
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
 				labelarray[i] = new Label();
 				labelarray[i].Name = "TxtBox-" + i.ToString();
 				labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
-				styleLabel(labelarray[i]);
+
+				if(currOpenedFileId == i)
+                {
+					styleCurrentSelectedLabel(labelarray[i]);
+                }
+                else
+                {
+					styleLabel(labelarray[i]);
+				}
 				LuaFileView.Items.Add(labelarray[i]);
 			}
-
 			LuaFileView.Items.Refresh();
 		}
 
@@ -451,6 +460,7 @@ namespace LeHandUI
 			
 			//set file view to the listbox
 			Listbox = LuaFileView;
+
 			//get all the filenames from registry
 			int len = LHregistry.GetAllFilenames().Length;
 			for (int i = 0; i < len; i++)
@@ -464,11 +474,8 @@ namespace LeHandUI
 				LuaFileView.Items.Add(txtbox);
 			}
 			
-
             BypassTextChangedEvent = true;
 			
-
-
 			//Alle icoontjes
 			PlusIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.PALE_GREEN_AddIcon64x64);
 			DeleteIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
@@ -491,9 +498,19 @@ namespace LeHandUI
 			label.BorderThickness = new Thickness(0);
 
 			label.GotFocus += inst.Label_GotFocus;
-			//label.MouseEnter += inst.
-
-
+			label.MouseEnter += inst.Label_MouseEnter;
+			label.MouseLeave += inst.Label_MouseLeave;
+		}
+		public static void styleCurrentSelectedLabel(Label label)
+        {
+			label.Foreground = white;
+			label.Background = light_blue;
+			label.BorderBrush = dark_blue;
+			label.BorderThickness = new Thickness(2);
+			
+			/*label.GotFocus += inst.Label_GotFocus;
+			label.MouseEnter += inst.Label_MouseEnter;
+			label.MouseLeave += inst.Label_MouseLeave;*/
 		}
 	}
 }
