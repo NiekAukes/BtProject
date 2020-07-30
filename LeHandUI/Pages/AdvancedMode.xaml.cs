@@ -300,10 +300,11 @@ namespace LeHandUI
 				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1)
 				{
 					LHregistry.RemoveFile(allIds[idToBeRemoved]);
-
 					LuaFileView.Items.RemoveAt(idToBeRemoved);
+					
 					LuaFileView.Items.Refresh();
 				}
+				RefreshLuaScript();
 			}
 		}
 
@@ -357,10 +358,10 @@ namespace LeHandUI
 			LuaFileView.Items.Refresh();
 			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
 
-			RefreshLuaScript(sender, e);
+			RefreshLuaScript();
 		}
 
-		private void RefreshLuaScript(object sender, EventArgs e)
+		private void RefreshLuaScript()
 		{
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
@@ -369,7 +370,9 @@ namespace LeHandUI
 
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
+				
 				Label currLuaFileViewLabel = (Label)(LuaFileView.Items[i]);
+				
 				if (LuaNames[i] == (string)currLuaFileViewLabel.Content)
 				{
 					continue;
@@ -459,12 +462,10 @@ namespace LeHandUI
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
 				new KeyGesture(Key.S, ModifierKeys.Control)
-
 				));
 			textEditor.InputBindings.Add(
 				new InputBinding(new LineToggleCommand(),
 				new KeyGesture(Key.L, ModifierKeys.Control)
-
 				));
 			textEditor.ShowLineNumbers = Convert.ToBoolean(val.ShowLineNumbers);
 			

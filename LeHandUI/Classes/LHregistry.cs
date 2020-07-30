@@ -25,7 +25,7 @@ namespace LeHandUI
     }
     public class LHregistry
     {
-        public static int alreadyremovedId;
+        
         static string FileNameKey = "HKEY_CURRENT_USER\\Software\\LeHand\\Filenames";
         static string StartupValKey = "HKEY_CURRENT_USER\\Software\\LeHand\\StartupData";
         public static StartupValues GetStartupValues()
@@ -127,13 +127,12 @@ namespace LeHandUI
             //HIER ALREADYREMOVEDID INGEVOERD OM BUG TE VOORKOMEN, namelijk als je twee keer achter elkaar op - klikt in advanced mode,
             //dan probeert hij een id te verwijderen met een registrykey die niet meer bestaat
 
-            if (id != -1 && alreadyremovedId != id) //als de id valide is, als er een file geselecteerd is
+            if (id != -1) //als de id valide is, als er een file geselecteerd is
             {
                 RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\Filenames", true);
                 string[] names = rk.GetValueNames();
                 if(names.Length >= id){
                     rk.DeleteValue(names[id]);
-                    alreadyremovedId = id;
                 }
             }
           
