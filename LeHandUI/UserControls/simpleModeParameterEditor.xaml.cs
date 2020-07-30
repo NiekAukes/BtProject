@@ -176,10 +176,10 @@ namespace LeHandUI
                     ActiveControl = MousePressInput;
                     break;
                 case 2:
-                    ActiveControl = KeyPressInput;
+                    ActiveControl = MouseMoveInput;
                     break;
                 case 3:
-                    ActiveControl = MousePressInput;
+                    ActiveControl = nulpanel;
                     break;
 
             }

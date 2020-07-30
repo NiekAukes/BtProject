@@ -106,7 +106,7 @@
         
         <!--4 dockpanels voor de 4 cases voor acties: CASE 0 = KEYPRESS     CASE 1 = MOUSEPRESS      CASE2 = MOUSEMOVE     CASE3 = END/EXITPROGRAM -->
 
-        <DockPanel x:Name="KeyPressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="True">
+        <DockPanel x:Name="KeyPressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="True">
             <Viewbox>
                 <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0"/>
             </Viewbox>
@@ -123,7 +123,7 @@
                       SelectionChanged="MousePressChooser_SelectionChanged"/>
         </DockPanel>
         
-        <DockPanel Panel.ZIndex="999" x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="1" IsEnabled="False">
+        <DockPanel Panel.ZIndex="999" x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="False">
             <Viewbox>
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
@@ -132,6 +132,7 @@
                 <TextBox x:Name="MouseMoveBox2" Padding="5,0,5,0" HorizontalAlignment="Center" Text="yDirection"/>
             </DockPanel>
         </DockPanel>
+        <DockPanel x:Name="nulpanel"></DockPanel>
             
     </Grid>
 </UserControl>
