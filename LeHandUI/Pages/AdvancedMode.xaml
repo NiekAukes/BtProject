@@ -42,7 +42,7 @@
 
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
         <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="15,10,0,0" HorizontalAlignment="Left">
-            <Button Style="{StaticResource TranspButton}"  Click="AddButton_Click"
+            <Button Style="{StaticResource TranspButton}"  Click="AddReferenceScript"
                 ToolTip="Add Reference" x:Name="AddButton">
                 <Image x:Name="PlusIcon" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
             </Button>

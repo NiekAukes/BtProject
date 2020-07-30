@@ -12,9 +12,9 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
-            <ColumnDefinition MinWidth="80"/>
+            <ColumnDefinition Width="2*" MinWidth="80"/>
             <ColumnDefinition Width="auto" MinWidth="20"/>
-            <ColumnDefinition Width="13*"/>
+            <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
