@@ -363,14 +363,15 @@ namespace LeHandUI
 		private void RefreshLuaScript(object sender, EventArgs e)
 		{
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-			
+
 			Label[] labelarray = new Label[LuaNames.Count];
 			int currOpenedFileId = FileManager.currentLoadedIndex;
 
 
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
-				if (LuaNames[i] == (string)(LuaFileView.Items[i]))
+				Label currLuaFileViewLabel = (Label)(LuaFileView.Items[i]);
+				if (LuaNames[i] == (string)currLuaFileViewLabel.Content)
 				{
 					continue;
 				}
@@ -388,7 +389,8 @@ namespace LeHandUI
 					{
 						styleLabel(labelarray[i]);
 					}
-					LuaFileView.Items.Add(labelarray[i]);
+					LuaFileView.Items.RemoveAt(i);
+					LuaFileView.Items.Insert(i,labelarray[i]);
 				}
 			}
 			LuaFileView.Items.Refresh();
