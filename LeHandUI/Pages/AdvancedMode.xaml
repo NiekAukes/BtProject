@@ -9,9 +9,7 @@
              FontFamily="Futura Lt BT" Foreground="#F2F2F2"
              d:DesignHeight="580" d:DesignWidth="760"
              Mouse.MouseEnter="FocusMouseEnter">
-    <Grid
-        FocusManager.FocusedElement="{Binding ElementName=textEditor}"
-        >
+    <Grid FocusManager.FocusedElement="{Binding ElementName=textEditor}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="auto" MinWidth="10"/>
