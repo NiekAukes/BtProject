@@ -463,12 +463,10 @@ namespace LeHandUI
 			textEditor.InputBindings.Add(
 				new InputBinding(new SaveCommand(),
 				new KeyGesture(Key.S, ModifierKeys.Control)
-
 				));
 			textEditor.InputBindings.Add(
 				new InputBinding(new LineToggleCommand(),
 				new KeyGesture(Key.L, ModifierKeys.Control)
-
 				));
 			textEditor.ShowLineNumbers = Convert.ToBoolean(val.ShowLineNumbers);
 			
