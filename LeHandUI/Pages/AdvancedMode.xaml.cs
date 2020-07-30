@@ -366,10 +366,13 @@ namespace LeHandUI
 			Label[] labelarray = new Label[LuaNames.Count];
 			int currOpenedFileId = FileManager.currentLoadedIndex;
 
+
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
+				
 				labelarray[i] = new Label();
-				labelarray[i].Name = "TxtBox-" + i.ToString();
+				string str = "TxtBox" + i.ToString();
+				labelarray[i].Name = str;
 				labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
 
 				if(currOpenedFileId == i)
