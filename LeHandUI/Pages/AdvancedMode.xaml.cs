@@ -342,7 +342,7 @@ namespace LeHandUI
 
         private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e)
 		{
-			System.Windows.Controls.ListBox lstbx = (System.Windows.Controls.ListBox)(sender);
+			ListBox lstbx = (ListBox)(sender);
 			SelectedItemIndex = lstbx.SelectedIndex;
 			if (SelectedItemIndex < 0)
 				return;
@@ -364,7 +364,6 @@ namespace LeHandUI
 		{
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
 
-			Label[] labelarray = new Label[LuaNames.Count];
 			int currOpenedFileId = FileManager.currentLoadedIndex;
 
 
@@ -377,20 +376,20 @@ namespace LeHandUI
 				}
 				else
 				{
-					labelarray[i] = new Label();
-					labelarray[i].Name = "TxtBox" + i.ToString();
-					labelarray[i].Content = LHregistry.getSimpleName(LuaNames[i]);
+					Label label = new Label();
+					label.Name = "TxtBox" + i.ToString();
+					label.Content = LHregistry.getSimpleName(LuaNames[i]);
 
 					if (currOpenedFileId == i)
 					{
-						styleCurrentSelectedLabel(labelarray[i]);
+						styleCurrentSelectedLabel(label);
 					}
 					else
 					{
-						styleLabel(labelarray[i]);
+						styleLabel(label);
 					}
 					LuaFileView.Items.RemoveAt(i);
-					LuaFileView.Items.Insert(i,labelarray[i]);
+					LuaFileView.Items.Insert(i,label);
 				}
 			}
 			LuaFileView.Items.Refresh();
