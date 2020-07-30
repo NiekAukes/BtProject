@@ -367,6 +367,7 @@ namespace LeHandUI
 			Label[] labelarray = new Label[LuaNames.Count];
 			int currOpenedFileId = FileManager.currentLoadedIndex;
 
+
 			for (int i = 0; i < LuaNames.Count; i++)
 			{
 				if (LuaNames[i] == (string)(LuaFileView.Items[i]))
