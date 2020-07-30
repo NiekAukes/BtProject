@@ -112,7 +112,7 @@
             </Viewbox>
             <TextBox x:Name="KeyPressChooser" Padding="2,4,0,0" 
                      ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, ArrowUp, ArrowDown, ArrowLeft, ArrowRight">
-                     Bijv. Enter, Backspace, K</TextBox>
+                     <!--Bijv. Enter, Backspace, K--></TextBox>
         </DockPanel>
 
         <DockPanel x:Name="MousePressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="True">
@@ -123,7 +123,7 @@
                       SelectionChanged="MousePressChooser_SelectionChanged"/>
         </DockPanel>
         
-        <DockPanel Panel.ZIndex="999" x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="False">
+        <DockPanel x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="False">
             <Viewbox>
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>

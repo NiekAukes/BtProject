@@ -191,7 +191,7 @@ namespace LeHandUI
             }
             ActiveControl.IsEnabled = true;
             ActiveControl.Opacity = 1;
-            Panel.SetZIndex(ActiveControl, 99);
+            Panel.SetZIndex(ActiveControl, 999);
         }
 
         private void MousePressChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)

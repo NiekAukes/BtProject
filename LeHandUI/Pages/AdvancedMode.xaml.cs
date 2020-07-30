@@ -491,7 +491,8 @@ namespace LeHandUI
 			label.BorderThickness = new Thickness(0);
 
 			label.GotFocus += inst.Label_GotFocus;
-			label.MouseEnter += inst.
+			//label.MouseEnter += inst.
+
 
 		}
 	}
