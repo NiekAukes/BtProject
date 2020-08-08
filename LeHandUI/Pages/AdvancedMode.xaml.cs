@@ -1,41 +1,24 @@
-﻿using ICSharpCode.AvalonEdit;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Printing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
 using WPFCustomMessageBox;
-using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
-using TextBox = System.Windows.Controls.TextBox;
 
 namespace LeHandUI
 {
-	
-	public class SaveCommand : ICommand
+
+    public class SaveCommand : ICommand
 	{
 		public event EventHandler CanExecuteChanged;
 
@@ -81,7 +64,7 @@ namespace LeHandUI
 		static SolidColorBrush light_blue			    = new SolidColorBrush(Color.FromArgb(180, 110, 130, 255));
 
 		public static AdvancedMode inst = null;
-		public static System.Windows.Controls.ListBox Listbox = null;
+		public static ListBox Listbox = null;
 		public static int SelectedItemIndex = -1;
 		public static bool hasRefreshOccurredWithinSeconds = false;
 
@@ -109,9 +92,70 @@ namespace LeHandUI
 
 		#region BUTTON_HANDLERS
 
+		Label lastSelectedLabel;
 		private void LuaFileView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			//bruh moment
+			//simple void to only style the object on which you single clicked (which you selected in the list)
+			//get selected item, style selected item differently than other items with styleSelectedLabel
+			//make an int for last selected item so you can unstyle only one item instead of brute forcing the whole list.
+
+			Label selectedLabel = (Label)LuaFileView.SelectedItem;
+			if (selectedLabel != null || selectedLabel != lastSelectedLabel)
+			{
+				//styles the now selected label
+				//styleSelectedLabel(selectedLabel); //THROWS ERROR HELP
+				
+
+				//gets last selected label, applies other style and inserts it into the list again
+				int indexLastSelectedLabel = LuaFileView.Items.IndexOf(lastSelectedLabel);
+
+				if (indexLastSelectedLabel != -1)
+				{
+					Label lastLabel = (Label)LuaFileView.Items[indexLastSelectedLabel];
+					styleLabel(lastLabel);
+
+					LuaFileView.Items.RemoveAt(indexLastSelectedLabel);
+					LuaFileView.Items.Insert(indexLastSelectedLabel, lastLabel);
+				}
+			}
+
+			//sets last selected label to current label to memorise which label was selected, 
+			//so when other label gets selected, this current one will get styled normally again.
+			lastSelectedLabel = selectedLabel;
+		}
+
+		
+		public static void styleLabel(Label label)
+		{
+			label.Foreground = off_white;
+			label.Background = transparent;
+			label.BorderBrush = dark_blue;
+			label.BorderThickness = new Thickness(0);
+
+			label.GotFocus += inst.Label_GotFocus;
+			label.MouseEnter += inst.Label_MouseEnter;
+			label.MouseLeave += inst.Label_MouseLeave;
+		}
+
+		void styleSelectedLabel(Label lelele)
+		{
+			lelele.Foreground = white;
+			lelele.Background = new SolidColorBrush(Color.FromArgb(255, 160, 110, 255)); //nice purple
+			lelele.BorderBrush = white;
+			lelele.BorderThickness = new Thickness(1);
+		}
+
+		public static void styleOpenedFileLabel(Label label)
+		{
+			label.Foreground = white;
+			label.Background = light_blue;
+			label.BorderBrush = dark_blue;
+			label.BorderThickness = new Thickness(2);
+
+			/*label.GotFocus += inst.Label_GotFocus;
+			label.MouseEnter += inst.Label_MouseEnter;
+			label.MouseLeave += inst.Label_MouseLeave;*/
 		}
 
 		private void Label_GotFocus(object sender, RoutedEventArgs e)
@@ -133,10 +177,10 @@ namespace LeHandUI
 		{
 			Label lelele = (Label)sender;
 			lelele.Foreground = white;
-			if (lelele.IsFocused == false)
-			{
+			if(lelele != LuaFileView.SelectedItem)
+            {
 				lelele.Background = transparent;
-			}
+            }
 		}
 
 
@@ -304,6 +348,7 @@ namespace LeHandUI
 					
 					LuaFileView.Items.Refresh();
 				}
+                
 				RefreshLuaScript();
 			}
 		}
@@ -385,7 +430,7 @@ namespace LeHandUI
 
 					if (currOpenedFileId == i)
 					{
-						styleCurrentSelectedLabel(label);
+						styleOpenedFileLabel(label);
 					}
 					else
 					{
@@ -501,27 +546,6 @@ namespace LeHandUI
 
         #endregion
 
-        public static void styleLabel(Label label)
-		{
-			label.Foreground = off_white;
-			label.Background = transparent;
-			label.BorderBrush = dark_blue;
-			label.BorderThickness = new Thickness(0);
-
-			label.GotFocus += inst.Label_GotFocus;
-			label.MouseEnter += inst.Label_MouseEnter;
-			label.MouseLeave += inst.Label_MouseLeave;
-		}
-		public static void styleCurrentSelectedLabel(Label label)
-        {
-			label.Foreground = white;
-			label.Background = light_blue;
-			label.BorderBrush = dark_blue;
-			label.BorderThickness = new Thickness(2);
-			
-			/*label.GotFocus += inst.Label_GotFocus;
-			label.MouseEnter += inst.Label_MouseEnter;
-			label.MouseLeave += inst.Label_MouseLeave;*/
-		}
+        
 	}
 }
