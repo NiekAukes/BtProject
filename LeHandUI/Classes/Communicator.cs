@@ -102,6 +102,7 @@ namespace LeHandUI
             }
             catch (IOException e)
             {
+                Debug.WriteLine("Exception Caught: " + e);
                 inputStream.Close();
             }
         }
@@ -225,7 +226,7 @@ namespace LeHandUI
             }
 			return null;
 		}
-        static int shortsread = 0;
+        //static int shortsread = 0;
         static int charsread = 0;
         static byte[] buf = new byte[1024];
         static IAsyncResult readres;

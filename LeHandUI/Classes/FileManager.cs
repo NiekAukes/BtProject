@@ -94,7 +94,8 @@ namespace LeHandUI
                 FileData[] ret = new FileData[reader.BaseStream.Length / 34];
 
                 //fill in the filedata
-                int bytesread = 0;
+
+                //int bytesread = 0;
                 for (int i = 0; i < Math.Floor(reader.BaseStream.Length / 34.001f); i++) 
                 {
                     //variable
