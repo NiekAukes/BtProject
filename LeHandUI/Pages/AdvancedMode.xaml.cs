@@ -152,6 +152,13 @@ namespace LeHandUI
 			lelele.BorderBrush = dark_blue;
 			lelele.BorderThickness = new Thickness(1);
 
+			for(int i; i < LuaFileView.Items.Count; i++)
+            {
+				//hj
+            }
+
+			lelele.Focus();
+
 			lastselectedLabel = lelele;
 		}
 
