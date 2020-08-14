@@ -109,6 +109,7 @@ namespace LeHandUI
 			label.MouseEnter += inst.Label_MouseEnter;
 			label.MouseLeave += inst.Label_MouseLeave;
 			label.MouseDown += inst.Label_MouseDown;
+			
 		}
 
 		public static void styleOpenedFileLabel(Label label)
@@ -126,10 +127,17 @@ namespace LeHandUI
 		private void Label_GotFocus(object sender, RoutedEventArgs e)
 		{
 			Label lelele = (Label)sender;
-			lelele.Foreground = white;
-			lelele.Background = dark_blue;
-			lelele.BorderBrush = off_white;
-			lelele.BorderThickness = new Thickness(2);
+			if (lelele != LuaFileView.SelectedItem)
+			{
+				lelele.Foreground = white;
+				lelele.Background = dark_blue;
+				lelele.BorderBrush = off_white;
+				lelele.BorderThickness = new Thickness(0);
+			}
+            else
+            {
+				Label_MouseDown(sender, e);
+            }
 		}
 		
 		private void Label_MouseEnter(object sender, RoutedEventArgs e)
@@ -142,25 +150,37 @@ namespace LeHandUI
 				lelele.BorderThickness = new Thickness(0);
 			}
 		}
-		
+
 		private void Label_MouseDown(object sender, RoutedEventArgs e)
 		{
 			Label lelele = (Label)sender;
-			
+
 			lelele.Foreground = dark_blue;
 			lelele.Background = white;
 			lelele.BorderBrush = dark_blue;
 			lelele.BorderThickness = new Thickness(1);
 
-			for(int i; i < LuaFileView.Items.Count; i++)
-            {
-				//hj
-            }
+			LuaFileView.SelectedItem = lelele;
 
-			lelele.Focus();
+			//Checks the whole list of items in the file viewer, this is to fix this bug:
+			//-when you clicked on an item and then clicked another label, those two labels would both be styled as MouseDown (selected)
+			//this loop fixes it by applying the normal style to all objects that are not the selected nor the opened file
+			for (int i = 0; i < LuaFileView.Items.Count; i++)
+			{
+				if (LuaFileView.Items[i] != LuaFileView.SelectedItem)
+				{
+					if (i != FileManager.currentLoadedIndex)
+					{
+						Label bruhlabel = (Label)LuaFileView.Items[i];
+						bruhlabel.Foreground = off_white;
+						bruhlabel.Background = transparent;
+						bruhlabel.BorderThickness = new Thickness(0);
+					}
+				}
 
-			lastselectedLabel = lelele;
-		}
+				lastselectedLabel = lelele;
+				}
+			}	
 
 		private void Label_MouseLeave(object sender, RoutedEventArgs e)
 		{
