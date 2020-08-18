@@ -24,6 +24,8 @@ using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
 using ListBox = System.Windows.Controls.ListBox;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using MouseEventHandler = System.Windows.Input.MouseEventHandler;
 using TextBox = System.Windows.Controls.TextBox;
 
 /*COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
@@ -37,12 +39,16 @@ namespace LeHandUI
 	{
 		public static string[] fileNames = SimpleFileManager.FileNames();
 		public static List<TextBox> textBoxes = new List<TextBox>();
-		
-		SolidColorBrush transparent =	new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
-		SolidColorBrush off_white	=	new SolidColorBrush(Color.FromArgb(255,242,242,242));
-		SolidColorBrush white		=	new SolidColorBrush(Color.FromArgb(255,255,255,255));
-		SolidColorBrush black =			new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-		SolidColorBrush dark_blue	=	new SolidColorBrush(Color.FromArgb(178, 6, 84, 100));
+
+		static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
+		static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
+		static SolidColorBrush almostTransparentWhite = new SolidColorBrush(Color.FromArgb(80, 242, 242, 242));
+		static SolidColorBrush halfTransparentWhite = new SolidColorBrush(Color.FromArgb(140, 242, 242, 242));
+		static SolidColorBrush white = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+		static SolidColorBrush black = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+		static SolidColorBrush dark_blue = new SolidColorBrush(Color.FromArgb(255, 40, 120, 200));
+		static SolidColorBrush light_blue = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
+		static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
 
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
@@ -74,12 +80,22 @@ namespace LeHandUI
 
 			simpleModeFileListBox.ItemsSource = textBoxes;
 
-			/* //DATA FOR TEST FILES
+            /* //DATA FOR TEST FILES
 			FileData[] data = new FileData[6];
 			FileData[] newdata = new FileData[1];
 			newdata[0] = new FileData(0, 0.2, 0.8, 0, 30, 0);
 			SimpleFileManager.ChangeFile("kiekoek", newdata);
 			SimpleFileManager.ChangeFile("halloe", newdata);*/
+
+            //INITIALIZE THE TEXTBOXARRAY
+            for (int i = 0; i < fileNames.Length; i++)
+            {
+				TextBox txtbox = new TextBox();
+				StyleNonSelectedTextBox(txtbox);
+				txtbox.Text = fileNames[i];
+
+				textBoxes.Add(txtbox);
+            }
 
 			refreshFiles();
 
@@ -90,38 +106,78 @@ namespace LeHandUI
         #endregion
 
         private string prevname = "something wrong";
-        public void refreshFiles()
+
+
+		public void refreshFiles()
 		{
 			fileNames = null;
-			textBoxes.Clear();
+
+			textBoxes.Clear(); //NOW DISABLED TO IMPROVE EFFICIENCY BY ALTERING REFRESH FILE MECHANISM, ENABLE IF BUGGY (voor douwe ursingur)
+
 			//simpleModeFileListBox.Items.Clear();
 			fileNames = SimpleFileManager.FileNames();
 			for (int i = 0; i < fileNames.Length; i++)
 			{
 
-				var txtbox = new TextBox();
-				txtbox.IsReadOnly = true;
+				TextBox txtbox = new TextBox();
 				txtbox.Text = fileNames[i];
-				txtbox.Focusable = true;
 
-				txtbox.KeyDown += Txtbox_KeyDown;
-				txtbox.LostKeyboardFocus += Txtbox_LostKeyboardFocus;
-				txtbox.MouseDoubleClick += Txtbox_MouseDoubleClick;
-				txtbox.MouseDown += onListItemSelected;
-				txtbox.MouseLeave += onListItemLeave;
-				txtbox.TextChanged += onTextChanged;
+				StyleNonSelectedTextBox(txtbox);
 
-				txtbox.Cursor = Cursors.Arrow;
-
-				txtbox.Background = transparent;
-				txtbox.Foreground = off_white;
-				txtbox.BorderThickness = new Thickness(2);
-				txtbox.BorderBrush = transparent;
 				textBoxes.Add(txtbox);
-				
+
 			}
 			simpleModeFileListBox.Items.Refresh();
 		}
+
+
+		#region StyleFunctions
+
+		public void StyleNonSelectedTextBox(TextBox txtbox)
+        {
+			txtbox.IsReadOnly = true;
+			txtbox.Focusable = true;
+
+			//txtbox.Cursor = Cursors.Arrow;
+
+			txtbox.Background = transparent;
+			txtbox.Foreground = off_white;
+			txtbox.BorderThickness = new Thickness(0);
+			txtbox.BorderBrush = transparent;
+
+			txtbox.KeyDown += Txtbox_KeyDown;
+			txtbox.LostKeyboardFocus += Txtbox_LostKeyboardFocus;
+			txtbox.MouseDoubleClick += Txtbox_MouseDoubleClick;
+			txtbox.MouseDown += onListItemSelected;
+            txtbox.MouseEnter += TxtBox_MouseEnter;
+			txtbox.MouseLeave += onListItemLeave;
+			txtbox.TextChanged += onTextChanged;
+		}
+
+		public void styleMouseOverTextBox(TextBox txtbox)
+        {
+			txtbox.Cursor = Cursors.Hand;
+
+			txtbox.Background = almostTransparentWhite;
+			txtbox.Foreground = white;
+
+		}
+
+		public void StyleSelectedTextBox(TextBox txtbox)
+        {
+			txtbox.IsReadOnly = true;
+
+			txtbox.Background = halfTransparentWhite;
+			txtbox.Foreground = white;
+			txtbox.BorderThickness = new Thickness(0);
+			txtbox.BorderBrush = white;
+
+			txtbox.Cursor = Cursors.IBeam;
+		}
+
+		#endregion
+
+
 		public void saveRuleFromCurrentFile()
 		{
 			//get all rules from current file
@@ -130,25 +186,12 @@ namespace LeHandUI
 			{
 				IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
 			}
+
 			//fix the rest lazy piece of shit douwe
 
 		}
 
-		private void ApplyNameListBoxItem(object sender, RoutedEventArgs e)
-		{
-			//ItemCollection boxItemsshit = simpleModeFileListBox.Items;
-			//for (int index = 0; index < fileNames.Length; index++)
-			//{
-			//	//splits the given name (something like something.something.TextBox: name) and gets the actual name
-			//	string updatedName = (boxItemsshit[index].ToString()).Split(':')[1]; 
-
-			//	SimpleFileManager.ChangeName(fileNames[index], updatedName);
-			//}
-			//refreshFiles();
-
-			//MainWindow.inst.Focus();
-		}
-
+		
         #region Txtbox Handlers
         private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
@@ -162,41 +205,44 @@ namespace LeHandUI
 			lostfocus(sender);
 			
 		}
+
+		private void TxtBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+			TextBox txtbox = (TextBox)sender;
+
+        }
+
 		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 
 			TextBox txtbox = (TextBox)sender;
-			txtbox.IsReadOnly = false;
 			prevname = txtbox.Text;
 
-			TextBox listitem = (TextBox)sender;
-			listitem.Background = white;
-			listitem.Foreground = black;
-			listitem.BorderThickness = new Thickness(2);
-			listitem.BorderBrush = white;
-
-			listitem.Cursor = Cursors.IBeam;
+			StyleSelectedTextBox(txtbox);
 		}
-		private void lostfocus(object sender)
+
+		private void lostfocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
 		{
 			TextBox txtbox = (TextBox)sender;
-			txtbox.IsReadOnly = true;
 
-			TextBox listitem = (TextBox)sender;
-			listitem.Background = transparent;
-			listitem.Foreground = off_white;
-			listitem.BorderThickness = new Thickness(2);
-			listitem.BorderBrush = transparent;
+			if (txtbox != simpleModeFileListBox.SelectedItem) //werkt dit? geen flauw idee, vast wel
+			{
+				StyleNonSelectedTextBox(txtbox);
+			}
+            else
+            {
+				
+            }
 
 			int index = simpleModeFileListBox.Items.IndexOf(sender);
-			if (listitem.Text.Length > 1)
+			if (txtbox.Text.Length > 1)
 			{
-				SimpleFileManager.ChangeName(prevname, listitem.Text);
+				SimpleFileManager.ChangeName(prevname, txtbox.Text);
 				refreshFiles();
 			}
 			else
 			{
-				listitem.Text = prevname;
+				txtbox.Text = prevname;
 			}
 		}
         #endregion
@@ -215,22 +261,22 @@ namespace LeHandUI
 		}
 		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			UIElement UIE = (UIElement)sender;
-			UIE.Focus();
 			TextBox listitem = (TextBox)sender;
+			listitem.Focus();
+
 			listitem.Background			= dark_blue;
 			listitem.Foreground			= white;
-			listitem.BorderThickness	= new Thickness(2);
-			listitem.BorderBrush		= white;
+			listitem.BorderThickness	= new Thickness(0);
 
 		}
 		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			TextBox listitem = (TextBox)sender;
 			MainWindow.inst.Focus();
+
+			TextBox listitem = (TextBox)sender;
 			listitem.Background = transparent;
 			listitem.Foreground = off_white;
-			listitem.BorderThickness = new Thickness(2);
+			listitem.BorderThickness = new Thickness(0);
 			listitem.BorderBrush = transparent;
 		}
 		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -240,6 +286,7 @@ namespace LeHandUI
 		#endregion
 
 		#region Button Handlers
+
 		public int totaladdedfiles = 0;
         private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{

@@ -58,11 +58,12 @@ namespace LeHandUI
 		static SolidColorBrush transparent				= new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
 		static SolidColorBrush off_white				= new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
 		static SolidColorBrush almostTransparentWhite	= new SolidColorBrush(Color.FromArgb(80 , 242, 242, 242));
+		static SolidColorBrush halfTransparentWhite		= new SolidColorBrush(Color.FromArgb(140 , 242, 242, 242));
 		static SolidColorBrush white					= new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
 		static SolidColorBrush black					= new SolidColorBrush(Color.FromArgb(255,  0 ,  0 ,  0 ));
-		static SolidColorBrush dark_blue				= new SolidColorBrush(Color.FromArgb(180,  6 ,  84, 200));
-		static SolidColorBrush light_blue			    = new SolidColorBrush(Color.FromArgb(180, 110, 130, 255));
-		static SolidColorBrush vague_purple				= new SolidColorBrush(Color.FromArgb(255, 160, 110, 255)); //nice purple
+		static SolidColorBrush dark_blue				= new SolidColorBrush(Color.FromArgb(255,  40, 120, 200));
+		static SolidColorBrush light_blue			    = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
+		static SolidColorBrush vague_purple				= new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
 
 		public static AdvancedMode inst = null;
 		public static ListBox Listbox = null;
@@ -115,9 +116,9 @@ namespace LeHandUI
 		public static void styleOpenedFileLabel(Label label)
 		{
 			label.Foreground = white;
-			label.Background = light_blue;
+			label.Background = dark_blue;
 			label.BorderBrush = dark_blue;
-			label.BorderThickness = new Thickness(2);
+			label.BorderThickness = new Thickness(0);
 
 			/*label.GotFocus += inst.Label_GotFocus;
 			label.MouseEnter += inst.Label_MouseEnter;
@@ -155,10 +156,10 @@ namespace LeHandUI
 		{
 			Label lelele = (Label)sender;
 
-			lelele.Foreground = dark_blue;
-			lelele.Background = white;
-			lelele.BorderBrush = dark_blue;
-			lelele.BorderThickness = new Thickness(1);
+			lelele.Foreground = white;
+			lelele.Background = halfTransparentWhite;
+			lelele.BorderBrush = light_blue;
+			lelele.BorderThickness = new Thickness(0);
 
 			LuaFileView.SelectedItem = lelele;
 
