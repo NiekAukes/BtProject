@@ -200,9 +200,9 @@ namespace LeHandUI
 			txtbox.KeyDown += Txtbox_KeyDown;
 			txtbox.LostKeyboardFocus += Txtbox_LostKeyboardFocus;
 			txtbox.MouseDoubleClick += Txtbox_MouseDoubleClick;
-			txtbox.MouseDown += onListItemSelected;
+			txtbox.MouseDown += TxtBox_MouseDown;
             txtbox.MouseEnter += TxtBox_MouseEnter;
-			txtbox.MouseLeave += onListItemLeave;
+			txtbox.MouseLeave += TxtBox_MouseLeave;
 			txtbox.TextChanged += onTextChanged;
 		}
 
@@ -239,7 +239,7 @@ namespace LeHandUI
 
 		#endregion
 
-
+		//FIX SAVERULEFROMCURRENTFILE BITCHY BOI
 		public void saveRuleFromCurrentFile()
 		{
 			//get all rules from current file
@@ -272,7 +272,34 @@ namespace LeHandUI
         {
 			TextBox txtbox = (TextBox)sender;
 
+			if (txtbox != simpleModeFileListBox.SelectedItem)
+			{
+				styleMouseOverTextBox(txtbox);
+			}
         }
+
+		private void TxtBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			MainWindow.inst.Focus();
+
+			TextBox listitem = (TextBox)sender;
+			listitem.Background = transparent;
+			listitem.Foreground = off_white;
+			listitem.BorderThickness = new Thickness(0);
+			listitem.BorderBrush = transparent;
+		}
+
+		private void TxtBox_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			TextBox txtbox = (TextBox)sender;
+			txtbox.Focus();
+
+			if (sender == simpleModeFileListBox.SelectedItem)
+			{
+				StyleSelectedTextBox(txtbox);
+			}
+
+		}
 
 		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
@@ -280,7 +307,9 @@ namespace LeHandUI
 			TextBox txtbox = (TextBox)sender;
 			prevname = txtbox.Text;
 
+			//NOT IMPLEMENTED YET: if(txtbox == SimpleFileManager.CurrentSelectedIndex){
 			StyleSelectedTextBox(txtbox);
+			//}
 		}
 
 		private void lostfocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
@@ -291,26 +320,26 @@ namespace LeHandUI
 			{
 				StyleNonSelectedTextBox(txtbox);
 			}
-            else
-            {
-				
-            }
 
-			int index = simpleModeFileListBox.Items.IndexOf(sender);
 			if (txtbox.Text.Length > 1)
 			{
 				SimpleFileManager.ChangeName(prevname, txtbox.Text);
 				refreshFiles();
 			}
+
 			else
 			{
 				txtbox.Text = prevname;
+
+				int index = simpleModeFileListBox.Items.IndexOf(sender);
+				textBoxes.RemoveAt(index);
+				textBoxes.Insert(index, txtbox);
 			}
 		}
         #endregion
 
         #region ListBox Handlers
-        private void onTextChanged(object sender, TextChangedEventArgs e)
+        private void onTextChanged(object sender, TextChangedEventArgs e) //help
 		{
 			/*TextBox listitem = (TextBox)sender;
 			int index = simpleModeFileListBox.SelectedIndex;
@@ -321,26 +350,8 @@ namespace LeHandUI
 				dosumShit(sender);
 			}*/
 		}
-		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			TextBox listitem = (TextBox)sender;
-			listitem.Focus();
-
-			listitem.Background			= dark_blue;
-			listitem.Foreground			= white;
-			listitem.BorderThickness	= new Thickness(0);
-
-		}
-		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			MainWindow.inst.Focus();
-
-			TextBox listitem = (TextBox)sender;
-			listitem.Background = transparent;
-			listitem.Foreground = off_white;
-			listitem.BorderThickness = new Thickness(0);
-			listitem.BorderBrush = transparent;
-		}
+		
+		
 		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			saveRuleFromCurrentFile();
