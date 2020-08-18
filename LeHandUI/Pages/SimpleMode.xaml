@@ -46,7 +46,7 @@
 
         <ListBox x:Name="simpleModeFileListBox" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Padding="5"
                  Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch"
-                 SelectedItem="{Binding SelectedIdInListBox,Mode=OneWayToSource}" Focusable="True"
+                 SelectedItem="{Binding SelectedIdInListBox,Mode=OneWayToSource}" Focusable="True" SelectionChanged="ListBox_SelectionChanged"
                  >
         </ListBox>
 
