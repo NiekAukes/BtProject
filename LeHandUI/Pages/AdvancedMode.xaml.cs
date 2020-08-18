@@ -53,6 +53,7 @@ namespace LeHandUI
 
 		}
 	}
+
 	public partial class AdvancedMode: System.Windows.Controls.UserControl
 	{
 		static SolidColorBrush transparent				= new SolidColorBrush(Color.FromArgb( 0 , 100, 100, 100));
@@ -65,7 +66,7 @@ namespace LeHandUI
 		static SolidColorBrush light_blue			    = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
 		static SolidColorBrush vague_purple				= new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
 
-		public static AdvancedMode inst = null;
+		public static AdvancedMode inst = null; //so that we can use inst.LuaFileView and such
 		public static ListBox Listbox = null;
 		public static int SelectedItemIndex = -1;
 		public static bool hasRefreshOccurredWithinSeconds = false;
@@ -88,11 +89,7 @@ namespace LeHandUI
 		}
 		#endregion
 
-		//Niek heeft al mooi een functie gemaakt die een string[] returnt met alle paths
-		//DRIE FUNCTIES: ADD / REFERENCE FILE, REMOVE FILE, REFRESH FILES
-		//List<string> LuaNames = new List<string>();
-
-		#region BUTTON_HANDLERS
+		#region BUTTON_HANDLERS + LABEL STYLES
 		Label lastselectedLabel;
 
 		private void LuaFileView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -193,7 +190,6 @@ namespace LeHandUI
 				lelele.BorderThickness = new Thickness(0);
             }
 		}
-
 
 		#endregion
 
@@ -505,8 +501,10 @@ namespace LeHandUI
 		public AdvancedMode()
         {
 			InitializeComponent();
+
             LuaFileView.SelectionChanged += LuaFileView_SelectionChanged;
 			FileManager.LoadAllFiles();
+
 			inst = this;
 			Focusable = true;
 

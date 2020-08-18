@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
+using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using MouseEventHandler = System.Windows.Input.MouseEventHandler;
@@ -68,7 +70,7 @@ namespace LeHandUI
 		}
         #endregion
 
-        #region initialisation
+        #region Construction/Initialisation
         public SimpleMode()
 		{
 			InitializeComponent();
@@ -87,7 +89,7 @@ namespace LeHandUI
 			SimpleFileManager.ChangeFile("kiekoek", newdata);
 			SimpleFileManager.ChangeFile("halloe", newdata);*/
 
-            //INITIALIZE THE TEXTBOXARRAY
+            //INITIALIZE THE TEXTBOXARRAY, adds all textboxes of files to the textBoxes array so that we can check for not changed files and shit
             for (int i = 0; i < fileNames.Length; i++)
             {
 				TextBox txtbox = new TextBox();
@@ -111,24 +113,74 @@ namespace LeHandUI
 		public void refreshFiles()
 		{
 			fileNames = null;
+			fileNames = SimpleFileManager.FileNames();	//returns all "Simple" file names by splitting the name in the '.' 
+														//thus only getting the name, not the extension (ex: .lua gets deleted)
 
-			textBoxes.Clear(); //NOW DISABLED TO IMPROVE EFFICIENCY BY ALTERING REFRESH FILE MECHANISM, ENABLE IF BUGGY (voor douwe ursingur)
+			//NIEK MOET DIT NOG GAAN IMPLEMENTEREN
+			int currOpenedRuleSet = -1;//SimpleFileManager.currentLoadedIndex DOES NOT EXIST YET
 
-			//simpleModeFileListBox.Items.Clear();
-			fileNames = SimpleFileManager.FileNames();
 			for (int i = 0; i < fileNames.Length; i++)
 			{
+				if(textBoxes[i] != null || textBoxes[i].Text == fileNames[i])
+				{
+					continue;
+				}
+                else
+                {
+					TextBox txtbox = new TextBox();
+					txtbox.Name = "txtbx " + i.ToString();
+					txtbox.Text = fileNames[i];
 
-				TextBox txtbox = new TextBox();
-				txtbox.Text = fileNames[i];
+					if (currOpenedRuleSet == i)	{
+						StyleOpenedTextBox(txtbox);
+					}
 
-				StyleNonSelectedTextBox(txtbox);
+					else{
+						StyleNonSelectedTextBox(txtbox);
+					}
 
-				textBoxes.Add(txtbox);
+					textBoxes.RemoveAt(i);
+					textBoxes.Insert(i, txtbox);
 
+				}
 			}
+
 			simpleModeFileListBox.Items.Refresh();
 		}
+		/* HERE FOR REWRITING PURPOSES
+		private void RefreshLuaScript()
+		{
+			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
+			int currOpenedFileId = FileManager.currentLoadedIndex;
+
+			for (int i = 0; i < LuaNames.Count; i++)
+			{
+				Label currLuaFileViewLabel = (Label)(LuaFileView.Items[i]);
+
+				if (LuaNames[i] == (string)currLuaFileViewLabel.Content)
+				{
+					continue;
+				}
+				else
+				{
+					Label label = new Label();
+					label.Name = "TxtBox" + i.ToString();
+					label.Content = LHregistry.getSimpleName(LuaNames[i]);
+
+					if (currOpenedFileId == i)
+					{
+						styleOpenedFileLabel(label);
+					}
+					else
+					{
+						styleLabel(label);
+					}
+					LuaFileView.Items.RemoveAt(i);
+					LuaFileView.Items.Insert(i, label);
+				}
+			}
+			LuaFileView.Items.Refresh();
+		}*/
 
 
 		#region StyleFunctions
@@ -173,6 +225,16 @@ namespace LeHandUI
 			txtbox.BorderBrush = white;
 
 			txtbox.Cursor = Cursors.IBeam;
+		}
+
+		public void StyleOpenedTextBox(TextBox txtbox)
+        {
+			txtbox.IsReadOnly = true;
+
+			txtbox.Foreground = white;
+			txtbox.Background = dark_blue;
+			txtbox.BorderBrush = dark_blue;
+			txtbox.BorderThickness = new Thickness(0);
 		}
 
 		#endregion
