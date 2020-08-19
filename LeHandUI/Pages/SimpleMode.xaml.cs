@@ -1,34 +1,19 @@
-﻿using LeHandUI.Properties;
-using Microsoft.TeamFoundation.Server;
-using Microsoft.VisualStudio.Services.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
 using Label = System.Windows.Controls.Label;
-using ListBox = System.Windows.Controls.ListBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-using MouseEventHandler = System.Windows.Input.MouseEventHandler;
-using TextBox = System.Windows.Controls.TextBox;
 
 /*COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
                    (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
@@ -37,10 +22,10 @@ using TextBox = System.Windows.Controls.TextBox;
 
 namespace LeHandUI
 {
-	public partial class SimpleMode : System.Windows.Controls.UserControl
+    public partial class SimpleMode : System.Windows.Controls.UserControl
 	{
 		public static string[] fileNames = SimpleFileManager.FileNames();
-		public static List<TextBox> textBoxes = new List<TextBox>();
+		public static List<UIElement> listBoxUIElemtents = new List<UIElement>();
 
 		static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
 		static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
@@ -80,7 +65,7 @@ namespace LeHandUI
 			addRuleImage.Source		=	ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
 			removeRuleImage.Source	=	ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
 
-			simpleModeFileListBox.ItemsSource = textBoxes;
+			simpleModeFileListBox.ItemsSource = listBoxUIElemtents;
 
             /* //DATA FOR TEST FILES
 			FileData[] data = new FileData[6];
@@ -92,11 +77,11 @@ namespace LeHandUI
             //INITIALIZE THE TEXTBOXARRAY, adds all textboxes of files to the textBoxes array so that we can check for not changed files and shit
             for (int i = 0; i < fileNames.Length; i++)
             {
-				TextBox txtbox = new TextBox();
-				StyleNonSelectedTextBox(txtbox);
-				txtbox.Text = fileNames[i];
+				Label lbl = new Label();
+				StyleNonSelectedLabel(lbl);
+				lbl.Content = fileNames[i];
 
-				textBoxes.Add(txtbox);
+				listBoxUIElemtents.Add(lbl);
             }
 
 			refreshFiles();
@@ -117,31 +102,57 @@ namespace LeHandUI
 														//thus only getting the name, not the extension (ex: .lua gets deleted)
 
 			//NIEK MOET DIT NOG GAAN IMPLEMENTEREN
-			int currOpenedRuleSet = -1;//SimpleFileManager.currentLoadedIndex DOES NOT EXIST YET
+			int currentOpenedFile = -1;//SimpleFileManager.currentLoadedIndex DOES NOT EXIST YET
 
 			for (int i = 0; i < fileNames.Length; i++)
 			{
-				if(textBoxes[i] != null || textBoxes[i].Text == fileNames[i])
-				{
-					continue;
-				}
-                else
+				TextBox listboxTextBox = null;
+				Label listboxLabel = null;
+
+				while(listBoxUIElemtents.Count < fileNames.Length) //to make the length of both arrays identical (well not arrays, a list and an array but fuck it)
                 {
-					TextBox txtbox = new TextBox();
-					txtbox.Name = "txtbx " + i.ToString();
-					txtbox.Text = fileNames[i];
+					Label newemptylabel = new Label();
+					listBoxUIElemtents.Add(newemptylabel);
+                }
 
-					if (currOpenedRuleSet == i)	{
-						StyleOpenedTextBox(txtbox);
+				if (listBoxUIElemtents[i] != null) {
+					try
+					{
+						listboxLabel = (Label)listBoxUIElemtents[i];
 					}
-
-					else{
-						StyleNonSelectedTextBox(txtbox);
+					catch (Exception e) {
+						listboxTextBox = (TextBox)listBoxUIElemtents[i];
+						Debug.WriteLine("Caught exception (file is textbox, not label): " + e);
 					}
+				}
 
-					textBoxes.RemoveAt(i);
-					textBoxes.Insert(i, txtbox);
+				if (listboxTextBox != null || listboxLabel != null)
+				{
+					
+					if (listBoxUIElemtents[i] != null || (String)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
+					{
+						continue;
+					}
+					else
+					{
+						Label lbl = new Label();
+						lbl.Name = "txtbx " + i.ToString();
+						lbl.Content = fileNames[i];
 
+						if (currentOpenedFile == i)
+						{
+							StyleOpenedLabel(lbl);
+						}
+
+						else
+						{
+							StyleNonSelectedLabel(lbl);
+						}
+
+						listBoxUIElemtents.RemoveAt(i);
+						listBoxUIElemtents.Insert(i, lbl);
+
+					}
 				}
 			}
 
@@ -185,56 +196,54 @@ namespace LeHandUI
 
 		#region StyleFunctions
 
-		public void StyleNonSelectedTextBox(TextBox txtbox)
+		public void StyleNonSelectedLabel(Label lbl)
         {
-			txtbox.IsReadOnly = true;
-			txtbox.Focusable = true;
+			lbl.Focusable = true;
 
 			//txtbox.Cursor = Cursors.Arrow;
 
-			txtbox.Background = transparent;
-			txtbox.Foreground = off_white;
-			txtbox.BorderThickness = new Thickness(0);
-			txtbox.BorderBrush = transparent;
+			lbl.Background = transparent;
+			lbl.Foreground = off_white;
+			lbl.BorderThickness = new Thickness(0);
+			lbl.BorderBrush = transparent;
 
-			txtbox.KeyDown += Txtbox_KeyDown;
-			txtbox.LostKeyboardFocus += Txtbox_LostKeyboardFocus;
-			txtbox.MouseDoubleClick += Txtbox_MouseDoubleClick;
-			txtbox.MouseDown += TxtBox_MouseDown;
-            txtbox.MouseEnter += TxtBox_MouseEnter;
-			txtbox.MouseLeave += TxtBox_MouseLeave;
-			txtbox.TextChanged += onTextChanged;
+			lbl.KeyDown += Lbl_KeyDown;
+			lbl.LostKeyboardFocus += Lbl_LostKeyboardFocus;
+			lbl.MouseDoubleClick += Txtbox_MouseDoubleClick;
+			lbl.MouseDown += Lbl_MouseDown;
+            lbl.MouseEnter += Lbl_MouseEnter;
+			lbl.MouseLeave += Lbl_MouseLeave;
 		}
 
-		public void styleMouseOverTextBox(TextBox txtbox)
+		public void styleMouseOverLabel(Label lbl)
         {
-			txtbox.Cursor = Cursors.Hand;
+			lbl.Cursor = Cursors.Hand;
 
-			txtbox.Background = almostTransparentWhite;
-			txtbox.Foreground = white;
+			lbl.Background = almostTransparentWhite;
+			lbl.Foreground = white;
 
 		}
 
-		public void StyleSelectedTextBox(TextBox txtbox)
+		public void StyleSelectedLabel(Label lbl)
         {
-			txtbox.IsReadOnly = true;
-
-			txtbox.Background = halfTransparentWhite;
-			txtbox.Foreground = white;
-			txtbox.BorderThickness = new Thickness(0);
-			txtbox.BorderBrush = white;
-
-			txtbox.Cursor = Cursors.IBeam;
+			lbl.Cursor = Cursors.Hand;
+			if (lbl == simpleModeFileListBox.SelectedItem)
+			{
+				lbl.Background = halfTransparentWhite;
+				lbl.Foreground = white;
+				lbl.BorderThickness = new Thickness(0);
+				lbl.BorderBrush = white;
+			}
 		}
 
-		public void StyleOpenedTextBox(TextBox txtbox)
+		public void StyleOpenedLabel(Label lbl)
         {
-			txtbox.IsReadOnly = true;
+			lbl.Cursor = Cursors.Hand;
 
-			txtbox.Foreground = white;
-			txtbox.Background = dark_blue;
-			txtbox.BorderBrush = dark_blue;
-			txtbox.BorderThickness = new Thickness(0);
+			lbl.Foreground = white;
+			lbl.Background = dark_blue;
+			lbl.BorderBrush = dark_blue;
+			lbl.BorderThickness = new Thickness(0);
 		}
 
 		#endregion
@@ -254,86 +263,101 @@ namespace LeHandUI
 		}
 
 		
-        #region Txtbox Handlers
-        private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        #region Label Handlers
+        private void Lbl_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
 			{
 				lostfocus(sender);
 			}
 		}
-		private void Txtbox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+		private void Lbl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
 		{
 			lostfocus(sender);
 			
 		}
 
-		private void TxtBox_MouseEnter(object sender, MouseEventArgs e)
+		private void Lbl_MouseEnter(object sender, MouseEventArgs e)
         {
-			TextBox txtbox = (TextBox)sender;
+			Label lbl = (Label)sender;
 
-			if (txtbox != simpleModeFileListBox.SelectedItem)
+			if (lbl != simpleModeFileListBox.SelectedItem)
 			{
-				styleMouseOverTextBox(txtbox);
+				styleMouseOverLabel(lbl);
 			}
         }
 
-		private void TxtBox_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		private void Lbl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			MainWindow.inst.Focus();
 
-			TextBox listitem = (TextBox)sender;
-			listitem.Background = transparent;
-			listitem.Foreground = off_white;
-			listitem.BorderThickness = new Thickness(0);
-			listitem.BorderBrush = transparent;
+			if (sender != simpleModeFileListBox.SelectedItem)
+			{
+				Label lbl = (Label)sender;
+				lbl.Background = transparent;
+				lbl.Foreground = off_white;
+				lbl.BorderThickness = new Thickness(0);
+				lbl.BorderBrush = transparent;
+			}
+
 		}
 
-		private void TxtBox_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
+		int lblindex;
+		private void Lbl_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			TextBox txtbox = (TextBox)sender;
-			txtbox.Focus();
+			Label lbl = (Label)sender;
 
-			if (sender == simpleModeFileListBox.SelectedItem)
+			for(int i = 0; i < simpleModeFileListBox.Items.Count; i++)
+            {
+				if((Label)sender == (Label)simpleModeFileListBox.Items[i]) //(Label)simpleModeFileListBox.Items[i]
+				{
+					lblindex = i;
+                }
+            }
+			if (lblindex == simpleModeFileListBox.SelectedIndex)
 			{
-				StyleSelectedTextBox(txtbox);
+				StyleSelectedLabel(lbl);
 			}
+            else
+            {
+				StyleNonSelectedLabel(lbl);
+            }
 
 		}
 
 		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 
-			TextBox txtbox = (TextBox)sender;
-			prevname = txtbox.Text;
+			Label lbl = (Label)sender;
+			prevname = (string)lbl.Content;
 
 			//NOT IMPLEMENTED YET: if(txtbox == SimpleFileManager.CurrentSelectedIndex){
-			StyleSelectedTextBox(txtbox);
+			StyleSelectedLabel(lbl);
 			//}
 		}
 
 		private void lostfocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
 		{
-			TextBox txtbox = (TextBox)sender;
+			Label lbl = (Label)sender;
 
-			if (txtbox != simpleModeFileListBox.SelectedItem) //werkt dit? geen flauw idee, vast wel
+			if (lbl != simpleModeFileListBox.SelectedItem) //werkt dit? geen flauw idee, vast wel
 			{
-				StyleNonSelectedTextBox(txtbox);
+				StyleNonSelectedLabel(lbl);
 			}
 
-			if (txtbox.Text.Length > 1)
+			if (((string)(lbl.Content)).Length > 1)
 			{
-				SimpleFileManager.ChangeName(prevname, txtbox.Text);
+				SimpleFileManager.ChangeName(prevname, (string)lbl.Content);
 				refreshFiles();
 			}
 
 			else
 			{
-				txtbox.Text = prevname;
+				lbl.Content = prevname;
 
 				int index = simpleModeFileListBox.Items.IndexOf(sender);
-				textBoxes.RemoveAt(index);
-				textBoxes.Insert(index, txtbox);
+				listBoxUIElemtents.RemoveAt(index);
+				listBoxUIElemtents.Insert(index, lbl);
 			}
 		}
         #endregion
@@ -345,7 +369,7 @@ namespace LeHandUI
 			int index = simpleModeFileListBox.SelectedIndex;
 			if (index != -1)
 			{
-				SimpleFileManager.ChangeName(fileNames[index], listitem.Text);
+				SimpleFileManager.ChangeName(fileNames[index], listitem.Content);
 				refreshFiles();
 				dosumShit(sender);
 			}*/
@@ -356,23 +380,23 @@ namespace LeHandUI
 		{
 			saveRuleFromCurrentFile();
 
-			TextBox selectedTxtbox = (TextBox)simpleModeFileListBox.SelectedItem;
+			Label selectedLbl = (Label)simpleModeFileListBox.SelectedItem;
 			int selectedIndex = simpleModeFileListBox.SelectedIndex;
 
 			for(int i = 0; i < simpleModeFileListBox.Items.Count; i++)
             {
 				if(i == selectedIndex)
                 {
-					textBoxes.RemoveAt(i);
-					StyleSelectedTextBox(selectedTxtbox);
-					textBoxes.Insert(i, selectedTxtbox);
+					listBoxUIElemtents.RemoveAt(i);
+					StyleSelectedLabel(selectedLbl);
+					listBoxUIElemtents.Insert(i, selectedLbl);
                 }
                 else
                 {
-					TextBox bruhbox = textBoxes[i];
-					StyleNonSelectedTextBox(bruhbox);
-					textBoxes.RemoveAt(i);
-					textBoxes.Insert(i, bruhbox);
+					Label bruhbox = (Label)listBoxUIElemtents[i];
+					StyleNonSelectedLabel(bruhbox);
+					listBoxUIElemtents.RemoveAt(i);
+					listBoxUIElemtents.Insert(i, bruhbox);
                 }
             }
 		}
@@ -391,7 +415,6 @@ namespace LeHandUI
 
 			refreshFiles();
 			saveRuleFromCurrentFile();
-			simpleModeFileListBox.Focus();
 		}
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
 		{

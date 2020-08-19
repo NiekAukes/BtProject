@@ -35,7 +35,7 @@
         </DockPanel>
 
         <Slider x:Name="lowerSlider" Grid.Row="1" Grid.Column="3" Margin="10,5,10,0" Panel.ZIndex="1" Opacity="1" VerticalAlignment="Center" OverridesDefaultStyle="False"
-          Minimum="{Binding ElementName=LeHandUI, Path=Minimum}" ToolTip="{Binding ElementName=lowerSlider, Path=Value}"
+          Minimum="{Binding ElementName=LeHandUI, Path=Minimum}" ToolTip="{Binding ElementName=lowerSlider, Path=Value, StringFormat='P2'}"
           Maximum="{Binding ElementName=LeHandUI, Path=Maximum}"
           Value="{Binding ElementName=LeHandUI, Path=LowerValue, Mode=TwoWay}"
           IsSnapToTickEnabled="{Binding ElementName=LeHandUI, Path=IsSnapToTickEnabled}"
