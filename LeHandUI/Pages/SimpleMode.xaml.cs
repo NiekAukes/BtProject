@@ -355,6 +355,26 @@ namespace LeHandUI
 		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			saveRuleFromCurrentFile();
+
+			TextBox selectedTxtbox = (TextBox)simpleModeFileListBox.SelectedItem;
+			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+
+			for(int i = 0; i < simpleModeFileListBox.Items.Count; i++)
+            {
+				if(i == selectedIndex)
+                {
+					textBoxes.RemoveAt(i);
+					StyleSelectedTextBox(selectedTxtbox);
+					textBoxes.Insert(i, selectedTxtbox);
+                }
+                else
+                {
+					TextBox bruhbox = textBoxes[i];
+					StyleNonSelectedTextBox(bruhbox);
+					textBoxes.RemoveAt(i);
+					textBoxes.Insert(i, bruhbox);
+                }
+            }
 		}
 		#endregion
 
