@@ -207,12 +207,11 @@ namespace LeHandUI
 			lbl.BorderThickness = new Thickness(0);
 			lbl.BorderBrush = transparent;
 
-			lbl.KeyDown += Lbl_KeyDown;
-			lbl.LostKeyboardFocus += Lbl_LostKeyboardFocus;
-			lbl.MouseDoubleClick += Txtbox_MouseDoubleClick;
-			lbl.MouseDown += Lbl_MouseDown;
-            lbl.MouseEnter += Lbl_MouseEnter;
-			lbl.MouseLeave += Lbl_MouseLeave;
+			lbl.KeyDown				+= Lbl_KeyDown;
+			lbl.LostKeyboardFocus	+= Lbl_LostKeyboardFocus;
+			lbl.MouseDown			+= Lbl_MouseDown;
+            lbl.MouseEnter			+= Lbl_MouseEnter;
+			lbl.MouseLeave			+= Lbl_MouseLeave;
 		}
 
 		public void styleMouseOverLabel(Label lbl)
@@ -306,7 +305,6 @@ namespace LeHandUI
 		private void Lbl_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			Label lbl = (Label)sender;
-
 			for(int i = 0; i < simpleModeFileListBox.Items.Count; i++)
             {
 				if((Label)sender == (Label)simpleModeFileListBox.Items[i]) //(Label)simpleModeFileListBox.Items[i]
@@ -323,17 +321,8 @@ namespace LeHandUI
 				StyleNonSelectedLabel(lbl);
             }
 
-		}
+			//Open the file:
 
-		private void Txtbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-
-			Label lbl = (Label)sender;
-			prevname = (string)lbl.Content;
-
-			//NOT IMPLEMENTED YET: if(txtbox == SimpleFileManager.CurrentSelectedIndex){
-			StyleSelectedLabel(lbl);
-			//}
 		}
 
 		private void lostfocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
@@ -428,12 +417,18 @@ namespace LeHandUI
 
 		private void addRuleButton_Click(object sender, RoutedEventArgs e)
 		{
-			//add a rule to the ruleset file:
-			//naam character: 0x00 + character voor variabele + 2 doubles + character voor action id + 2 keer 4 bytes voor args
-			//voorbeeld: 0x01 (als variabele in deze range zit) + 0x01 (één v.d. vingers, xyz as van acceleratie of rotatie) + 0x03 (...) + arg1 t/m arg4
-			//voorbeeld: 0x01 0x01 0x03 0x45 0x74 0x19 0x20
+            //add a rule to the ruleset file:
+            //naam character: 0x00 + character voor variabele + 2 doubles + character voor action id + 2 keer 4 bytes voor args
+            //voorbeeld: 0x01 (als variabele in deze range zit) + 0x01 (één v.d. vingers, xyz as van acceleratie of rotatie) + 0x03 (...) + arg1 t/m arg4
+            //voorbeeld: 0x01 0x01 0x03 0x45 0x74 0x19 0x20
 
-			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+            //Moet een usercontrol invoegen (simplemodeparametereditor.xaml) aan de stackpanel in simplemode
+            //moet naam geven denk ik
+            List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
+
+			int selectedIndex = simpleModeFileListBox.SelectedIndex; //loopen door de filedata en alles in parameter editor ui zetten
+			 SimpleFileManager.GetFileData(selectedIndex);
+
 
 			saveRuleFromCurrentFile();
 		}
