@@ -27,6 +27,34 @@ namespace LeHandUI
             arg1 = a1;
             arg2 = a2;
         }
+        public simpleModeParameterEditor toSMPE()
+        {
+            simpleModeParameterEditor ret = new simpleModeParameterEditor();
+            ret.varChooser.SelectedIndex = variable;
+            ret.upperSlider.Value = endRange;
+            ret.lowerSlider.Value = endRange;
+            ret.actionChooser.SelectedIndex = actionId;
+            ByteConverter bc = new ByteConverter();
+            switch(actionId)
+            {
+                case 0:
+                    object dat = arg1;
+                    ret.KeyPressChooser.Text = ((char)dat).ToString();
+                    break;
+                //still todo
+
+                //case 1:
+                //    object dat = arg1;
+                //    ret.MousePressChooser.
+                //    break;
+                case 2:
+                    ret.MouseMoveBox1.Text = BitConverter.Int64BitsToDouble(arg1).ToString();
+                    ret.MouseMoveBox2.Text = BitConverter.Int64BitsToDouble(arg2).ToString();
+                    break;
+
+
+            }
+        }
         public Logic toLogic()
         {
             Logic logic = new Logic();

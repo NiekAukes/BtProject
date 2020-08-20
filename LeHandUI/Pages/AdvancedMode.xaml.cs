@@ -124,6 +124,7 @@ namespace LeHandUI
 
 		private void Label_GotFocus(object sender, RoutedEventArgs e)
 		{
+			//fucking douwe
 			Label lelele = (Label)sender;
 			if (lelele != LuaFileView.SelectedItem)
 			{
@@ -509,6 +510,7 @@ namespace LeHandUI
 			Focusable = true;
 
 			StartupValues val = LHregistry.GetStartupValues();
+			SimpleMode.LastFileOpened = val.LastSimpleFileSelected;
 			textEditor.FontSize = val.StartFontSize;
 			textEditor.Text = "function Start()\n	print(\"preview\")\nend\n\n\n\n\n\n\n\n";
 			LoadFileFromId(val.StartupFileId);

@@ -240,22 +240,42 @@ namespace LeHandUI
 		#endregion
 
 
-		public void saveRuleFromCurrentFile()
+		public void saveCurrentFile(string name)
 		{
 			//get all rules from current file
 			int selectedIndex = simpleModeFileListBox.SelectedIndex;
 			if (selectedIndex != -1)
 			{
-				IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
+				//IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
+				IList<FileData> dat = new List<FileData>();
+
+				SimpleFileManager.ChangeFile(name, dat);
+			}
+
+			//fix the rest lazy piece of shit douwe
+
+		}
+		public void saveCurrentFile()
+		{
+			//get all rules from current file
+			int selectedIndex = simpleModeFileListBox.SelectedIndex;
+			if (selectedIndex != -1)
+			{
+				//IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
+				IList<FileData> dat = new List<FileData>();
+
+				//simpleModeParameterEditor[] smpe = 
+
+				SimpleFileManager.ChangeFile((string)((Label)(simpleModeFileListBox.SelectedItem)).Content, dat);
 			}
 
 			//fix the rest lazy piece of shit douwe
 
 		}
 
-		
-        #region Txtbox Handlers
-        private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+
+		#region Txtbox Handlers
+		private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
 			{
@@ -307,9 +327,10 @@ namespace LeHandUI
 				txtbox.Text = prevname;
 			}
 		}
-        #endregion
+		#endregion
 
-        #region ListBox Handlers
+		#region ListBox Handlers
+		public static int LastFileOpened = 0xFFFF;
         private void onTextChanged(object sender, TextChangedEventArgs e)
 		{
 			/*TextBox listitem = (TextBox)sender;
@@ -341,10 +362,6 @@ namespace LeHandUI
 			listitem.BorderThickness = new Thickness(0);
 			listitem.BorderBrush = transparent;
 		}
-		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			saveRuleFromCurrentFile();
-		}
 		#endregion
 
 		#region Button Handlers
@@ -359,7 +376,8 @@ namespace LeHandUI
 			totaladdedfiles++;
 
 			refreshFiles();
-			saveRuleFromCurrentFile();
+			saveCurrentFile();
+			//was zum fuck
 			simpleModeFileListBox.Focus();
 		}
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
@@ -381,13 +399,13 @@ namespace LeHandUI
 
 			int selectedIndex = simpleModeFileListBox.SelectedIndex;
 
-			saveRuleFromCurrentFile();
+			saveCurrentFile();
 		}
 		private void removeRuleButton_Click(object sender, RoutedEventArgs e)
 		{
 			//remove the shit above
 
-			saveRuleFromCurrentFile();
+			saveCurrentFile();
 		}
 		#endregion
 
@@ -397,6 +415,10 @@ namespace LeHandUI
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		
+		private void simpleModeFileListBox_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			saveCurrentFile();
+
+		}
 	}
 }

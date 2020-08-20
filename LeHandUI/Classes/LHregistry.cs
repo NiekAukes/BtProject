@@ -17,11 +17,13 @@ namespace LeHandUI
         {
             "FontSize",
             "StartupFile",
-            "ShowLineNumbers"
+            "ShowLineNumbers",
+            "SelectedSimpleFile"
         };
         public int StartFontSize;
         public int StartupFileId;
         public int ShowLineNumbers;
+        public int LastSimpleFileSelected;
     }
     public class LHregistry
     {
@@ -48,6 +50,8 @@ namespace LeHandUI
                     values.StartupFileId = (int)rk.GetValue(names[i]);
                 if (names[i] == StartupValues.keynames[2])
                     values.ShowLineNumbers = (int)rk.GetValue(names[i]);
+                if (names[i] == StartupValues.keynames[3])
+                    values.LastSimpleFileSelected = (int)rk.GetValue(names[i]);
             }
 
             return values;
