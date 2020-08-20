@@ -112,10 +112,15 @@ namespace LeHandUI
 
         private void control_loaded(object sender, RoutedEventArgs e)
         {
-            lowerSlider.Minimum = 0;                upperSlider.Minimum = 0;
-            lowerSlider.Maximum = 100;              upperSlider.Maximum = 100;
-            lowerSlider.TickFrequency = 2;          upperSlider.TickFrequency = 2;
-            lowerSlider.IsSnapToTickEnabled = true; upperSlider.IsSnapToTickEnabled = true;
+            lowerSlider.Minimum = 0;                                upperSlider.Minimum = 0;
+            lowerSlider.Maximum = 100;                              upperSlider.Maximum = 100;
+            lowerSlider.TickFrequency = 2;                          upperSlider.TickFrequency = 2;
+            lowerSlider.TickPlacement = TickPlacement.None;  upperSlider.TickPlacement = TickPlacement.None;
+            lowerSlider.IsSnapToTickEnabled = true;                 upperSlider.IsSnapToTickEnabled = true;
+            lowerSlider.SmallChange = 1;                            upperSlider.SmallChange = 1;
+            lowerSlider.LargeChange = 0;                            upperSlider.LargeChange = 0;
+            lowerSlider.IsMoveToPointEnabled = false;               upperSlider.IsMoveToPointEnabled = false;
+
 
             lowerSlider.Value = 20;
             upperSlider.Value = 80;

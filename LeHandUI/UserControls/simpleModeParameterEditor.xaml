@@ -3,16 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LeHandUI"
+             
              mc:Ignorable="d" Foreground="#FFF2F2F2" Background="Transparent"
              FontFamily="Futura Lt BT" FontSize="16" BorderBrush="#F2F2F2" BorderThickness="1"
              d:DesignHeight="70" d:DesignWidth="550" Loaded="control_loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="7*" MinWidth="50"/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="11*" MinWidth="50"/>
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -34,33 +34,45 @@
                       x:Name="varChooser" HorizontalAlignment="Stretch" />
         </DockPanel>
 
-        <Slider x:Name="lowerSlider" Grid.Row="1" Grid.Column="3" Margin="10,5,10,0" Panel.ZIndex="1" Opacity="1" VerticalAlignment="Center" OverridesDefaultStyle="False"
-          Minimum="{Binding ElementName=LeHandUI, Path=Minimum}" ToolTip="{Binding ElementName=lowerSlider, Path=Value}"
-          Maximum="{Binding ElementName=LeHandUI, Path=Maximum}"
-          Value="{Binding ElementName=LeHandUI, Path=LowerValue, Mode=TwoWay}"
-          IsSnapToTickEnabled="{Binding ElementName=LeHandUI, Path=IsSnapToTickEnabled}"
-          TickFrequency="{Binding ElementName=LeHandUI, Path=TickFrequency}"
-          TickPlacement="BottomRight" ValueChanged="valueofsliderChanged"
-          Ticks="{Binding ElementName=LeHandUI, Path=Ticks}"
-         >
-            <Slider.Resources>
-                <SolidColorBrush x:Key="SliderSelectionBackground" Color="#212121" />
-                <SolidColorBrush x:Key="SliderSelectionBorder" Color="#F2F2F2" />
-                <SolidColorBrush x:Key="SliderThumbBackground" Color="#FFFFFF" />
-                <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="DarkOliveGreen" />
-                <SolidColorBrush x:Key="SliderThumbBackgroundDragging" Color="#34acbc" />
-                <SolidColorBrush x:Key="SliderThumbBackgroundHover" Color="#FFFFFF" />
-                <SolidColorBrush x:Key="SliderThumbBorder" Color="#000000" />
-                <SolidColorBrush x:Key="SliderThumbBorderDisabled" Color="#3c3c3c" />
-                <SolidColorBrush x:Key="SliderThumbBorderDragging" Color="#FFFFFF" />
-                <SolidColorBrush x:Key="SliderThumbBorderHover" Color="#34acbc" />
-                <ControlTemplate x:Key="upperSliderTemplate" TargetType="{x:Type Slider}">
-                    <Grid/>
-                </ControlTemplate>
-            </Slider.Resources>
+            
+            
+            <Slider x:Name="lowerSlider" OverridesDefaultStyle="false" Grid.Row="1" Grid.Column="3" Margin="10,5,10,0" Panel.ZIndex="0" Opacity="2"
+                Minimum="{Binding ElementName=LeHandUI, Path=Minimum}" ToolTip="{Binding ElementName=lowerSlider, Path=Value, StringFormat='P2'}"
+                Maximum="{Binding ElementName=LeHandUI, Path=Maximum}"
+                 Value="{Binding ElementName=LeHandUI, Path=LowerValue, Mode=TwoWay}"
+                IsSnapToTickEnabled="{Binding ElementName=LeHandUI, Path=IsSnapToTickEnabled}"
+                TickFrequency="{Binding ElementName=LeHandUI, Path=TickFrequency}"
+                TickPlacement="BottomRight" ValueChanged="valueofsliderChanged"
+                Ticks="{Binding ElementName=LeHandUI, Path=Ticks}"
+                >
+                <Slider.Resources>
+                    <SolidColorBrush x:Key="SliderSelectionBackground" Color="#212121" />
+                    <SolidColorBrush x:Key="SliderSelectionBorder" Color="#F2F2F2" />
+                    <SolidColorBrush x:Key="SliderThumbBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="DarkOliveGreen" />
+                    <SolidColorBrush x:Key="SliderThumbBackgroundDragging" Color="#34acbc" />
+                    <SolidColorBrush x:Key="SliderThumbBackgroundHover" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="SliderThumbBorder" Color="#000000" />
+                    <SolidColorBrush x:Key="SliderThumbBorderDisabled" Color="#3c3c3c" />
+                    <SolidColorBrush x:Key="SliderThumbBorderDragging" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="SliderThumbBorderHover" Color="#34acbc" />
+                    <ControlTemplate x:Key="upperSliderTemplate" TargetType="{x:Type Slider}">
+                        <Grid/>
+                    </ControlTemplate>
+                    </Slider.Resources>
+                    
         </Slider>
 
-        <Slider x:Name="upperSlider" Grid.Row="1" Grid.Column="3" Margin="10,0,10,0" Panel.ZIndex="2"
+        <TickBar Grid.Row="1" Grid.Column="3" Margin="10,0,10,0"
+            x:Name="tickBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                     Maximum="{Binding Path=Maximum, ElementName=lowerSlider}" 
+                     Minimum="{Binding Path=Minimum, ElementName=lowerSlider}"
+                     TickFrequency="10" Height="5" ReservedSpace="11" Fill="White"
+                     Visibility="Visible" Panel.ZIndex="1">
+        </TickBar>
+
+
+        <Slider x:Name="upperSlider" Grid.Row="1" Grid.Column="3" Margin="10,5,10,0" Panel.ZIndex="0"
                 Foreground="#F2F2F2" BorderBrush="Transparent" BorderThickness="0"  Template="{StaticResource horizontalSlider}"
           VerticalAlignment="Center" ToolTip="{Binding ElementName=upperSlider, Path=Value}"
           Minimum="{Binding ElementName=LeHandUI, Path=Minimum}"
@@ -88,7 +100,7 @@
                     <Grid/>
                 </ControlTemplate>
             </Slider.Resources>
-            
+
         </Slider>
 
         <DockPanel x:Name="Actionpart1" Grid.Column="1" Grid.Row="3">
@@ -108,7 +120,7 @@
 
         <DockPanel x:Name="KeyPressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="True">
             <Viewbox>
-                <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0"/>
+                <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0" Background="#f2f2f2" Foreground="Black"/>
             </Viewbox>
             <TextBox x:Name="KeyPressChooser" Padding="2,4,0,0" 
                      ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, ArrowUp, ArrowDown, ArrowLeft, ArrowRight">
@@ -119,8 +131,40 @@
             <Viewbox>
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser" 
-                      SelectionChanged="MousePressChooser_SelectionChanged"/>
+
+            <!--    Button_MLD  = 0x0002     left button down
+                    Button_MLU  = 0x0004     left button up
+                    Button_MRD  = 0x0008     right button down
+                    Button_MRU  = 0x0010     right button up
+                    Button_MMD  = 0x0020     middle button down
+                    Button_MMU  = 0x0040     middle button up
+                    Button_MXD  = 0x0080     x button down
+                    Button_MXU  = 0x0100     x button up
+                    Button_MFW  = 0x0800     wheel button rolled
+                    Button_MFHW = 0x01000   hwheel button rolled 
+            
+            XAML versie in de combobox:
+                -Left Mouse Button Click
+                -Right Mouse Button Click
+                -Middle Mouse Button Click
+                -X button click
+                -Mouse4 Click
+                -Mouse5 Click
+                -MouseWheel Up
+                -MouseWheel Down
+            -->
+            
+            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser" Background="Transparent" Foreground="Black"
+                      SelectionChanged="MousePressChooser_SelectionChanged" ItemContainerStyle="{StaticResource itemcontainerstyle}">
+
+                <ComboBoxItem>Left mouse button click</ComboBoxItem>
+                <ComboBoxItem>Right mouse button click</ComboBoxItem>
+                <ComboBoxItem>Middle mouse button click</ComboBoxItem>
+                <ComboBoxItem>Mouse4 click</ComboBoxItem>
+                <ComboBoxItem>Mouse5 click</ComboBoxItem>
+                <ComboBoxItem>Mousewheel up</ComboBoxItem>
+                <ComboBoxItem>Mousewheel down</ComboBoxItem>
+            </ComboBox>
         </DockPanel>
         
         <DockPanel x:Name="MouseMoveInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="False">
