@@ -207,7 +207,6 @@ namespace LeHandUI
 			lbl.BorderThickness = new Thickness(0);
 			lbl.BorderBrush = transparent;
 
-			lbl.KeyDown				+= Lbl_KeyDown;
 			lbl.LostKeyboardFocus	+= Lbl_LostKeyboardFocus;
 			lbl.MouseDown			+= Lbl_MouseDown;
             lbl.MouseEnter			+= Lbl_MouseEnter;
