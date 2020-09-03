@@ -5,12 +5,14 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WPFCustomMessageBox;
 using Color = System.Windows.Media.Color;
+using ContextMenu = System.Windows.Controls.ContextMenu;
 using Cursors = System.Windows.Input.Cursors;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
@@ -95,7 +97,7 @@ namespace LeHandUI
 		private void LuaFileView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 		}
-		
+
 		public static void styleLabel(Label label)
 		{
 			label.Foreground = off_white;
@@ -107,7 +109,23 @@ namespace LeHandUI
 			label.MouseEnter += inst.Label_MouseEnter;
 			label.MouseLeave += inst.Label_MouseLeave;
 			label.MouseDown += inst.Label_MouseDown;
-			
+
+			if(label == inst.LuaFileView.SelectedItem)
+            {
+				styleOpenedFileLabel(label);
+            }
+			else if(inst.LuaFileView.Items.IndexOf(label) != -1 && inst.LuaFileView.Items.IndexOf(label) == inst.LuaFileView.SelectedIndex)
+            {
+				inst.styleSelectedLabel(label);
+            }
+
+
+			//Context menu creation
+			ContextMenu lblMenu = new ContextMenu;
+			Label item1 = new Label();
+			lblMenu.Items.Add(item1);
+
+			label.ContextMenu = lblMenu;
 		}
 
 		public static void styleOpenedFileLabel(Label label)
@@ -120,6 +138,13 @@ namespace LeHandUI
 			/*label.GotFocus += inst.Label_GotFocus;
 			label.MouseEnter += inst.Label_MouseEnter;
 			label.MouseLeave += inst.Label_MouseLeave;*/
+		}
+		public void styleSelectedLabel(Label label)
+        {
+			label.Foreground = white;
+			label.Background = halfTransparentWhite;
+			label.BorderBrush = light_blue;
+			label.BorderThickness = new Thickness(0);
 		}
 
 		private void Label_GotFocus(object sender, RoutedEventArgs e)
@@ -154,10 +179,7 @@ namespace LeHandUI
 		{
 			Label lelele = (Label)sender;
 
-			lelele.Foreground = white;
-			lelele.Background = halfTransparentWhite;
-			lelele.BorderBrush = light_blue;
-			lelele.BorderThickness = new Thickness(0);
+			styleSelectedLabel(lelele);
 
 			LuaFileView.SelectedItem = lelele;
 
@@ -278,9 +300,12 @@ namespace LeHandUI
 					Label textshitthingdinges = (Label)inst.LuaFileView.Items[index];
 
 					string label = textshitthingdinges.Content.ToString();
-					label = label.Remove(label.Length - 1);
-					textshitthingdinges.Content = label;
-					ChangeLabelText(list, label, index);
+					if (label[label.Length - 1] == '*')
+					{
+						label = label.Remove(label.Length - 1);
+						textshitthingdinges.Content = label;
+						ChangeLabelText(list, label, index);
+					}
 				}
 			}
 		}
@@ -537,6 +562,8 @@ namespace LeHandUI
 				txtbox.Content = LHregistry.getSimpleName(wholePath);
 
 				styleLabel(txtbox);
+				txtbox.Foreground = white;
+				txtbox.Background = transparent;
 
 				LuaFileView.Items.Add(txtbox);
 			}

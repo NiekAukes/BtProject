@@ -33,7 +33,8 @@
                  Margin="15,5,0,0" Padding="5" FontSize="15" x:Name="LuaFileView" 
                  Background="#212121" BorderBrush="White" Foreground="#F2F2F2" 
                  FontFamily="Futura Lt BT"
-                 Control.MouseDoubleClick="LoadLuaFileFromSelectedObjectInList"/>
+                 Control.MouseDoubleClick="LoadLuaFileFromSelectedObjectInList">
+        </ListBox>
 
 
         <!--De button icons zijn verstopt in de MainWindow.xaml.cs code, daar kun je de icons aanpassen-->
