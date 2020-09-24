@@ -5,6 +5,7 @@
 //double = 8bytes 64bit |||| short = 2bytes 16bit
 
 #include <SoftwareSerial.h>
+#define pot           A0
 #define rx            0
 #define tx            1
 SoftwareSerial BTSerial(rx, tx);
@@ -23,15 +24,17 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_y         11
 #define acc_z         12
 
-short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
+//short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
 //reads wordt ook gebruikt voor header informatie
+short reads[] = {pot};
 const short data_length = 0x0004;
 const short footer =      0xFFFF;
 short data_arr[data_length];
 double read_inf;
 
 void setup() {
-  BTSerial.begin(9600);
+  //BTSerial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {

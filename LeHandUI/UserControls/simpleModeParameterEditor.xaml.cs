@@ -25,6 +25,8 @@ namespace LeHandUI
             ActiveControl = KeyPressInput;
         }
 
+        
+
         #region Callbacks
         private static object LowerValueCoerceValueCallback(DependencyObject target, object valueObject)
         {
@@ -144,6 +146,13 @@ namespace LeHandUI
                 lowerSlider.Value--;
             }
 
+        }
+        public void initializeVars(FileData data)
+        {
+            lowerSlider.Value = data.beginRange * 100;
+            upperSlider.Value = data.endRange * 100;
+            varChooser.SelectedIndex = data.variable;
+            actionChooser.SelectedIndex = data.actionId;
         }
         public Logic ParseToLogic()
         {

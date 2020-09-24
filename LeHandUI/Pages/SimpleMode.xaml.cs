@@ -200,16 +200,23 @@ namespace LeHandUI
 		public void LoadFile(int selectedindex)
         {
 			CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
-
-			//apply newly loaded filedata
-
 			//Clear stackpanel van parametershit
+			parameterPanel.Children.Clear();
 			//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
+			for (int i = 0; i < CurrentLoadedFileData.Count; i++)
+            {
+				simpleModeParameterEditor neweditor = new simpleModeParameterEditor();
+				
+				parameterPanel.Children.Add();
+            }
 
         }
 		public void SaveChanges()
         {
-
+			//pak alle instellingen van parametereditor xaml user interfaces
+			//gooi ze in een filedata list
+			//parse de filedata nar simplemodefilemanager
+			//SimpleFileManager.ChangeFile() dus
         }
         #endregion
 

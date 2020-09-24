@@ -88,9 +88,9 @@ typedef DeviceDetails* lpDeviceDetails;
 			bltDsp.fIssueInquiry = true;
 			bltDsp.fReturnAuthenticated = true;
 			bltDsp.fReturnConnected = false;
-			bltDsp.fReturnRemembered = true;
+			bltDsp.fReturnRemembered = false;
 			bltDsp.fReturnUnknown = true;
-			bltDsp.cTimeoutMultiplier = 2;
+			bltDsp.cTimeoutMultiplier = 4;
 			bltDsp.dwSize = sizeof(bltDsp);
 			BLUETOOTH_DEVICE_INFO_STRUCT bltDis[20];
 			for (int i = 0; i < 20; i++) {

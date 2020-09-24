@@ -22,6 +22,8 @@
 #include <thread>
 #include <cstdlib>
 #include <windows.devices.serialcommunication.h>
+#include <bluetoothleapis.h>
+#include <bthledef.h>
 #include <bthdef.h>
 #include <Windows.h>
 
