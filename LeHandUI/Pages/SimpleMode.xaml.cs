@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,6 +27,8 @@ namespace LeHandUI
 	{
 		public static string[] fileNames = SimpleFileManager.FileNames();
 		public static List<UIElement> listBoxUIElemtents = new List<UIElement>();
+
+		public List<FileData> CurrentLoadedFileData = new List<FileData>();
 
 		static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
 		static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
@@ -158,7 +161,7 @@ namespace LeHandUI
 
 			simpleModeFileListBox.Items.Refresh();
 		}
-		/* HERE FOR REWRITING PURPOSES
+        /* HERE FOR REWRITING PURPOSES
 		private void RefreshLuaScript()
 		{
 			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
@@ -193,10 +196,26 @@ namespace LeHandUI
 			LuaFileView.Items.Refresh();
 		}*/
 
+        #region LoadnSave
+		public void LoadFile(int selectedindex)
+        {
+			CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
 
-		#region StyleFunctions
+			//apply newly loaded filedata
 
-		public void StyleNonSelectedLabel(Label lbl)
+			//Clear stackpanel van parametershit
+			//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
+
+        }
+		public void SaveChanges()
+        {
+
+        }
+        #endregion
+
+        #region StyleFunctions
+
+        public void StyleNonSelectedLabel(Label lbl)
         {
 			lbl.Focusable = true;
 
@@ -208,7 +227,7 @@ namespace LeHandUI
 			lbl.BorderBrush = transparent;
 
 			lbl.LostKeyboardFocus	+= Lbl_LostKeyboardFocus;
-			lbl.MouseDown			+= Lbl_MouseDown;
+			lbl.PreviewMouseLeftButtonDown	+= Lbl_MouseDown;
             lbl.MouseEnter			+= Lbl_MouseEnter;
 			lbl.MouseLeave			+= Lbl_MouseLeave;
 		}
@@ -217,8 +236,15 @@ namespace LeHandUI
         {
 			lbl.Cursor = Cursors.Hand;
 
-			lbl.Background = almostTransparentWhite;
-			lbl.Foreground = white;
+			if (lbl != simpleModeFileListBox.SelectedItem)
+			{
+				lbl.Background = almostTransparentWhite;
+				lbl.Foreground = white;
+			}
+			else if(lbl == simpleModeFileListBox.SelectedItem)
+            {
+				StyleSelectedLabel(lbl);
+            }
 
 		}
 
@@ -227,11 +253,16 @@ namespace LeHandUI
 			lbl.Cursor = Cursors.Hand;
 			if (lbl == simpleModeFileListBox.SelectedItem)
 			{
-				lbl.Background = halfTransparentWhite;
-				lbl.Foreground = white;
+				lbl.Background = white;
+				lbl.Foreground = black;
 				lbl.BorderThickness = new Thickness(0);
 				lbl.BorderBrush = white;
 			}
+            else if(lbl != simpleModeFileListBox.SelectedItem)
+            {
+				StyleNonSelectedLabel(lbl);
+            }
+
 		}
 
 		public void StyleOpenedLabel(Label lbl)
@@ -242,12 +273,21 @@ namespace LeHandUI
 			lbl.Background = dark_blue;
 			lbl.BorderBrush = dark_blue;
 			lbl.BorderThickness = new Thickness(0);
+
+
+			for (int i =0; i < simpleModeFileListBox.Items.Count; i++)
+            {
+				if(simpleModeFileListBox.Items[i] != simpleModeFileListBox.SelectedItem)
+                {
+					StyleNonSelectedLabel((Label)(simpleModeFileListBox.Items[i]));
+                }
+            }
 		}
 
-		#endregion
+        #endregion
 
-
-		public void saveCurrentFile(string name)
+        #region saveFileFunc!MOET NOG SPUL GEBEUREN AUKES
+        public void saveCurrentFile(string name)
 		{
 			//get all rules from current file
 			int selectedIndex = simpleModeFileListBox.SelectedIndex;
@@ -279,23 +319,23 @@ namespace LeHandUI
 			//fix the rest lazy piece of shit douwe
 
 		}
+        #endregion
 
-
-		#region Txtbox Handlers
-		private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        #region Label/txtbox Handlers
+        private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
 			{
-				lostfocus(sender);
+				LabelOrTxtboxLostFocus(sender);
 			}
 		}
 		private void Lbl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
 		{
-			lostfocus(sender);
+			LabelOrTxtboxLostFocus(sender);
 			
 		}
 
-		private void Lbl_MouseEnter(object sender, MouseEventArgs e)
+		private void Lbl_MouseEnter(object sender, MouseEventArgs e) //voor style
         {
 			Label lbl = (Label)sender;
 
@@ -305,7 +345,7 @@ namespace LeHandUI
 			}
         }
 
-		private void Lbl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		private void Lbl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) //ook puur voor stijl
 		{
 			MainWindow.inst.Focus();
 
@@ -320,31 +360,26 @@ namespace LeHandUI
 
 		}
 
-		int lblindex;
-		private void Lbl_MouseDown(object sender, System.Windows.Input.MouseEventArgs e)
+		public Label prevlbl = null;
+		private void Lbl_MouseDown(object sender, MouseEventArgs e)
 		{
 			Label lbl = (Label)sender;
-			for(int i = 0; i < simpleModeFileListBox.Items.Count; i++)
-            {
-				if((Label)sender == (Label)simpleModeFileListBox.Items[i]) //(Label)simpleModeFileListBox.Items[i]
-				{
-					lblindex = i;
-                }
-            }
-			if (lblindex == simpleModeFileListBox.SelectedIndex)
-			{
+			
+			simpleModeFileListBox.SelectedItem = lbl;
+			
+			if (lbl != prevlbl) {
 				StyleSelectedLabel(lbl);
 			}
-            else
+			if (prevlbl != null)
             {
-				StyleNonSelectedLabel(lbl);
+				StyleNonSelectedLabel(prevlbl);
             }
+			prevlbl = lbl;
 
 			//Open the file:
-
 		}
 
-		private void lostfocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
+		private void LabelOrTxtboxLostFocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
 		{
 			Label lbl = (Label)sender;
 
@@ -368,9 +403,11 @@ namespace LeHandUI
 				listBoxUIElemtents.Insert(index, lbl);
 			}
 		}
+
 		#endregion
 
 		#region ListBox Handlers
+
 		public static int LastFileOpened = 0xFFFF;
         private void onTextChanged(object sender, TextChangedEventArgs e)
 		{
@@ -383,7 +420,7 @@ namespace LeHandUI
 				dosumShit(sender);
 			}*/
 		}
-		private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
+		/*private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
 		{
 			TextBox listitem = (TextBox)sender;
 			listitem.Focus();
@@ -402,7 +439,7 @@ namespace LeHandUI
 			listitem.Foreground = off_white;
 			listitem.BorderThickness = new Thickness(0);
 			listitem.BorderBrush = transparent;
-		}
+		}*/
 		#endregion
 
 		#region Button Handlers
