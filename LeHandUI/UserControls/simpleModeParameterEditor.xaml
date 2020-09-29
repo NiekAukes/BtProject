@@ -120,7 +120,7 @@
 
         <DockPanel x:Name="KeyPressInput" Grid.Column="3" Grid.Row="3"  Margin="0,0,0,0" Opacity="0" IsEnabled="True">
             <Viewbox>
-                <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0" Background="#f2f2f2" Foreground="Black"/>
+                <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0" Background="Transparent" Foreground="Black"/>
             </Viewbox>
             <TextBox x:Name="KeyPressChooser" Padding="2,4,0,0" 
                      ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, ArrowUp, ArrowDown, ArrowLeft, ArrowRight">
@@ -153,8 +153,8 @@
                 -MouseWheel Up
                 -MouseWheel Down
             -->
-            
-            <ComboBox Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0" x:Name="MousePressChooser" Background="Transparent" Foreground="Black"
+
+            <ComboBox x:Name="MousePressChooser" Height="auto" Width="auto" HorizontalAlignment="Stretch" Margin="5,0,0,0"  Background="Transparent" Foreground="Black"
                       SelectionChanged="MousePressChooser_SelectionChanged" ItemContainerStyle="{StaticResource itemcontainerstyle}">
 
                 <ComboBoxItem>Left mouse button click</ComboBoxItem>
