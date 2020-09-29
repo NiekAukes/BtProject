@@ -90,7 +90,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			bltDsp.fReturnConnected = false;
 			bltDsp.fReturnRemembered = true;
 			bltDsp.fReturnUnknown = true;
-			bltDsp.cTimeoutMultiplier = 2;
+			bltDsp.cTimeoutMultiplier = 4;
 			bltDsp.dwSize = sizeof(bltDsp);
 			BLUETOOTH_DEVICE_INFO_STRUCT bltDis[20];
 			for (int i = 0; i < 20; i++) {
@@ -183,7 +183,8 @@ typedef DeviceDetails* lpDeviceDetails;
 				std::cout << "failed callback " << GetLastError() << '\n';
 				return 1;
 			}
-
+			std::string code;
+			DWORD res;
 			dwResult = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionNotRequired);
 			switch (dwResult)
 			{
@@ -203,6 +204,12 @@ typedef DeviceDetails* lpDeviceDetails;
 
 			case ERROR_NO_MORE_ITEMS:
 				std::cout << "device appears paired already" << std::endl;
+				break;
+			case WAIT_TIMEOUT:
+				std::cout << "Enter security code: ";
+				//std::cin >> code;
+				//res = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionRequired);
+				std::cout << "device timed out" << std::endl;
 				break;
 
 			default:

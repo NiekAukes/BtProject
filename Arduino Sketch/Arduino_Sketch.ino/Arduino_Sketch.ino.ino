@@ -23,7 +23,8 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_y         11
 #define acc_z         12
 
-short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
+//short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
+short reads[] = {duim};
 //reads wordt ook gebruikt voor header informatie
 const short data_length = 0x0004;
 const short footer =      0xFFFF;
@@ -31,14 +32,15 @@ short data_arr[data_length];
 double read_inf;
 
 void setup() {
-  BTSerial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {
   //Read information
   for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
     
-    read_inf = (analogRead(reads[i])/1024.0);
+    //read_inf = (analogRead(reads[i])/1024.0);
+    read_inf = random(1024);
     //Cut information to shorts
     
     for(int j = 0; j < data_length; j++){
