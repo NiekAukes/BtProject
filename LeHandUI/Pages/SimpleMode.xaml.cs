@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Services.Common.CommandLine;
+﻿using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Common;
+using Microsoft.VisualStudio.Services.Common.CommandLine;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -449,9 +451,12 @@ namespace LeHandUI
 			CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
 			//Clear stackpanel van parametershit
 			parameterPanel.Children.Clear();
-			simpleModeParameterEditor parEdit = CurrentLoadedFileData[0].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
+			for (int i = 0; i < parameterPanel.Children.Count; i++)
+			{
+				simpleModeParameterEditor parEdit = CurrentLoadedFileData[i].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
 
-			parameterPanel.Children.Add(parEdit);
+				parameterPanel.Children.Add(parEdit);
+			}
 
         }
 		public void SaveChanges()
@@ -460,6 +465,39 @@ namespace LeHandUI
 			//gooi ze in een filedata list
 			//parse de filedata nar simplemodefilemanager
 			//SimpleFileManager.ChangeFile() dus
+			List<FileData> savedData = new List<FileData>();
+			for (int i = 0; i < parameterPanel.Children.Count; i++)
+            {
+				simpleModeParameterEditor currEditor = (simpleModeParameterEditor)parameterPanel.Children[i];
+				FileData newFileData = new FileData();
+				newFileData.variable = (byte)currEditor.varChooser.SelectedIndex;
+				newFileData.beginRange = currEditor.lowerSlider.Value;
+				newFileData.endRange = currEditor.upperSlider.Value;
+				newFileData.actionId = (byte)currEditor.actionChooser.SelectedIndex;
+
+                switch (currEditor.actionChooser.SelectedIndex)
+                {
+					case 0:
+                        try
+                        {
+							newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text];//(char)currEditor.KeyPressChooser.Text;
+
+						}
+						catch (KeyNotFoundException) 
+						{
+							Console.WriteLine("key could not be found in dictionary ascii_table");
+							//SHOW POPUP THAT SAVING COULD NOT BE COMPLETED
+
+						}
+
+						break;
+					case 1:
+
+						break;
+                }
+
+				savedData.Add(newFileData);
+            }
         }
         #endregion
 
