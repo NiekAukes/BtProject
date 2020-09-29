@@ -24,6 +24,15 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <Popup Height="40" Width="300" Placement="Mouse">
+            <Border CornerRadius="5" BorderThickness="3" 
+                    BorderBrush="#EEE2E2E2" Background="#FF4D4D4D">
+                <Viewbox>
+                    <TextBlock Text="Saving could not be Completed" Padding="5,0,5,0"/>
+                </Viewbox>
+            </Border>
+        </Popup>
+        
         <!--COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
                    (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
                     very dark,    dark blue,    aqua,      pale aqua,     greyish-->
@@ -64,7 +73,7 @@
             </Button>
         </DockPanel>
         <Border BorderBrush="#f2f2f2" BorderThickness="1" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3">
-            <StackPanel 
+            <StackPanel x:Name="parameterPanel" 
                  Background="Transparent" FlowDirection="LeftToRight">
                 <local:simpleModeParameterEditor Style="{StaticResource parameterStyle}"/>
             </StackPanel>

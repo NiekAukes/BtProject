@@ -121,7 +121,7 @@ namespace LeHandUI
 
 
 			//Context menu creation
-			ContextMenu lblMenu = new ContextMenu;
+			ContextMenu lblMenu = new ContextMenu();
 			Label item1 = new Label();
 			lblMenu.Items.Add(item1);
 
