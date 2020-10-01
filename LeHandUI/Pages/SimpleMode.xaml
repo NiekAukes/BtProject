@@ -24,7 +24,7 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <Popup Height="40" Width="300" Placement="Mouse">
+        <Popup x:Name="saveErrorPopup" Height="40" Width="300" Placement="Mouse" Panel.ZIndex="999999999">
             <Border CornerRadius="5" BorderThickness="3" 
                     BorderBrush="#EEE2E2E2" Background="#FF4D4D4D">
                 <Viewbox>

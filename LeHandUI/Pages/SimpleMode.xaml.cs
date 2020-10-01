@@ -8,11 +8,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
@@ -32,6 +35,8 @@ namespace LeHandUI
 		public static List<UIElement> listBoxUIElemtents = new List<UIElement>();
 
 		public List<FileData> CurrentLoadedFileData = new List<FileData>();
+
+		Storyboard st;
 
 		static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
 		static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
@@ -73,6 +78,7 @@ namespace LeHandUI
 
 			simpleModeFileListBox.ItemsSource = listBoxUIElemtents;
 
+			st = new Storyboard();
 			/* //DATA FOR TEST FILES
 			FileData[] data = new FileData[6];
 			FileData[] newdata = new FileData[1];
@@ -459,6 +465,27 @@ namespace LeHandUI
 			}
 
         }
+		public void FadePopup(Popup Popup = null)
+        {
+			saveErrorPopup.IsOpen = true;
+
+			var myDoubleAnimation = new DoubleAnimation();
+			myDoubleAnimation.From = 0.0;
+			myDoubleAnimation.To = 1.0;
+			myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
+			myDoubleAnimation.AutoReverse = true ;
+			myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+
+			st.Children.Add(myDoubleAnimation);
+			Storyboard.SetTargetName(myDoubleAnimation, saveErrorPopup.Name);
+			Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Popup.OpacityProperty));
+
+			st.Begin(saveErrorPopup);
+			
+
+
+		}
+
 		public void SaveChanges()
         {
 			//pak alle instellingen van parametereditor xaml user interfaces
@@ -487,7 +514,7 @@ namespace LeHandUI
 						{
 							Console.WriteLine("key could not be found in dictionary ascii_table");
 							//SHOW POPUP THAT SAVING COULD NOT BE COMPLETED
-
+							
 						}
 
 						break;
@@ -757,17 +784,22 @@ namespace LeHandUI
 
 		private void addRuleButton_Click(object sender, RoutedEventArgs e)
 		{
-            //add a rule to the ruleset file:
-            //naam character: 0x00 + character voor variabele + 2 doubles + character voor action id + 2 keer 4 bytes voor args
-            //voorbeeld: 0x01 (als variabele in deze range zit) + 0x01 (één v.d. vingers, xyz as van acceleratie of rotatie) + 0x03 (...) + arg1 t/m arg4
-            //voorbeeld: 0x01 0x01 0x03 0x45 0x74 0x19 0x20
+			//add a rule to the ruleset file:
+			//naam character: 0x00 + character voor variabele + 2 doubles + character voor action id + 2 keer 4 bytes voor args
+			//voorbeeld: 0x01 (als variabele in deze range zit) + 0x01 (één v.d. vingers, xyz as van acceleratie of rotatie) + 0x03 (...) + arg1 t/m arg4
+			//voorbeeld: 0x01 0x01 0x03 0x45 0x74 0x19 0x20
 
-            //Moet een usercontrol invoegen (simplemodeparametereditor.xaml) aan de stackpanel in simplemode
-            //moet naam geven denk ik
-            List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
+			//Moet een usercontrol invoegen (simplemodeparametereditor.xaml) aan de stackpanel in simplemode
+			//moet naam geven denk ik
+
+			FadePopup(saveErrorPopup);
+			List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
 
 			int selectedIndex = simpleModeFileListBox.SelectedIndex; //loopen door de filedata en alles in parameter editor ui zetten
-			 SimpleFileManager.GetFileData(selectedIndex);
+			if (selectedIndex != -1)
+			{
+				SimpleFileManager.GetFileData(selectedIndex);
+			}
 
 
 			saveCurrentFile();
