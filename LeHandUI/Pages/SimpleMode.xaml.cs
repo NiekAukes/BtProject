@@ -465,23 +465,24 @@ namespace LeHandUI
 			}
 
         }
-		public void FadePopup(Popup Popup = null)
+		public async Task FadePopup(Popup Popup = null)
         {
 			saveErrorPopup.IsOpen = true;
 
-			var myDoubleAnimation = new DoubleAnimation();
-			myDoubleAnimation.From = 0.0;
-			myDoubleAnimation.To = 1.0;
-			myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
-			myDoubleAnimation.AutoReverse = true ;
-			myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+			//var myDoubleAnimation = new DoubleAnimation();
+			//myDoubleAnimation.From = 0.0;
+			//myDoubleAnimation.To = 1.0;
+			//myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
+			//myDoubleAnimation.AutoReverse = true ;
+			//myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
 
-			st.Children.Add(myDoubleAnimation);
-			Storyboard.SetTargetName(myDoubleAnimation, saveErrorPopup.Name);
-			Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Popup.OpacityProperty));
+			//st.Children.Add(myDoubleAnimation);
+			//Storyboard.SetTargetName(myDoubleAnimation, saveErrorPopup.Name);
+			//Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Popup.OpacityProperty));
 
-			st.Begin(saveErrorPopup);
-			
+			//st.Begin(saveErrorPopup);
+
+			await Task.Delay(1000);
 
 
 		}
