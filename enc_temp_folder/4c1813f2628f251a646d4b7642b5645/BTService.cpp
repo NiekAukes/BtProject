@@ -186,7 +186,6 @@ typedef DeviceDetails* lpDeviceDetails;
 			std::string code;
 			DWORD res;
 			dwResult = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionNotRequired);
-			DWORD newdwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
 			switch (dwResult)
 			{
 			case ERROR_SUCCESS:
@@ -213,11 +212,11 @@ typedef DeviceDetails* lpDeviceDetails;
 				break;
 
 			default:
-				std::string s;
 				std::cout << "pair device failed, unknown error, code " << (unsigned int)dwResult << std::endl;
+				return 2;
 				break;
 			}
-			
+			dwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
 		}
 
 		WSADATA wsadat;
@@ -230,7 +229,7 @@ typedef DeviceDetails* lpDeviceDetails;
 		dwResult = WSAStartup(2.2, &wsadat);
 		if (dwResult != SOCKET_ERROR) {
 
-			s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM); //was L2CAP 
+			s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_L2CAP); //was L2CAP
 
 			SOCKADDR_BTH name;
 			ZeroMemory(&name, sizeof(SOCKADDR_BTH));
@@ -251,9 +250,9 @@ typedef DeviceDetails* lpDeviceDetails;
 			ZeroMemory(&sAddrBth, sizeof(SOCKADDR_BTH));
 			sAddrBth.addressFamily = AF_BTH;
 			sAddrBth.btAddr = dd.inheritData.Address.ullLong;
-			sAddrBth.serviceClassId = (GUID)SerialPortServiceClass_UUID;
+			sAddrBth.serviceClassId = L2CAP_PROTOCOL_UUID;
 			sAddrBth.port = 0;
-			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH)); //this needs to be changed
+			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH));
 			if (dwResult != SOCKET_ERROR) {
 				//succeeded in connected
 				std::cout << "now connected to the device" << '\n';

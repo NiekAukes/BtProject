@@ -34,8 +34,7 @@ short data_arr[data_length];
 double read_inf;
 
 void setup() {
-  //BTSerial.begin(9600);
-  Serial.begin(9600);
+  BTSerial.begin(9600);
 }
 
 void loop() {
@@ -51,10 +50,17 @@ void loop() {
     }
     
     //Header, information, footer print to serial
+<<<<<<< Updated upstream
     /*Serial.write(reads[i]);//header
     Serial.write(data_length);//data length
     Serial.write((char*)data_arr,sizeof(data_arr)); //speciale functie Serial.write, arrays zijn eigenlijk char pointers,
     Serial.write(footer);      */                     //hier mee verstuur je dus gewoon een array
     Serial.println("Snack_Overflow");
+=======
+    BTSerial.write(reads[i]);//header
+    BTSerial.write(data_length);//data length
+    BTSerial.write((char*)data_arr,sizeof(data_arr)); //speciale functie Serial.write, arrays zijn eigenlijk char pointers,
+    BTSerial.write(footer);                           //hier mee verstuur je dus gewoon een array
+>>>>>>> Stashed changes
   }
 }
