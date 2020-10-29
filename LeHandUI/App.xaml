@@ -5,6 +5,8 @@
              StartupUri="Pages/MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
+        
+        
         <Style x:Key="itemcontainerstyle" TargetType="ComboBoxItem">
             <Setter Property="Background" Value="#F2F2F2"/>
             <Setter Property="Foreground" Value="Black"/>
@@ -45,9 +47,48 @@
             </Border>
         </ControlTemplate>
 
-        <Style TargetType="ListBoxItem" x:Name="listBoxItemStyle">
+        <Style TargetType="Label" x:Name="labelSimpleModeStyle" x:Key="labelSimpleModeStyle">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#FFF2F2F2"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="border" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Left"/>
+                        </Border>
+                        <!--IsMouseCaptured IsFocused -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#BF065464"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#FFFFFFFF"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="#D8097287"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#FFFFFFFF"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+
+                            <Trigger Property="IsFocused" Value="False">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#FFF2F2F2"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="ListBoxItem" x:Name="listBoxItemStyle" x:Key="listBoxItemStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#FFF2F2F2"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="Width" Value="auto"/>
             <Setter Property="Height" Value="auto"/>
             <Setter Property="Template">

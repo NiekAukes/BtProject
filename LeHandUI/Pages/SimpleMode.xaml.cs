@@ -48,6 +48,7 @@ namespace LeHandUI
 		static SolidColorBrush light_blue = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
 		static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
 
+		bool fAlreadySaving = false;
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -87,11 +88,14 @@ namespace LeHandUI
 			SimpleFileManager.ChangeFile("halloe", newdata);*/
 
 			//INITIALIZE THE TEXTBOXARRAY, adds all textboxes of files to the textBoxes array so that we can check for not changed files and shit
+			simpleModeFileListBox.HorizontalAlignment = HorizontalAlignment.Stretch;
+
 			for (int i = 0; i < fileNames.Length; i++)
 			{
 				Label lbl = new Label();
 				StyleNonSelectedLabel(lbl);
 				lbl.Content = fileNames[i];
+
 
 				listBoxUIElemtents.Add(lbl);
 			}
@@ -454,14 +458,20 @@ namespace LeHandUI
         #endregion
         public void LoadFile(int selectedindex)
         {
-			CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
-			//Clear stackpanel van parametershit
-			parameterPanel.Children.Clear();
-			for (int i = 0; i < parameterPanel.Children.Count; i++)
+			if (!fAlreadySaving)
 			{
-				simpleModeParameterEditor parEdit = CurrentLoadedFileData[i].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
 
-				parameterPanel.Children.Add(parEdit);
+				fAlreadySaving = true;
+				CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
+				//Clear stackpanel van parametershit
+				parameterPanel.Children.Clear();
+				for (int i = 0; i < CurrentLoadedFileData.Count; i++)
+				{
+					simpleModeParameterEditor parEdit = CurrentLoadedFileData[i].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
+
+					parameterPanel.Children.Add(parEdit);
+				}
+				fAlreadySaving = false;
 			}
 
         }
@@ -493,39 +503,44 @@ namespace LeHandUI
 			//gooi ze in een filedata list
 			//parse de filedata nar simplemodefilemanager
 			//SimpleFileManager.ChangeFile() dus
-			List<FileData> savedData = new List<FileData>();
-			for (int i = 0; i < parameterPanel.Children.Count; i++)
-            {
-				simpleModeParameterEditor currEditor = (simpleModeParameterEditor)parameterPanel.Children[i];
-				FileData newFileData = new FileData();
-				newFileData.variable = (byte)currEditor.varChooser.SelectedIndex;
-				newFileData.beginRange = currEditor.lowerSlider.Value;
-				newFileData.endRange = currEditor.upperSlider.Value;
-				newFileData.actionId = (byte)currEditor.actionChooser.SelectedIndex;
+			if (!fAlreadySaving)
+			{
+				fAlreadySaving = true;
+				List<FileData> savedData = new List<FileData>();
+				for (int i = 0; i < parameterPanel.Children.Count; i++)
+				{
+					simpleModeParameterEditor currEditor = (simpleModeParameterEditor)parameterPanel.Children[i];
+					FileData newFileData = new FileData();
+					newFileData.variable = (byte)currEditor.varChooser.SelectedIndex;
+					newFileData.beginRange = currEditor.lowerSlider.Value;
+					newFileData.endRange = currEditor.upperSlider.Value;
+					newFileData.actionId = (byte)currEditor.actionChooser.SelectedIndex;
 
-                switch (currEditor.actionChooser.SelectedIndex)
-                {
-					case 0:
-                        try
-                        {
-							newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text];//(char)currEditor.KeyPressChooser.Text;
+					switch (currEditor.actionChooser.SelectedIndex)
+					{
+						case 0:
+							try
+							{
+								newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text];//(char)currEditor.KeyPressChooser.Text;
 
-						}
-						catch (KeyNotFoundException) 
-						{
-							Console.WriteLine("key could not be found in dictionary ascii_table");
-							//SHOW POPUP THAT SAVING COULD NOT BE COMPLETED
-							
-						}
+							}
+							catch (KeyNotFoundException)
+							{
+								Console.WriteLine("key could not be found in dictionary ascii_table");
+								//SHOW POPUP THAT SAVING COULD NOT BE COMPLETED
 
-						break;
-					case 1:
+							}
 
-						break;
-                }
+							break;
+						case 1:
 
-				savedData.Add(newFileData);
-            }
+							break;
+					}
+
+					savedData.Add(newFileData);
+				}
+				fAlreadySaving = false;
+			}
         }
         #endregion
 
@@ -546,6 +561,9 @@ namespace LeHandUI
 			lbl.PreviewMouseLeftButtonDown	+= Lbl_MouseDown;
             lbl.MouseEnter			+= Lbl_MouseEnter;
 			lbl.MouseLeave			+= Lbl_MouseLeave;
+
+			//lbl.Style = this.FindResource("labelSimpleModeStyle") as Style;
+
 		}
 
 		public void styleMouseOverLabel(Label lbl)
@@ -685,11 +703,13 @@ namespace LeHandUI
 			
 			if (lbl != prevlbl) {
 				StyleSelectedLabel(lbl);
+				LoadFile(simpleModeFileListBox.SelectedIndex);
 			}
 			if (prevlbl != null)
             {
 				StyleNonSelectedLabel(prevlbl);
-            }
+				SaveChanges();
+			}
 			prevlbl = lbl;
 
 			//Open the file:

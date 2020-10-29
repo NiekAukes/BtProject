@@ -51,9 +51,10 @@ void loop() {
     }
     
     //Header, information, footer print to serial
-    Serial.write(reads[i]);//header
+    /*Serial.write(reads[i]);//header
     Serial.write(data_length);//data length
     Serial.write((char*)data_arr,sizeof(data_arr)); //speciale functie Serial.write, arrays zijn eigenlijk char pointers,
-    Serial.write(footer);                           //hier mee verstuur je dus gewoon een array
+    Serial.write(footer);      */                     //hier mee verstuur je dus gewoon een array
+    Serial.println("Snack_Overflow");
   }
 }

@@ -186,6 +186,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			std::string code;
 			DWORD res;
 			dwResult = BluetoothAuthenticateDeviceEx(NULL, NULL, &dd.inheritData, NULL, MITMProtectionNotRequired);
+			DWORD newdwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
 			switch (dwResult)
 			{
 			case ERROR_SUCCESS:
@@ -213,11 +214,11 @@ typedef DeviceDetails* lpDeviceDetails;
 				break;
 
 			default:
+				std::string s;
 				std::cout << "pair device failed, unknown error, code " << (unsigned int)dwResult << std::endl;
-				return 2;
 				break;
 			}
-			dwResult = BluetoothUnregisterAuthentication(hCallbackHandle);
+			
 		}
 
 		WSADATA wsadat;
@@ -251,9 +252,9 @@ typedef DeviceDetails* lpDeviceDetails;
 			ZeroMemory(&sAddrBth, sizeof(SOCKADDR_BTH));
 			sAddrBth.addressFamily = AF_BTH;
 			sAddrBth.btAddr = dd.inheritData.Address.ullLong;
-			sAddrBth.serviceClassId = RFCOMM_PROTOCOL_UUID;
+			sAddrBth.serviceClassId = (GUID)SerialPortServiceClass_UUID;
 			sAddrBth.port = 0;
-			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH));
+			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH)); //this needs to be changed
 			if (dwResult != SOCKET_ERROR) {
 				//succeeded in connected
 				std::cout << "now connected to the device" << '\n';

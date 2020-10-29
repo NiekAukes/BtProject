@@ -1,6 +1,7 @@
 ﻿using Microsoft.TeamFoundation.Framework.Client;
 using System;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;

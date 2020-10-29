@@ -38,8 +38,7 @@ namespace LeHandUI
             switch(actionId)
             {
                 case 0:
-                    object dat = arg1;
-                    ret.KeyPressChooser.Text = ((char)dat).ToString();
+                    ret.KeyPressChooser.Text = ((char)arg1).ToString();
                     break;
                 //still todo
 
