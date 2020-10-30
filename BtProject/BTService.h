@@ -46,17 +46,23 @@ private:
 	BLUETOOTH_DEVICE_INFO_STRUCT inheritData;
 };
 
-struct Axis
-{
-	int nAxisNum = 1;
-	double val = 0;
+union DataType {
+	double Double;
+	char* str;
+	DataType(double d) { Double = d; }
+	DataType(char* string) { str = string; }
+	~DataType() {  }
 };
-
-union NormalData
+struct NormalData
 {
-	char* Raw;
-	Axis* finger;
-	NormalData() { Raw = new char('c'); }
+	short id = 0;
+	short DataLength = 0;
+	DataType data = 0.0;
+	/*NormalData(NormalData& nd) {
+
+	}
+	NormalData() {	}*/
+
 };
 enum class Expectedtype
 {

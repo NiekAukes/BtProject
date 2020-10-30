@@ -378,93 +378,118 @@ typedef DeviceDetails* lpDeviceDetails;
 		short Length = -1;
 		short Protocol = -1;
 		short databuf[4] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
-		NormalData ret;
-		while (Active)
-		{
-			if (Data.size() != 0)
-			{
-				unsigned short chunk = Data.front(); Data.pop();
+		std::vector<short>* retur = new std::vector<short>();
 
-				if (expected == Expectedtype::Protocol)
-				{
-					if (chunk < 32)
-					{
-						//normal
-						Protocol = chunk;
-						if (chunk < 12)
-						{
-							ret.finger = new Axis();
-							ret.finger->nAxisNum = chunk - 2;
-						}
-						else if (chunk < 32)
-						{
-							//other undefined
-						}
-						expected = Expectedtype::Length;
-					}
-					//out of range
+		//dequeue and put in vector
+		int i = 0;
+		while (Data.size() > 0) {
+			short chunk = Data.front();
+			retur->push_back(chunk);
+			Data.pop();
+
+			if (i == 0)
+				Protocol = chunk;
+
+			if (i == 1)
+				Length = chunk;
+
+			if (i == Length + 2) { //footer expected
+				if (chunk = 0xFFFF) {
+					break;
 				}
-				else if (expected == Expectedtype::Length)
-				{
-					Length = chunk;
-					expected = Expectedtype::Data;
-				}
-				else if (expected == Expectedtype::Data)
-				{
-					if (chunk != (unsigned short)(0xFFFF)) //not a footer
-					{
-						if (Protocol < 7)
-						{
-							//data is of double type
-							for (int p = 0; p < 4; p++)
-							{
-								if (databuf[p] == (short)0xFFFF)
-								{
-									//free space
-									databuf[p] = chunk;
-									break;
-								}
-							}
-
-						}
-					}
-					else
-					{
-						//do final things and return
-
-						expected = Expectedtype::Protocol;
-
-						if (Protocol < 12)
-						{
-							double* value = new double(0);
-							for (int p = 0; p < 4; p++) //convert data buffer to double
-							{
-								if (databuf[p] != 0xFFFF)
-								{
-									*((short*)value + p) = databuf[p];
-								}
-								else break;
-							}
-							ret.finger->val = *value;
-							if (out != nullptr)
-								*out = ret;
-							return 0;
-						}
-					}
-				}
-
+				else return 1;
 			}
-			else
-			{
-				return 0;
-			}
+			i++;
 		}
+		out = (NormalData*)(retur->data());
+		//while (Active)
+		//{
+		//	if (Data.size() != 0)
+		//	{
+		//		unsigned short chunk = Data.front(); Data.pop();
+		//
+		//		if (expected == Expectedtype::Protocol)
+		//		{
+		//			if (chunk < 32)
+		//			{
+		//				//normal
+		//				Protocol = chunk;
+		//				if (chunk < 12)
+		//				{
+		//					//ret.finger = new Axis();
+		//					//ret.finger->nAxisNum = chunk - 2;
+		//				}
+		//				else if (chunk < 32)
+		//				{
+		//					//other undefined
+		//				}
+		//				expected = Expectedtype::Length;
+		//			}
+		//			//out of range
+		//		}
+		//		else if (expected == Expectedtype::Length)
+		//		{
+		//			Length = chunk;
+		//			expected = Expectedtype::Data;
+		//		}
+		//		else if (expected == Expectedtype::Data)
+		//		{
+		//			if (chunk != (unsigned short)(0xFFFF)) //not a footer
+		//			{
+		//				if (Protocol < 7)
+		//				{
+		//					//data is of double type
+		//					for (int p = 0; p < 4; p++)
+		//					{
+		//						if (databuf[p] == (short)0xFFFF)
+		//						{
+		//							//free space
+		//							databuf[p] = chunk;
+		//							break;
+		//						}
+		//					}
+		//
+		//				}
+		//			}
+		//			else
+		//			{
+		//				//do final things and return
+		//
+		//				expected = Expectedtype::Protocol;
+		//
+		//				if (Protocol < 12)
+		//				{
+		//					double* value = new double(0);
+		//					for (int p = 0; p < 4; p++) //convert data buffer to double
+		//					{
+		//						if (databuf[p] != 0xFFFF)
+		//						{
+		//							*((short*)value + p) = databuf[p];
+		//						}
+		//						else break;
+		//					}
+		//					//ret.finger->val = *value;
+		//					if (out != nullptr)
+		//						//*out = ret;
+		//					return 0;
+		//				}
+		//			}
+		//		}
+		//
+		//	}
+		//	else
+		//	{
+		//		return 1;
+		//	}
+		//}
 
 		return 0;
 	}
 
-	void BTService::ApplyData(NormalData* Datain)
+	void BTService::ApplyData(NormalData* DataIn)
 	{
+		//set the data in the right place
+		
 	}
 
 	int BTService::DataGenerator()
@@ -490,7 +515,7 @@ typedef DeviceDetails* lpDeviceDetails;
 
 			NormalData* returnad = new NormalData();
 			ProcessData(returnad);
-			std::cout << returnad->finger->val << '\n';
+			std::cout << returnad->data.Double << '\n';
 			return 0;
 		}
 	}
