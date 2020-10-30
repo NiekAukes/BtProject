@@ -326,18 +326,21 @@ typedef DeviceDetails* lpDeviceDetails;
 	{
 		while (signal == nullptr ? false : *signal) 
 		{
-			char buf[8] = "       ";
-			recv(s, buf, 8, 0);
-			for (int i = 0; i < 8; i++) {
-				if (buf[i] != ' ') {
-					std::cout << buf[i];
-					bts->Data.push(buf[i]);
+			char buf[8] = "       "; //creates buffer
+			recv(s, buf, 8, 0); //receives values from bt
+			for (int i = 0; i < 8; i++) { //loops through all
+				if (buf[i] != ' ') { //if character is not space, filter it
+					std::cout << buf[i]; //print
+					bts->Data.push(buf[i]); //push on the Data Stack
 
 				}
-				if (buf[i] == 0xff && buf[i + 1] == 0xff) {
+				if (buf[i] == 0xff && buf[i + 1] == 0xff) { //if footer detected
 					bts->Data.push(buf[i]);
 					bts->Data.push(buf[i+1]);
-					bts->ProcessData(bts->dat);
+					bts->ProcessData(bts->dat); //process all data
+
+					//signal that data has been processed
+
 					i++;
 				}
 			}
