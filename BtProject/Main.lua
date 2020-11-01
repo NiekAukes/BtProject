@@ -20,7 +20,7 @@ Update = function ()
         print("men, i don")
         return false
     end
-    return true		
+    return true	--will continue program
 end
 
 Start()

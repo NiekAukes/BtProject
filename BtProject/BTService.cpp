@@ -493,8 +493,9 @@ typedef DeviceDetails* lpDeviceDetails;
 	void BTService::ApplyData(NormalData* DataIn, bool Del = false)
 	{
 		//set the data in the right place
-		if (DataIn->id < 11) {
+		if (DataIn->id < 11) {											//GOING TO CHANGE TO AN ASSIGNABLE INT
 			values[DataIn->id] = DataIn->data.Double;
+			//std::cout << DataIn->data.Double;
 		}
 		if (Del)
 			delete DataIn;
