@@ -10,6 +10,7 @@ extern "C" {
 #endif //  _WIN32
 
 #include <iostream>
+#include <vector>
 #include "BTService.h"
 #include <Windows.h>
 
@@ -35,21 +36,43 @@ public:
 	void start(std::string filename, BTService* service);
 };
 
-static int lua_RecvVal(lua_State* L/*, short* val*/) {
+template <typename T, typename U>
+void as_table(lua_State* L, T begin, U end) {
+	lua_newtable(L);
+	for (size_t i = 0; begin != end; ++begin, ++i) {
+		lua_pushinteger(L, i + 1);
+		lua_pushnumber(L, *begin);
+		lua_settable(L, -3);
+	}
+}
+
+static int deb(lua_State* L) {
 	double* values = new double(5.9);
+	double value[4] = { 4.0, 11.0, 1.0, 1.5 };
 	int amount = 0;
 	values = LuaFTF::requestservice->getDoubleDataFromBT(&amount);
 
-	lua_createtable(L, 0, amount);
+	const size_t s = amount;
+	std::vector<double> vec(values, values + amount);
+
+	as_table(L, vec.begin(), vec.end());
+	/*lua_createtable(L, 0, amount);
 	for (int i = 0; i < amount; i++)
 	{
 		lua_pushnumber(L, *(values + i));
 		lua_rawseti(L, -2, i + 1);
-	}
+	}*/
 	return 1;
 }
 
-static void deb(lua_State* L) {
+static int lua_RecvVal(lua_State* L/*, short* val*/) {
+	return deb(L);
+}
+
+
+
+
+static int lua_MMove(lua_State* L) {
 	int dx = lua_tonumber(L, 1);
 	int dy = lua_tonumber(L, 2);
 	int mode = lua_tonumber(L, 3);
@@ -65,9 +88,6 @@ static void deb(lua_State* L) {
 	else
 		ip.mi.dwFlags = MOUSEEVENTF_MOVE;
 	UINT ret = SendInput(1, &ip, sizeof(INPUT));
-}
-static int lua_MMove(lua_State* L) {
-	deb(L);
 	return 0;
 }
 static int lua_KPress(lua_State* L/*, char Key, int mode*/) {

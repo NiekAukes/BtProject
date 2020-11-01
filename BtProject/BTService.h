@@ -110,7 +110,7 @@ public:
 	int LatestConnect(); //automatic connect on last connected device
 	bool* ReceiveData(char* buf, int buflen);
 	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
-	void ApplyData(NormalData* Datain);
+	void ApplyData(NormalData* Datain, bool Del);
 
 	int DataGenerator();
 	std::vector<short> GetGeneratedData();

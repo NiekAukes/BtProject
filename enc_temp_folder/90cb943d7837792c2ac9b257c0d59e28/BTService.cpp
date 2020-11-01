@@ -572,9 +572,9 @@ typedef DeviceDetails* lpDeviceDetails;
 
 	double* BTService::getDoubleDataFromBT(int* length)
 	{
-		/*for (int i = 0; i < 11; i++) {
+		for (int i = 0; i < 11; i++) {
 			*(values + i) = rand();
-		}*/
+		}
 		*length = 11;
 		return values;
 	}
