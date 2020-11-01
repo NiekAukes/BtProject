@@ -44,9 +44,7 @@ int main(int argc, char* argv[])
 			file = argv[1];
 		}
 	}
-	//CommandManager* cmdMgr = CommandManager::GetInst();
-	//cmdMgr->startcommander(false, file.size() > 1 ? file : "");
-	BTService bts;
-	bts.DataGenerator();
+	CommandManager* cmdMgr = CommandManager::GetInst();
+	cmdMgr->startcommander(false, file.size() > 1 ? file : "");
 	return 0;
 }
