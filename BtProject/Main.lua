@@ -16,9 +16,9 @@ Update = function ()
         --Kpress("a", 0)
         Mpress(Button_MLD + Button_MLU)
         Sys("cls")
-        return 
+        return
     end
-    return true		
+    return true	--will continue program
 end
 
 Start()

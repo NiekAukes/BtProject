@@ -330,7 +330,9 @@ typedef DeviceDetails* lpDeviceDetails;
 			recv(s, buf, 8, 0); //receives values from bt
 			for (int i = 0; i < 8; i++) { //loops through all
 				if (buf[i] != ' ') { //if character is not space, filter it
-					std::cout << buf[i]; //print
+
+					//std::cout << std::hex << buf[i]; //print										.....important comment
+
 					bts->Data.push(buf[i]); //push on the Data Stack
 
 				}
@@ -490,8 +492,9 @@ typedef DeviceDetails* lpDeviceDetails;
 	void BTService::ApplyData(NormalData* DataIn, bool Del = false)
 	{
 		//set the data in the right place
-		if (DataIn->id < 11) {
+		if (DataIn->id < 11) {											//GOING TO CHANGE TO AN ASSIGNABLE INT
 			values[DataIn->id] = DataIn->data.Double;
+			//std::cout << DataIn->data.Double;
 		}
 		if (Del)
 			delete DataIn;
