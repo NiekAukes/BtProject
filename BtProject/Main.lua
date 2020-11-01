@@ -1,3 +1,4 @@
+
 LeHand = require "LeHand"
 --Functions:
 ----Kpress(Character, Mode) -> registers Keypress
@@ -10,13 +11,14 @@ print("Hello LeHand")
 X = 1
 Update = function ()
     --will be executed every frame
-    print(X .. "times executed")
-    X = X + 1
+    --print(X .. "times executed")
+    X =X + 1
     if X % 3000 == 0 then
         --Kpress("a", 0)
         Mpress(Button_MLD + Button_MLU)
         Sys("cls")
-        return 
+        print("men, i don")
+        return false
     end
     return true		
 end

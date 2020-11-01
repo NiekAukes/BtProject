@@ -322,6 +322,7 @@ typedef DeviceDetails* lpDeviceDetails;
 		return 0;
 	} 
 
+
 	void receiver(bool* signal, SOCKET s, BTService* bts) 
 	{
 		while (signal == nullptr ? false : *signal) 
@@ -330,7 +331,9 @@ typedef DeviceDetails* lpDeviceDetails;
 			recv(s, buf, 8, 0); //receives values from bt
 			for (int i = 0; i < 8; i++) { //loops through all
 				if (buf[i] != ' ') { //if character is not space, filter it
-					std::cout << buf[i]; //print
+
+
+					std::cout << (int)buf[i]; //print
 					bts->Data.push(buf[i]); //push on the Data Stack
 
 				}
