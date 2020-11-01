@@ -338,8 +338,10 @@ typedef DeviceDetails* lpDeviceDetails;
 					bts->Data.push(buf[i]);
 					bts->Data.push(buf[i+1]);
 					bts->ProcessData(bts->dat); //process all data
+					bts->ApplyData(bts->dat, true);
+					bts->dat = nullptr;
 
-					//signal that data has been processed
+					//signal that data has been processed: CHECK
 
 					i++;
 				}
@@ -374,17 +376,15 @@ typedef DeviceDetails* lpDeviceDetails;
 
 
 		*/
-		bool Active = true;
 		short Length = -1;
 		short Protocol = -1;
-		short databuf[4] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
-		std::vector<short>* retur = new std::vector<short>();
+		std::vector<short>* ret = new std::vector<short>();
 
 		//dequeue and put in vector
 		int i = 0;
 		while (Data.size() > 0) {
 			short chunk = Data.front();
-			retur->push_back(chunk);
+			ret->push_back(chunk);
 			Data.pop();
 
 			if (i == 0)
@@ -401,7 +401,8 @@ typedef DeviceDetails* lpDeviceDetails;
 			}
 			i++;
 		}
-		out = (NormalData*)(retur->data());
+		out = (NormalData*)(ret->data());
+		//short databuf[4] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
 		//while (Active)
 		//{
 		//	if (Data.size() != 0)
@@ -486,10 +487,14 @@ typedef DeviceDetails* lpDeviceDetails;
 		return 0;
 	}
 
-	void BTService::ApplyData(NormalData* DataIn)
+	void BTService::ApplyData(NormalData* DataIn, bool Del = false)
 	{
 		//set the data in the right place
-		
+		if (DataIn->id < 11) {
+			values[DataIn->id] = DataIn->data.Double;
+		}
+		if (Del)
+			delete DataIn;
 	}
 
 	int BTService::DataGenerator()
@@ -567,9 +572,9 @@ typedef DeviceDetails* lpDeviceDetails;
 
 	double* BTService::getDoubleDataFromBT(int* length)
 	{
-		for (int i = 0; i < 11; i++) {
+		/*for (int i = 0; i < 11; i++) {
 			*(values + i) = rand();
-		}
+		}*/
 		*length = 11;
 		return values;
 	}
