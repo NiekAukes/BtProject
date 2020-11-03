@@ -325,6 +325,7 @@ typedef DeviceDetails* lpDeviceDetails;
 
 	void receiver(bool* signal, SOCKET s, BTService* bts) 
 	{
+		char Lastchar = 'c';
 		while (signal == nullptr ? false : *signal) 
 		{
 			char buf[8] = "       "; //creates buffer
@@ -333,20 +334,31 @@ typedef DeviceDetails* lpDeviceDetails;
 				if (buf[i] != ' ') { //if character is not space, filter it
 
 
-					//std::cout << (int)buf[i]; //print
+					std::cout << (int)buf[i] << " "; //print
 					bts->Data.push(buf[i]); //push on the Data Stack
 
 				}
-				if (buf[i] == 0xff && buf[i + 1] == 0xff) { //if footer detected
-					bts->Data.push(buf[i]);
+				if (buf[i] == (char)0xff && buf[i + 1] == (char)0xff) { //if footer detected
+					//bts->Data.push(buf[i]);
 					bts->Data.push(buf[i+1]);
-					bts->ProcessData(bts->dat); //process all data
+					bts->ProcessData(&bts->dat); //process all data
 					bts->ApplyData(bts->dat, true);
 					bts->dat = nullptr;
 
 					//signal that data has been processed: CHECK
 
 					i++;
+				}
+				if (i == 0 && Lastchar == 0xff && buf[i] == 0xff) { //if footer detected
+					//bts->Data.push(buf[i]);
+					bts->Data.push(buf[i + 1]);
+					bts->dat = new NormalData();
+					bts->ProcessData(&bts->dat); //process all data
+					bts->ApplyData(bts->dat, true);
+					bts->dat = nullptr;
+				}
+				if (i == 7) {
+					Lastchar = buf[i];
 				}
 			}
 		}
@@ -361,7 +373,7 @@ typedef DeviceDetails* lpDeviceDetails;
 	}
 
 
-	int BTService::ProcessData(NormalData* out)
+	int BTService::ProcessData(NormalData** out)
 	{
 		/*
 			Data format: uses 16 bit data chunks
@@ -404,7 +416,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			}
 			i++;
 		}
-		out = (NormalData*)(ret->data());
+		*out = (NormalData*)(ret->data());
 		//short databuf[4] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
 		//while (Active)
 		//{
@@ -523,7 +535,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			Data.push(0xFFFF);
 
 			NormalData* returnad = new NormalData();
-			ProcessData(returnad);
+			ProcessData(&returnad);
 			std::cout << returnad->data.Double << '\n';
 			return 0;
 		}

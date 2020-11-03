@@ -109,7 +109,7 @@ public:
 	int Connect(DeviceDetails dd); //allows you to connect with the device
 	int LatestConnect(); //automatic connect on last connected device
 	bool* ReceiveData(char* buf, int buflen);
-	int ProcessData(NormalData* out); //receives data, returns protocol or negative if failed
+	int ProcessData(NormalData** out); //receives data, returns protocol or negative if failed
 	void ApplyData(NormalData* Datain, bool Del);
 
 	int DataGenerator();

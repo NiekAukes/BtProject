@@ -43,6 +43,22 @@ void setup() {
   pinMode(duim,INPUT);
 }
 
+short flip (short* value) {
+    short* pshort = new short(value);
+    char* pchar1 = (char*)pshort;
+    char* pchar2 = ((char*)pshort + 1);
+    
+    short* pshort1 = new short();
+    (char*)pshort1 = pchar2;
+    ((char*)pshort1 + 1) = pchar1;
+    
+    short ret = *pshort1;
+    delete pshort;
+    delete pshort1;
+    return *pshort1;
+  }
+}
+
 void loop() {
   //Read information
   for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
@@ -56,10 +72,10 @@ void loop() {
     }
     
     ////Header, information, footer print to serial
-    Serial.write(reads[i]);//header
-    Serial.write(data_length);//data length
+    Serial.write((char*)&reads[i], 2);//header
+    Serial.write((char*)&data_length, 2);//data length
     Serial.write((char*)data_arr,sizeof(data_arr)); //speciale functie Serial.write, arrays zijn eigenlijk char pointers,
-    Serial.write(footer);                           //hier mee verstuur je dus gewoon een array
+    Serial.write(0xFF); Serial.write(0xFF);         //hier mee verstuur je dus gewoon een array
 
     //Serial.println(int(float(analogRead(A0)) * (1024.0/1023.0)));
   }
