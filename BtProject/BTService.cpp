@@ -333,7 +333,7 @@ typedef DeviceDetails* lpDeviceDetails;
 				if (buf[i] != ' ') { //if character is not space, filter it
 
 
-					std::cout << (int)buf[i]; //print
+					//std::cout << (int)buf[i]; //print
 					bts->Data.push(buf[i]); //push on the Data Stack
 
 				}
