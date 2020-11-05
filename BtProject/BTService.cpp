@@ -326,16 +326,25 @@ typedef DeviceDetails* lpDeviceDetails;
 	void receiver(bool* signal, SOCKET s, BTService* bts) 
 	{
 		char Lastchar = 'c';
+		char* pshort = new char[2];
 		while (signal == nullptr ? false : *signal) 
 		{
+			bool frev = false;
 			char buf[8] = "       "; //creates buffer
 			recv(s, buf, 8, 0); //receives values from bt
 			for (int i = 0; i < 8; i++) { //loops through all
+				pshort = new char[2];
 				if (buf[i] != ' ') { //if character is not space, filter it
 
 
 					std::cout << (int)buf[i] << " "; //print
-					bts->Data.push(buf[i]); //push on the Data Stack
+					if (i % 2 == frev ? 1 : 0)
+						*pshort = buf[i]; //push on the Data Stack
+					else {
+						*(pshort + 1) = buf[i];
+						bts->Data.push(*((short*)pshort)); //push on the Data Stack
+					}
+					//bts->Data.push(buf[i]); //push on the Data Stack
 
 				}
 				if (buf[i] == (char)0xff && buf[i + 1] == (char)0xff) { //if footer detected
@@ -344,6 +353,8 @@ typedef DeviceDetails* lpDeviceDetails;
 					bts->ProcessData(&bts->dat); //process all data
 					bts->ApplyData(bts->dat, true);
 					bts->dat = nullptr;
+					if (i % 2 == 1)
+						frev = true;
 
 					//signal that data has been processed: CHECK
 
@@ -397,6 +408,7 @@ typedef DeviceDetails* lpDeviceDetails;
 
 		//dequeue and put in vector
 		int i = 0;
+		bool broken = false;
 		while (Data.size() > 0) {
 			short chunk = Data.front();
 			ret->push_back(chunk);
@@ -405,18 +417,35 @@ typedef DeviceDetails* lpDeviceDetails;
 			if (i == 0)
 				Protocol = chunk;
 
-			if (i == 1)
-				Length = chunk;
+			if (i == 1) {
+				Length = chunk / 2;
+				if (Length < 1)
+					broken = true;
+			}
 
-			if (i == Length + 2) { //footer expected
-				if (chunk = 0xFFFF) {
-					break;
+					//										ZORG ERVOOR DAT DE INFO NIET HALVERWEGE DE SHORT WORDT GELEZEN EN RESULTEERT IN -6,03
+
+			if (chunk == (short)0xFFFF) {
+				
+
+				if (i == Length - 1 && !broken) { //footer expected
+					
+					*out = (NormalData*)(ret->data());
+
+					//Reverse byte order
+
+					/*(*out)->id = _byteswap_ushort((*out)->id);
+					(*out)->DataLength = _byteswap_ushort((*out)->DataLength);
+					(*out)->data.Double = _byteswap_ulong((*out)->data.Double);*/
+					return 0;
 				}
 				else return 1;
+				
 			}
 			i++;
 		}
-		*out = (NormalData*)(ret->data());
+		
+		*out = nullptr;
 		//short databuf[4] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
 		//while (Active)
 		//{
@@ -499,15 +528,17 @@ typedef DeviceDetails* lpDeviceDetails;
 		//	}
 		//}
 
-		return 0;
+		return 1;
 	}
 
 	void BTService::ApplyData(NormalData* DataIn, bool Del = false)
 	{
 		//set the data in the right place
+		if (DataIn == nullptr)
+			return;
 		if (DataIn->id < 11) {											//GOING TO CHANGE TO AN ASSIGNABLE INT
-			values[DataIn->id] = DataIn->data.Double;
-			//std::cout << DataIn->data.Double;
+			values[DataIn->id] = DataIn->data;
+			std::cout << DataIn->data;
 		}
 		if (Del)
 			delete DataIn;
@@ -536,7 +567,7 @@ typedef DeviceDetails* lpDeviceDetails;
 
 			NormalData* returnad = new NormalData();
 			ProcessData(&returnad);
-			std::cout << returnad->data.Double << '\n';
+			std::cout << returnad->data << '\n';
 			return 0;
 		}
 	}

@@ -33,7 +33,7 @@ short reads[] = {duim}; //DEBUG VERSIE
 
 //reads wordt ook gebruikt voor header informatie
 
-const short data_length = 0x0004; //length of double
+const short data_length = 4; //length of double
 const short footer =      0xFFFF; //'exit' code of information
 short data_arr[data_length];
 double read_inf;
@@ -43,28 +43,14 @@ void setup() {
   pinMode(duim,INPUT);
 }
 
-short flip (short* value) {
-    short* pshort = new short(value);
-    char* pchar1 = (char*)pshort;
-    char* pchar2 = ((char*)pshort + 1);
-    
-    short* pshort1 = new short();
-    (char*)pshort1 = pchar2;
-    ((char*)pshort1 + 1) = pchar1;
-    
-    short ret = *pshort1;
-    delete pshort;
-    delete pshort1;
-    return *pshort1;
-  }
-}
+
 
 void loop() {
   //Read information
   for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
     
-    read_inf = (analogRead(reads[i])/1023.0);
-
+    //read_inf = (analogRead(reads[i])/1023.0);
+    read_inf = 0.5;
     
     //Cut information to shorts
     for(int j = 0; j < data_length; j++){
@@ -72,8 +58,8 @@ void loop() {
     }
     
     ////Header, information, footer print to serial
-    Serial.write((char*)&reads[i], 2);//header
-    Serial.write((char*)&data_length, 2);//data length
+    Serial.write((char*)&data_length, 2);//header
+    Serial.write((char*)&reads[i], 2);//data length
     Serial.write((char*)data_arr,sizeof(data_arr)); //speciale functie Serial.write, arrays zijn eigenlijk char pointers,
     Serial.write(0xFF); Serial.write(0xFF);         //hier mee verstuur je dus gewoon een array
 

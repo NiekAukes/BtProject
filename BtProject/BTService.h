@@ -53,17 +53,20 @@ union DataType {
 	DataType(char* string) { str = string; }
 	~DataType() {  }
 };
-struct NormalData
-{
-	short id = 0;
-	short DataLength = 0;
-	DataType data = 0.0;
-	/*NormalData(NormalData& nd) {
+extern "C" {
+	struct NormalData
+	{
+		short id = 0;
+		short DataLength = 0;
+		int FOURBYTEBUFFER;
+		double data = 0.0;
+		/*NormalData(NormalData& nd) {
 
-	}
-	NormalData() {	}*/
+		}
+		NormalData() {	}*/
 
-};
+	};
+}
 enum class Expectedtype
 {
 	Protocol,
