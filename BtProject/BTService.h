@@ -58,7 +58,7 @@ extern "C" {
 	{
 		short id = 0;
 		short DataLength = 0;
-		int FOURBYTEBUFFER;
+		//int FOURBYTEBUFFER;
 		double data = 0.0;
 		/*NormalData(NormalData& nd) {
 

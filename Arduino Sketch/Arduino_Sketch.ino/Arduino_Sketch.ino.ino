@@ -49,12 +49,11 @@ void loop() {
   //Read information
   for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
     
-    //read_inf = (analogRead(reads[i])/1023.0);
-    read_inf = 0.5;
+    read_inf = (analogRead(pot)/1023.0);
     
     //Cut information to shorts
     for(int j = 0; j < data_length; j++){
-      data_arr[j] = *((short*)&read_inf);
+      data_arr[j] = *(((short*)&read_inf) + j);
     }
     
     ////Header, information, footer print to serial
