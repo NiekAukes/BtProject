@@ -59,8 +59,11 @@ void loop() {
     ////Header, information, footer print to serial
     Serial.write((char*)&data_length, 2);//header
     Serial.write((char*)&reads[i], 2);//data length
-    Serial.write((char*)data_arr,sizeof(data_arr)); //speciale functie Serial.write, arrays zijn eigenlijk char pointers,
-    Serial.write(0xFF); Serial.write(0xFF);         //hier mee verstuur je dus gewoon een array
+    //information
+    Serial.write((char*)&read_inf,8)); //size 8 = double (8 bytes)
+    //footer
+    Serial.write(0xFF); 
+    Serial.write(0xFF);
 
     //Serial.println(int(float(analogRead(A0)) * (1024.0/1023.0)));
   }
