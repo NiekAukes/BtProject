@@ -16,6 +16,8 @@ Prot14 =14
 Prot15 =15
 Prot16 =16
 
+val = 0
+
 Mode_Press = 0
 Mode_Absolute = 1
 
@@ -40,16 +42,18 @@ end
 function Start()
   while true do
     val = RecvVal()
-    LF = val[0] 
-    RF = val[1]
-    MF = val[2]
-    IF = val[3]
-    Th = val[4]
-    AX = val[5]
-    AY = val[6]
-    AZ = val[7]
-    RY = val[8]
+    
+    LF = val[1] 
+    RF = val[2]
+    MF = val[3]
+    IF = val[4]
+    Th = val[5]
+    AX = val[6]
+    AY = val[7]
+    AZ = val[8]
+    RY = val[9]
     go = Update()
+    os.execute("sleep " .. 10)
     if go == false then break end
   end
   

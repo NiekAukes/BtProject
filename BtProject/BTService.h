@@ -59,7 +59,7 @@ extern "C" {
 		short id = 0;
 		short DataLength = 0;
 		//int FOURBYTEBUFFER;
-		double data = 0.0;
+		float data = 0.0;
 		/*NormalData(NormalData& nd) {
 
 		}
@@ -77,7 +77,7 @@ enum class Expectedtype
 class BTService
 {
 private:
-	double values[11]; //values bound to protocol
+	float values[11]; //values bound to protocol
 	HANDLE Radio;
 	SOCKET s;
 public:
@@ -99,12 +99,17 @@ public:
 	double partdata = 0;
 	Expectedtype expected = Expectedtype::Protocol;
 	NormalData* dat;
+	bool IsConnected = false;
+	int MaxIdNumber = 11;
 
 	std::string pipedata;
 
 	BTService()
 	{
 		std::cout << "initiated service\n";
+		for (int i = 0; i < MaxIdNumber; i++) {
+			values[i] = 1;
+		}
 		inst = this;
 		
 	}
@@ -118,7 +123,7 @@ public:
 	int DataGenerator();
 	std::vector<short> GetGeneratedData();
 
-	double* getDoubleDataFromBT(int* length);
+	float* getDoubleDataFromBT(int* length);
 
 
 };

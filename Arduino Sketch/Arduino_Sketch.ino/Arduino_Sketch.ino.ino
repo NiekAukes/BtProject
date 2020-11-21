@@ -29,18 +29,19 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_z         12
 
 //short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
-short reads[] = {duim}; //DEBUG VERSIE
+short reads[] = {0}; //DEBUG VERSIE
 
 //reads wordt ook gebruikt voor header informatie
 
 const short data_length = 4; //length of double
 const short footer =      0xFFFF; //'exit' code of information
 short data_arr[data_length];
-double read_inf;
+float read_inf;
 
 void setup() {
   Serial.begin(9600);
   pinMode(duim,INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 
@@ -50,21 +51,29 @@ void loop() {
   for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
     
     read_inf = (analogRead(pot)/1023.0);
-    
-    //Cut information to shorts
-    for(int j = 0; j < data_length; j++){
-      data_arr[j] = *(((short*)&read_inf) + j);
-    }
+    //digitalWrite(LED_BUILTIN, HIGH);
+    if (read_inf < 0.5)
+      digitalWrite(LED_BUILTIN, HIGH);
+    else 
+      digitalWrite(LED_BUILTIN, LOW);
     
     ////Header, information, footer print to serial
-    Serial.write((char*)&data_length, 2);//header
     Serial.write((char*)&reads[i], 2);//data length
+    Serial.write((char*)&data_length, 2);//header
     //information
-    Serial.write((char*)&read_inf,8)); //size 8 = double (8 bytes)
+    /*char buf[24]; // "-2147483648\0"
+    Serial.print(read_inf); Serial.print(" : ");
+    for(int j = 0; j < 8; j++) {
+      char* ch = itoa((int)(*(((char*)&read_inf) + j)), buf, 10);
+      Serial.print(ch); Serial.print(" ");
+    }
+    Serial.print("\n");
+    */
+    Serial.write((char*)&read_inf,4); //size 8 = double (8 bytes)
     //footer
     Serial.write(0xFF); 
     Serial.write(0xFF);
-
+    //delay(50);
     //Serial.println(int(float(analogRead(A0)) * (1024.0/1023.0)));
   }
 }
