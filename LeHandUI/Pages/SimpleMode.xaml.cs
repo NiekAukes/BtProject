@@ -17,6 +17,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
 using Label = System.Windows.Controls.Label;
@@ -653,7 +654,7 @@ namespace LeHandUI
 			//fix the rest lazy piece of shit douwe
 
 		}
-        #endregion
+		#endregion
 
         #region Label/txtbox Handlers
         private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -686,28 +687,31 @@ namespace LeHandUI
 			if (sender != simpleModeFileListBox.SelectedItem)
 			{
 				Label lbl = (Label)sender;
-				lbl.Background = transparent;
-				lbl.Foreground = off_white;
-				lbl.BorderThickness = new Thickness(0);
-				lbl.BorderBrush = transparent;
+				StyleNonSelectedLabel(lbl);
 			}
 
 		}
 
 		public Label prevlbl = null;
-		private void Lbl_MouseDown(object sender, MouseEventArgs e)
+		private async void Lbl_MouseDown(object sender, MouseEventArgs e)
 		{
+			
 			Label lbl = (Label)sender;
 			
 			simpleModeFileListBox.SelectedItem = lbl;
 			
 			if (lbl != prevlbl) {
 				StyleSelectedLabel(lbl);
+
+				//skips loading or saving unless cooldown of 100ms is finished.
+
 				LoadFile(simpleModeFileListBox.SelectedIndex);
+					
 			}
 			if (prevlbl != null)
             {
 				StyleNonSelectedLabel(prevlbl);
+
 				SaveChanges();
 			}
 			prevlbl = lbl;
@@ -803,7 +807,7 @@ namespace LeHandUI
 			refreshFiles();
 		}
 
-		private void addRuleButton_Click(object sender, RoutedEventArgs e)
+		private async void addRuleButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a rule to the ruleset file:
 			//naam character: 0x00 + character voor variabele + 2 doubles + character voor action id + 2 keer 4 bytes voor args
@@ -813,7 +817,7 @@ namespace LeHandUI
 			//Moet een usercontrol invoegen (simplemodeparametereditor.xaml) aan de stackpanel in simplemode
 			//moet naam geven denk ik
 
-			FadePopup(saveErrorPopup);
+			await FadePopup(saveErrorPopup);
 			List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
 
 			int selectedIndex = simpleModeFileListBox.SelectedIndex; //loopen door de filedata en alles in parameter editor ui zetten

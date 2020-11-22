@@ -94,6 +94,11 @@ namespace LeHandUI
 		#region BUTTON_HANDLERS + LABEL STYLES
 		Label lastselectedLabel;
 
+		private void StyleLuaListbox()
+        {
+			//
+        }
+
 		private void LuaFileView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 		}
@@ -552,6 +557,7 @@ namespace LeHandUI
 			
 			//set file view to the listbox
 			Listbox = LuaFileView;
+			StyleLuaListbox();
 
 			//get all the filenames from registry
 			int len = LHregistry.GetAllFilenames().Length;

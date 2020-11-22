@@ -29,11 +29,11 @@
                  very dark blue, dark blue,    aqua,      pale aqua,     greyish-->
 
         <!--List of all lua files-->
-        <ListBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" BorderThickness="1"
-                 Margin="15,5,0,0" Padding="5" FontSize="15" x:Name="LuaFileView" 
-                 Background="#212121" BorderBrush="White" Foreground="#F2F2F2" 
-                 FontFamily="Futura Lt BT"
-                 Control.MouseDoubleClick="LoadLuaFileFromSelectedObjectInList">
+        <ListBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" FontSize="15" 
+                 x:Name="LuaFileView" Background="#212121" BorderBrush="White" 
+                 Foreground="#F2F2F2" FontFamily="Futura Lt BT"
+                 Control.MouseDoubleClick="LoadLuaFileFromSelectedObjectInList"
+                 Style="{StaticResource listBoxStyle}">
         </ListBox>
 
 
@@ -73,13 +73,18 @@
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             x:Name="textEditor" FontFamily="Consolas" 
             TextChanged="ChangedFile" ClipToBounds="True" 
-            BorderThickness="1" BorderBrush="#F2F2F2" FontSize="15"
+            BorderThickness="1" BorderBrush="White" FontSize="15"
             Grid.Column="2" Grid.ColumnSpan="5" Grid.Row="3"
             Grid.RowSpan="2" Background="#212121" Foreground="#F2F2F2"
-            Margin="0,5,0,0" Padding="5,5,5,10"  
+            Margin="0,5,0,0" Padding="5,5,5,10"
             SyntaxHighlighting="Lua" VerticalScrollBarVisibility="Visible"
             MouseEnter="FocusMouseEnter"
             PreviewMouseWheel="EditorBox_PreviewMouseWheel">
+            <avalonEdit:TextEditor.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+            </avalonEdit:TextEditor.Resources>
         </avalonEdit:TextEditor>
 
 
