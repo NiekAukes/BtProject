@@ -332,17 +332,16 @@ typedef DeviceDetails* lpDeviceDetails;
 		while (signal == nullptr ? false : *signal) 
 		{
 			//bool frev = false;
-			char buf[8] = "       "; //creates buffer
-			recv(s, buf, 8, 0); //receives values from bt
+			char buf[10] = "       "; //creates buffer
+			recv(s, buf, 10, 0); //receives values from bt
 			
-			for (int i = 0; i < 8; i++) { //loops through all
+			for (int i = 0; i < 10; i++) { //loops through all
 				if (buf[i] != ' ') { //if character is not space, filter it
 					//std::cout << (int)buf[i] << " "; //print
 					if (buf[i] == (char)0xff && buf[i + 1] == (char)0xff) { //if footer detected
-						bts->Data.push(buf[i]);
-						bts->Data.push(buf[i + 1]);
-						bts->ProcessData(&bts->dat); //process all data
-						bts->ApplyData(bts->dat, true);
+						bts->Data.push(-1);
+						if (!bts->ProcessData(&bts->dat)) //process all data
+							bts->ApplyData(bts->dat, true);
 						bts->dat = nullptr;
 
 						i++;
@@ -377,6 +376,9 @@ typedef DeviceDetails* lpDeviceDetails;
 					Lastchar = buf[i];
 				}
 				
+			}
+			if (bts->Data.size() > 100) {
+				bts->Data.empty();
 			}
 		}
 		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
@@ -434,15 +436,10 @@ typedef DeviceDetails* lpDeviceDetails;
 			if (chunk == (short)0xFFFF) {
 				
 
-				if (i == Length - 1 && !broken) { //footer expected
+				if (i - 2 == Length && !broken) { //footer expected
 					
 					*out = (NormalData*)(ret->data());
-
-					//Reverse byte order
-
-					/*(*out)->id = _byteswap_ushort((*out)->id);
-					(*out)->DataLength = _byteswap_ushort((*out)->DataLength);
-					(*out)->data.Double = _byteswap_ulong((*out)->data.Double);*/
+					
 					return 0;
 				}
 				else return 1;
@@ -544,7 +541,7 @@ typedef DeviceDetails* lpDeviceDetails;
 			return;
 		if (DataIn->id < 11) {											//GOING TO CHANGE TO AN ASSIGNABLE INT
 			values[DataIn->id] = DataIn->data;
-			std::cout << DataIn->data;
+			//std::cout << DataIn->data << std::endl;
 		}
 		if (Del)
 			delete DataIn;
@@ -623,7 +620,7 @@ typedef DeviceDetails* lpDeviceDetails;
 		}
 	}
 
-	double* BTService::getDoubleDataFromBT(int* length)
+	float* BTService::getDoubleDataFromBT(int* length)
 	{
 		/*for (int i = 0; i < 11; i++) {
 			*(values + i) = rand();

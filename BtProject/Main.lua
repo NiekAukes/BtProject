@@ -14,12 +14,18 @@ Update = function ()
     --print(X .. "times executed")
     X =X + 1
     if X % 3000 == 0 then
-        --Kpress("a", 0)
-        Mpress(Button_MLD + Button_MLU)
-        Sys("cls")
-        print("men, i don")
-        return false
+        
+        x = val[2]
+        print(x)
+    --print(string.rep(" ", x) .. "|")
+    if (val[2] < 0.5) then
+        Mpress(Button_MLD)
+        --os.execute("sleep " .. 500)
+    else
+        Mpress(Button_MLU)
     end
+end
+
     return true	--will continue program
 end
 

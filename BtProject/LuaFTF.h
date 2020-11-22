@@ -46,27 +46,40 @@ void as_table(lua_State* L, T begin, U end) {
 	}
 }
 
+
+
 static int deb(lua_State* L) {
-	double* values = new double(5.9);
-	double value[4] = { 4.0, 11.0, 1.0, 1.5 };
+	int button = lua_tonumber(L, 1);
+	int mode = lua_tonumber(L, 2);
+
+	INPUT ip;
+	ip.type = INPUT_MOUSE;
+	ip.mi.dx = 0; ip.mi.dy = 0;
+	ip.mi.time = 0;
+	ip.mi.dwExtraInfo = 0;
+	ip.mi.mouseData = 0;
+	ip.mi.dwFlags = button;
+	UINT ret = SendInput(1, &ip, sizeof(INPUT));
+	return 0;
+}
+
+static int lua_RecvVal(lua_State* L/*, short* val*/) {
+	float* values = nullptr;
+	//double value[4] = { 4.0, 11.0, 1.0, 1.5 };
 	int amount = 0;
 	values = LuaFTF::requestservice->getDoubleDataFromBT(&amount);
 
 	const size_t s = amount;
-	std::vector<double> vec(values, values + amount);
+	//std::vector<float> vec(values, values + amount);
 
-	as_table(L, vec.begin(), vec.end());
-	/*lua_createtable(L, 0, amount);
-	for (int i = 0; i < amount; i++)
-	{
+	//as_table(L, vec.begin(), vec.end());
+	lua_newtable(L);
+	for (int i = 0; i < amount; i++) {
+		lua_pushinteger(L, i + 1);
 		lua_pushnumber(L, *(values + i));
-		lua_rawseti(L, -2, i + 1);
-	}*/
+		lua_settable(L, -3);
+	}
 	return 1;
-}
-
-static int lua_RecvVal(lua_State* L/*, short* val*/) {
-	return deb(L);
 }
 
 
@@ -110,17 +123,7 @@ static int lua_KPress(lua_State* L/*, char Key, int mode*/) {
 	return 0;
 }
 static int lua_MPress(lua_State* L/*, int Button, int mode*/) {
-	int button = lua_tonumber(L, 1);
-	int mode = lua_tonumber(L, 2);
-
-	INPUT ip;
-	ip.type = INPUT_MOUSE;
-	ip.mi.dx = 0; ip.mi.dy = 0;
-	ip.mi.time = 0;
-	ip.mi.dwExtraInfo = 0;
-	ip.mi.mouseData = 0;
-	ip.mi.dwFlags = button;
-	UINT ret = SendInput(1, &ip, sizeof(INPUT));
+	deb(L);
 	return 0;
 }
 

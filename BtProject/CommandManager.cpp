@@ -482,7 +482,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					keysend->startSender(false);
 					command = "";
 					
-					datagen = new std::thread(datgen, &service, keysend);
+					//datagen = new std::thread(datgen, &service, keysend);
 
 					//std::this_thread::sleep_for(std::chrono::microseconds(500));
 					std::cout << "commandline active\n";
