@@ -84,6 +84,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="listBoxStyle" x:Name="listBoxStyle" TargetType="ListBox">
+            <Style.Setters>
+                <Setter Property="Margin" Value="15,5,0,0"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style.Setters>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+            </Style.Resources>
+        </Style>
         
         <Style TargetType="ListBoxItem" x:Name="listBoxItemStyle" x:Key="listBoxItemStyle">
             <Setter Property="Background" Value="Transparent"/>
@@ -143,7 +156,11 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Focusable" Value="False"/>
-
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+            </Style.Resources>
         </Style>
         <Style x:Key="TranspButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -194,6 +211,7 @@
                         <Border Name="border" Background="{TemplateBinding Background}"
                                 BorderBrush="#F2F2F2" CornerRadius="0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Button.IsPressed" Value="True">
@@ -210,6 +228,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+            </Style.Resources>
         </Style>
 
         <Style x:Key="TitleText" TargetType="TextBlock">
@@ -217,6 +240,7 @@
                 <Setter Property="Foreground" Value="#34acbc"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="FontSize" Value="25"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
             </Style.Setters>
         </Style>
 
