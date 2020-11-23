@@ -372,7 +372,7 @@ typedef DeviceDetails* lpDeviceDetails;
 					count++;
 				}
 				
-				if (i == 7) {
+				if (i == 9) {
 					Lastchar = buf[i];
 				}
 				
@@ -382,6 +382,39 @@ typedef DeviceDetails* lpDeviceDetails;
 			}
 		}
 		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
+	}
+
+	int BTService::LatencyTest() 
+	{
+		char* buf = new char[8];
+		LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+		LARGE_INTEGER Frequency;
+
+		QueryPerformanceFrequency(&Frequency);
+		QueryPerformanceCounter(&StartingTime);
+		send(s, "TEST", 4, NULL);
+		//start timing
+		
+
+		recv(s, buf, 8, NULL);
+
+		QueryPerformanceCounter(&EndingTime);
+		ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
+
+
+		//
+		// We now have the elapsed number of ticks, along with the
+		// number of ticks-per-second. We use these values
+		// to convert to the number of elapsed microseconds.
+		// To guard against loss-of-precision, we convert
+		// to microseconds *before* dividing by ticks-per-second.
+		//
+
+		ElapsedMicroseconds.QuadPart *= 1000000;
+		ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+
+		std::cout << ElapsedMicroseconds.QuadPart << std::endl;
+		return ElapsedMicroseconds.QuadPart;
 	}
 
 	bool* BTService::ReceiveData(char* buf, int buflen)

@@ -468,6 +468,10 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 							}
 						}
 					}
+					else if (arg2._Equal("test"))
+					{
+						service.LatencyTest();
+					}
 					else if (arg2._Equal("list") || arg2._Equal("ls"))
 					{
 						//to do

@@ -11,20 +11,23 @@ print("Hello LeHand")
 X = 1
 Update = function ()
     --will be executed every frame
-    --print(X .. "times executed")
-    X =X + 1
+    if (val[1] < 0.5) then
+        print("HIGH ".. val[1])
+    else
+        print("LOW " .. val[1])
+
+    --[[
     if X % 3000 == 0 then
         
         x = val[2]
         print(x)
-    --print(string.rep(" ", x) .. "|")
-    if (val[2] < 0.5) then
-        Mpress(Button_MLD)
-        --os.execute("sleep " .. 500)
-    else
-        Mpress(Button_MLU)
+        --print(string.rep(" ", x) .. "|")
+        if (val[2] < 0.5) then
+            Mpress(Button_MLD)
+        else
+            Mpress(Button_MLU)
+        end ]]--
     end
-end
 
     return true	--will continue program
 end

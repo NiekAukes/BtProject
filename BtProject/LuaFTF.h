@@ -76,7 +76,7 @@ static int lua_RecvVal(lua_State* L/*, short* val*/) {
 	lua_newtable(L);
 	for (int i = 0; i < amount; i++) {
 		lua_pushinteger(L, i + 1);
-		lua_pushnumber(L, *(values + i));
+		lua_pushnumber(L, (*(values + i)));
 		lua_settable(L, -3);
 	}
 	return 1;

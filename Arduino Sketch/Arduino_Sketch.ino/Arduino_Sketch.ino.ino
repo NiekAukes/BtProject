@@ -36,6 +36,8 @@ short reads[] = {0}; //DEBUG VERSIE
 const short data_length = 4; //length of double
 const short footer =      0xFFFF; //'exit' code of information
 short data_arr[data_length];
+
+bool active = false;
 float read_inf;
 
 void setup() {
@@ -48,32 +50,43 @@ void setup() {
 
 void loop() {
   //Read information
-  for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
-    
-    read_inf = (analogRead(pot)/1023.0);
-    //digitalWrite(LED_BUILTIN, HIGH);
-    if (read_inf < 0.5)
-      digitalWrite(LED_BUILTIN, HIGH);
-    else 
-      digitalWrite(LED_BUILTIN, LOW);
-    
-    ////Header, information, footer print to serial
-    Serial.write((char*)&reads[i], 2);//data length
-    Serial.write((char*)&data_length, 2);//header
-    //information
-    /*char buf[24]; // "-2147483648\0"
-    Serial.print(read_inf); Serial.print(" : ");
-    for(int j = 0; j < 8; j++) {
-      char* ch = itoa((int)(*(((char*)&read_inf) + j)), buf, 10);
-      Serial.print(ch); Serial.print(" ");
+  if (active) 
+  {
+    for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
+      
+      read_inf = (analogRead(pot)/1023.0);
+      //digitalWrite(LED_BUILTIN, HIGH);
+      if (read_inf < 0.5)
+        digitalWrite(LED_BUILTIN, HIGH);
+      else 
+        digitalWrite(LED_BUILTIN, LOW);
+      
+      ////Header, information, footer print to serial
+      Serial.write((char*)&reads[i], 2);//data length
+      Serial.write((char*)&data_length, 2);//header
+      //information
+      Serial.write((char*)&read_inf,4); //size 8 = double (8 bytes)
+      //footer
+      Serial.write(0xFF); 
+      Serial.write(0xFF);
+      //delay(50);
+      //Serial.println(int(float(analogRead(A0)) * (1024.0/1023.0)));
     }
-    Serial.print("\n");
-    */
-    Serial.write((char*)&read_inf,4); //size 8 = double (8 bytes)
-    //footer
-    Serial.write(0xFF); 
-    Serial.write(0xFF);
-    //delay(50);
-    //Serial.println(int(float(analogRead(A0)) * (1024.0/1023.0)));
+  }
+  if (Serial.available()) {
+    String str = Serial.readString();
+    str.trim();
+    //Serial.println("GOT");
+    if (str == "OK") {
+      active = true;
+    }
+    if (str == "STOP") {
+      active = true;
+    }
+    if (str == "TEST") {
+      active = false;
+      delay(1000);
+      Serial.print("OK");
+    }
   }
 }

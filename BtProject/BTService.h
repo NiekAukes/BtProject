@@ -119,6 +119,7 @@ public:
 	bool* ReceiveData(char* buf, int buflen);
 	int ProcessData(NormalData** out); //receives data, returns protocol or negative if failed
 	void ApplyData(NormalData* Datain, bool Del);
+	int LatencyTest(); //returns milliseconds
 
 	int DataGenerator();
 	std::vector<short> GetGeneratedData();
