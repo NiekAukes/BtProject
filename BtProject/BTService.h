@@ -120,6 +120,7 @@ public:
 	int ProcessData(NormalData** out); //receives data, returns protocol or negative if failed
 	void ApplyData(NormalData* Datain, bool Del);
 	int LatencyTest(); //returns milliseconds
+	void sendStart();
 
 	int DataGenerator();
 	std::vector<short> GetGeneratedData();

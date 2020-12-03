@@ -8,14 +8,22 @@ LeHand = require "LeHand"
 --begin, will be executed on startup
 print("Hello LeHand")
 
-X = 1
+X = false
 Update = function ()
     --will be executed every frame
-    if (val[1] < 0.5) then
-        print("HIGH ".. val[1])
+    if (X) then
+        if (val[1] < 0.5) then
+            print("HIGH ".. val[1])
+            X = false
+        end
     else
-        print("LOW " .. val[1])
+        if (val[1] > 0.5) then
+            print("LOW ".. val[1])
+            X = true
+        end
 
+    --X = X + 1
+    
     --[[
     if X % 3000 == 0 then
         

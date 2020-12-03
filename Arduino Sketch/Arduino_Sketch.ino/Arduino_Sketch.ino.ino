@@ -43,12 +43,40 @@ float read_inf;
 void setup() {
   Serial.begin(9600);
   pinMode(duim,INPUT);
+  pinMode(5, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
+  Serial.setTimeout(20);
 }
 
 
 
 void loop() {
+  if (Serial.available()) {
+    Serial.println("GOT\n");
+    String str = Serial.readString();
+    Serial.println("TRIM\n");
+    str.trim();
+    
+    if (str == "OK") {
+      active = true;
+      digitalWrite(5, HIGH);
+      Serial.write("OK");
+    }
+    if (str == "STOP") {
+      active = false;
+      
+      digitalWrite(5, LOW);
+    }
+    if (str == "TEST") {
+      active = false;
+      //delay(1000);
+      digitalWrite(5, HIGH);
+      Serial.write("OK");
+      delay(300);
+      digitalWrite(5, LOW);
+    }
+  }
+  
   //Read information
   if (active) 
   {
@@ -73,20 +101,5 @@ void loop() {
       //Serial.println(int(float(analogRead(A0)) * (1024.0/1023.0)));
     }
   }
-  if (Serial.available()) {
-    String str = Serial.readString();
-    str.trim();
-    //Serial.println("GOT");
-    if (str == "OK") {
-      active = true;
-    }
-    if (str == "STOP") {
-      active = true;
-    }
-    if (str == "TEST") {
-      active = false;
-      delay(1000);
-      Serial.print("OK");
-    }
-  }
+  
 }

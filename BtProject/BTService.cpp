@@ -1,6 +1,24 @@
 #include "BTService.h"
+#include <fcntl.h>
+
 
 typedef DeviceDetails* lpDeviceDetails;
+
+bool SetSocketBlockingEnabled(int fd, bool blocking)
+{
+	if (fd < 0) return false;
+
+#ifdef _WIN32
+	unsigned long mode = blocking ? 0 : 1;
+	return (ioctlsocket(fd, FIONBIO, &mode) == 0) ? true : false;
+#else
+	int flags = fcntl(fd, F_GETFL, 0);
+	if (flags == -1) return false;
+	flags = blocking ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
+	return (fcntl(fd, F_SETFL, flags) == 0) ? true : false;
+#endif
+}
+
 	int BTService::Discover(DeviceDetails** out)
 	{
 		std::cout << "discovering\n";
@@ -231,7 +249,7 @@ typedef DeviceDetails* lpDeviceDetails;
 		if (dwResult != SOCKET_ERROR) {
 
 			s = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM); //was L2CAP 
-
+			
 			SOCKADDR_BTH name;
 			ZeroMemory(&name, sizeof(SOCKADDR_BTH));
 			name.addressFamily = AF_BTH;
@@ -258,6 +276,9 @@ typedef DeviceDetails* lpDeviceDetails;
 				//succeeded in connected
 				std::cout << "now connected to the device" << '\n';
 				
+				//set socket mode
+				SetSocketBlockingEnabled(s, false);
+
 				//register latest address
 				HKEY hkey;
 				DWORD Dispos;
@@ -329,12 +350,25 @@ typedef DeviceDetails* lpDeviceDetails;
 		char* pshort = new char[2];
 		int count = 0; 
 		//pshort = new char[2];
+		send(s, "OK", 2, NULL);
 		while (signal == nullptr ? false : *signal) 
 		{
+			//performance
+			LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+			LARGE_INTEGER Frequency;
+
+			QueryPerformanceFrequency(&Frequency);
+			QueryPerformanceCounter(&StartingTime);
+
 			//bool frev = false;
-			char buf[10] = "       "; //creates buffer
-			recv(s, buf, 10, 0); //receives values from bt
-			
+			char buf[10] = "         "; //creates buffer
+			int rec = 0;
+			while (rec <= 0) {
+				rec = recv(s, buf, 10, 0); //receives values from bt
+				/*if (rec == -1)
+					std::cout << GetLastError();*/
+			}
+
 			for (int i = 0; i < 10; i++) { //loops through all
 				if (buf[i] != ' ') { //if character is not space, filter it
 					//std::cout << (int)buf[i] << " "; //print
@@ -380,23 +414,48 @@ typedef DeviceDetails* lpDeviceDetails;
 			if (bts->Data.size() > 100) {
 				bts->Data.empty();
 			}
+
+			//performance
+			QueryPerformanceCounter(&EndingTime);
+			ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
+
+
+			//
+			// We now have the elapsed number of ticks, along with the
+			// number of ticks-per-second. We use these values
+			// to convert to the number of elapsed microseconds.
+			// To guard against loss-of-precision, we convert
+			// to microseconds *before* dividing by ticks-per-second.
+			//
+
+			ElapsedMicroseconds.QuadPart *= 1000000;
+			ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+
+			//std::cout << ElapsedMicroseconds.QuadPart / 1000.0f << std::endl;
 		}
+		delete[] pshort;
 		std::cout << "stopped receiving: " << (signal == nullptr ? "signal corrupt" : "ended");
 	}
 
-	int BTService::LatencyTest() 
+	int BTService::LatencyTest()
 	{
 		char* buf = new char[8];
 		LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
 		LARGE_INTEGER Frequency;
 
+		
+		int ret = send(s, "TEST", 4, NULL);
+		if (ret == -1) {
+			return -1;
+		}
+		//start timing
 		QueryPerformanceFrequency(&Frequency);
 		QueryPerformanceCounter(&StartingTime);
-		send(s, "TEST", 4, NULL);
-		//start timing
-		
 
-		recv(s, buf, 8, NULL);
+		int rec = 0;
+		while (rec <= 0) {
+			rec = recv(s, buf, 8, NULL);
+		}
 
 		QueryPerformanceCounter(&EndingTime);
 		ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
@@ -413,8 +472,14 @@ typedef DeviceDetails* lpDeviceDetails;
 		ElapsedMicroseconds.QuadPart *= 1000000;
 		ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
 
-		std::cout << ElapsedMicroseconds.QuadPart << std::endl;
+		std::cout << ElapsedMicroseconds.QuadPart / 1000.0 << std::endl;
 		return ElapsedMicroseconds.QuadPart;
+	}
+
+	void BTService::sendStart()
+	{
+		int ret = send(s, "OK", 2, NULL);
+
 	}
 
 	bool* BTService::ReceiveData(char* buf, int buflen)
