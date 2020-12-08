@@ -177,8 +177,8 @@
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
             <DockPanel>
-                <TextBox x:Name="MouseMoveBox1" Padding="5,0,5,0" HorizontalAlignment="Center" Text="xDirection"/>
-                <TextBox x:Name="MouseMoveBox2" Padding="5,0,5,0" HorizontalAlignment="Center" Text="yDirection"/>
+                <TextBox Width="{Binding }" x:Name="MouseMoveBox1" Padding="5,0,5,0" HorizontalAlignment="Center" Text="xDirection" TextChanged="MouseMoveBox_TextChanged"/>
+                <TextBox x:Name="MouseMoveBox2" Padding="5,0,5,0" HorizontalAlignment="Center" Text="yDirection" TextChanged="MouseMoveBox_TextChanged"/>
             </DockPanel>
         </DockPanel>
         <DockPanel x:Name="nulpanel"></DockPanel>

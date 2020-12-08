@@ -104,7 +104,8 @@ namespace LeHandUI
 			refreshFiles();
 
 			//getfiledata returns null, pls fix volvo
-			FileData dat = SimpleFileManager.GetFileData(0)[0];
+			//FileData dat = SimpleFileManager.GetFileData(0)[0];
+			//IDK WHAT THIS DOES, BUT I HAVE COMMENTED IT
 
 		}
 		#endregion
@@ -132,12 +133,14 @@ namespace LeHandUI
 					listBoxUIElemtents.Add(newemptylabel);
 				}
 
-				if (listBoxUIElemtents[i] != null) {
+				if (listBoxUIElemtents[i] != null)
+				{
 					try
 					{
 						listboxLabel = (Label)listBoxUIElemtents[i];
 					}
-					catch (Exception e) {
+					catch (Exception e)
+					{
 						listboxTextBox = (TextBox)listBoxUIElemtents[i];
 						Debug.WriteLine("Caught exception (file is textbox, not label): " + e);
 					}
@@ -175,43 +178,9 @@ namespace LeHandUI
 
 			simpleModeFileListBox.Items.Refresh();
 		}
-		/* HERE FOR REWRITING PURPOSES
-		private void RefreshLuaScript()
-		{
-			List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-			int currOpenedFileId = FileManager.currentLoadedIndex;
-
-			for (int i = 0; i < LuaNames.Count; i++)
-			{
-				Label currLuaFileViewLabel = (Label)(LuaFileView.Items[i]);
-
-				if (LuaNames[i] == (string)currLuaFileViewLabel.Content)
-				{
-					continue;
-				}
-				else
-				{
-					Label label = new Label();
-					label.Name = "TxtBox" + i.ToString();
-					label.Content = LHregistry.getSimpleName(LuaNames[i]);
-
-					if (currOpenedFileId == i)
-					{
-						styleOpenedFileLabel(label);
-					}
-					else
-					{
-						styleLabel(label);
-					}
-					LuaFileView.Items.RemoveAt(i);
-					LuaFileView.Items.Insert(i, label);
-				}
-			}
-			LuaFileView.Items.Refresh();
-		}*/
 
 		#region LoadnSave
-		#region dictionary
+		#region ASCII dictionary of all the buttons that can be pressed
 		/*			 Button_MLD  = 0x0002     left button down
 					Button_MLU = 0x0004     left button up
 				   Button_MRD = 0x0008     right button down
@@ -480,25 +449,29 @@ namespace LeHandUI
         {
 			saveErrorPopup.IsOpen = true;
 
-			//var myDoubleAnimation = new DoubleAnimation();
-			//myDoubleAnimation.From = 0.0;
-			//myDoubleAnimation.To = 1.0;
-			//myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
-			//myDoubleAnimation.AutoReverse = true ;
-			//myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+			var myDoubleAnimation = new DoubleAnimation();
+			myDoubleAnimation.From = 0.0;
+			myDoubleAnimation.To = 1.0;
 
-			//st.Children.Add(myDoubleAnimation);
-			//Storyboard.SetTargetName(myDoubleAnimation, saveErrorPopup.Name);
-			//Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Popup.OpacityProperty));
+			myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
 
-			//st.Begin(saveErrorPopup);
+			myDoubleAnimation.AutoReverse = true ;
 
-			await Task.Delay(1000);
+			st.Children.Add(myDoubleAnimation);
+			Storyboard.SetTargetName(myDoubleAnimation, saveErrorPopup.Name);
+			Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(OpacityProperty));
 
+			st.Begin(saveErrorPopup);
 
+            st.Completed += Storyboard_Completed;
 		}
 
-		public void SaveChanges()
+        private void Storyboard_Completed(object sender, EventArgs e)
+        {
+			saveErrorPopup.IsOpen = false;
+        }
+
+        public void SaveChanges()
         {
 			//pak alle instellingen van parametereditor xaml user interfaces
 			//gooi ze in een filedata list
@@ -533,8 +506,18 @@ namespace LeHandUI
 							}
 
 							break;
-						case 1:
+						case 1: //keypress (insert selected index of mousepresschooser into arg1)
+							newFileData.arg1 = currEditor.MousePressChooser.SelectedIndex;
+							break;
 
+						case 2: //mousemove (insert arg1 and arg2 with mouse1 and mouse2
+							
+							//CONVERTS STRINGS INTO LONGS, typing a character into the textbox is prevented in the textbox handlers.
+							newFileData.arg1 = long.Parse(currEditor.MouseMoveBox1.Text);
+                            
+							break;
+						case 3:
+							//do nothing because the program exit does not require any arguments
 							break;
 					}
 
@@ -559,7 +542,7 @@ namespace LeHandUI
 			lbl.BorderBrush = transparent;
 
 			lbl.LostKeyboardFocus	+= Lbl_LostKeyboardFocus;
-			lbl.PreviewMouseLeftButtonDown	+= Lbl_MouseDown;
+			lbl.PreviewMouseLeftButtonUp	+= LblMouseUp;
             lbl.MouseEnter			+= Lbl_MouseEnter;
 			lbl.MouseLeave			+= Lbl_MouseLeave;
 
@@ -693,7 +676,7 @@ namespace LeHandUI
 		}
 
 		public Label prevlbl = null;
-		private async void Lbl_MouseDown(object sender, MouseEventArgs e)
+		private async void LblMouseUp(object sender, MouseEventArgs e)
 		{
 			
 			Label lbl = (Label)sender;
@@ -760,26 +743,7 @@ namespace LeHandUI
 				dosumShit(sender);
 			}*/
 		}
-		/*private void onListItemSelected(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			TextBox listitem = (TextBox)sender;
-			listitem.Focus();
-
-			listitem.Background			= dark_blue;
-			listitem.Foreground			= white;
-			listitem.BorderThickness	= new Thickness(0);
-
-		}
-		private void onListItemLeave(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			MainWindow.inst.Focus();
-
-			TextBox listitem = (TextBox)sender;
-			listitem.Background = transparent;
-			listitem.Foreground = off_white;
-			listitem.BorderThickness = new Thickness(0);
-			listitem.BorderBrush = transparent;
-		}*/
+		
 		#endregion
 
 		#region Button Handlers
@@ -847,6 +811,11 @@ namespace LeHandUI
 		{
 			saveCurrentFile();
 
+		}
+
+		private void simpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			SaveChanges();
 		}
 	}
 }

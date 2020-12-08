@@ -1,7 +1,9 @@
 ﻿using Microsoft.TeamFoundation.Framework.Client;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -13,6 +15,18 @@ namespace LeHandUI
     public partial class simpleModeParameterEditor : UserControl
     {
         public DockPanel ActiveControl = null;
+        private int width;
+        public int MouseMouseWidth {
+
+            get
+            {
+                return width;
+            }
+            set
+            {
+                width = value;
+            }
+        }
         public simpleModeParameterEditor()
         {
             
@@ -130,24 +144,7 @@ namespace LeHandUI
 
         }
 
-        private void lowerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
-        }
-
-        private void valueofsliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            double lowerval = lowerSlider.Value; double upperval = upperSlider.Value;
-            if(lowerval >= upperval)
-            {
-                upperSlider.Value++;
-            }
-            if(upperval <= lowerval)
-            {
-                lowerSlider.Value--;
-            }
-
-        }
+        
         public void initializeVars(FileData data)
         {
             lowerSlider.Value = data.beginRange * 100;
@@ -182,6 +179,26 @@ namespace LeHandUI
             return logic;
         }
 
+        #region Handlers for textboxes and comboboxes and shit
+        private void lowerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
+        private void valueofsliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            double lowerval = lowerSlider.Value; double upperval = upperSlider.Value;
+            if (lowerval >= upperval)
+            {
+                upperSlider.Value++;
+            }
+            if (upperval <= lowerval)
+            {
+                lowerSlider.Value--;
+            }
+
+        }
+
         private void actionChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cbox = (ComboBox)sender;
@@ -213,5 +230,30 @@ namespace LeHandUI
         {
 
         }
+
+        private void MouseMoveBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int result;
+            
+            if (((TextBox)sender).Text != null) {
+                if (!int.TryParse(((TextBox)sender).Text, out result))
+                {
+                    e.Handled = true;
+                    ((TextBox)sender).Text = "NO NUMBERS!";
+                }
+            }
+        }
+        #endregion
+
+        public class MouseMoveWidth : INotifyPropertyChanged
+        {
+            public event PropertyChangedEventHandler PropertyChanged;
+            private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
+        }
+        
     }
 }
