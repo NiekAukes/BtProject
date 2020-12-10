@@ -78,6 +78,12 @@ namespace LeHandUI
         public static string[] GetAllFilenames()
         {
             RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\LeHand\\Filenames");
+            if (rk == null)
+            {
+                //key does not exist
+                Registry.CurrentUser.CreateSubKey("Software\\LeHand\\Filenames");
+                return new string[0];
+            }
             string[] names = rk.GetValueNames();
             for (int i = 0; i < names.Length; i++)
             {

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Windows;
 using Microsoft.TeamFoundation.Common;
 using System.Runtime.CompilerServices;
+using Microsoft.Win32;
 
 namespace LeHandUI
 {
@@ -84,9 +85,18 @@ namespace LeHandUI
     }
     class SimpleFileManager
     {
-
+        public static bool CheckName(string name)
+        {
+            return File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh");
+        }
         public static string[] FileNames()
         {
+            if (MainWindow.Directory == null)
+            {
+                System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory);
+                Registry.CurrentUser.OpenSubKey("Software\\LeHand", true).SetValue("Dir", AppDomain.CurrentDomain.BaseDirectory);
+                MainWindow.Directory = AppDomain.CurrentDomain.BaseDirectory;
+            }
             string[] outstr = Directory.GetFiles(MainWindow.Directory + "\\Files");
             for (int i = 0; i < outstr.Length; i++)
             {
