@@ -115,7 +115,7 @@ namespace LeHandUI
 
 		public void refreshFiles()
 		{
-			fileNames = null;
+			listBoxUIElemtents.Clear();
 			fileNames = SimpleFileManager.FileNames();  //returns all "Simple" file names by splitting the name in the '.' 
 														//thus only getting the name, not the extension (ex: .lua gets deleted)
 
@@ -125,55 +125,57 @@ namespace LeHandUI
 			for (int i = 0; i < fileNames.Length; i++)
 			{
 				TextBox listboxTextBox = null;
-				Label listboxLabel = null;
+				Label listboxLabel = new Label();
+				listboxLabel.Content = fileNames[i];
+				listBoxUIElemtents.Add(listboxLabel);
 
-				while (listBoxUIElemtents.Count < fileNames.Length) //to make the length of both arrays identical (well not arrays, a list and an array but fuck it)
-				{
-					Label newemptylabel = new Label();
-					listBoxUIElemtents.Add(newemptylabel);
-				}
+				//while (listBoxUIElemtents.Count < fileNames.Length) //to make the length of both arrays identical (well not arrays, a list and an array but fuck it)
+				//{
+				//	Label newemptylabel = new Label();
+				//	listBoxUIElemtents.Add(newemptylabel);
+				//}
 
-				if (listBoxUIElemtents[i] != null)
-				{
-					try
-					{
-						listboxLabel = (Label)listBoxUIElemtents[i];
-					}
-					catch (Exception e)
-					{
-						listboxTextBox = (TextBox)listBoxUIElemtents[i];
-						Debug.WriteLine("Caught exception (file is textbox, not label): " + e);
-					}
-				}
+				//if (listBoxUIElemtents[i] != null)
+				//{
+				//	try
+				//	{
+				//		listboxLabel = (Label)listBoxUIElemtents[i];
+				//	}
+				//	catch (Exception e)
+				//	{
+				//		listboxTextBox = (TextBox)listBoxUIElemtents[i];
+				//		Debug.WriteLine("Caught exception (file is textbox, not label): " + e);
+				//	}
+				//}
 
-				if (listboxTextBox != null || listboxLabel != null)
-				{
+			//	if (listboxTextBox != null || listboxLabel != null)
+			//	{
 
-					if (listBoxUIElemtents[i] != null || (String)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
-					{
-						continue;
-					}
-					else
-					{
-						Label lbl = new Label();
-						lbl.Name = "txtbx " + i.ToString();
-						lbl.Content = fileNames[i];
+			//		if (listBoxUIElemtents[i] != null || (string)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
+			//		{
+			//			continue;
+			//		}
+			//		else
+			//		{
+			//			Label lbl = new Label();
+			//			lbl.Name = "txtbx " + i.ToString();
+			//			lbl.Content = fileNames[i];
 
-						if (currentOpenedFile == i)
-						{
-							StyleOpenedLabel(lbl);
-						}
+			//			if (currentOpenedFile == i)
+			//			{
+			//				StyleOpenedLabel(lbl);
+			//			}
 
-						else
-						{
-							StyleNonSelectedLabel(lbl);
-						}
+			//			else
+			//			{
+			//				StyleNonSelectedLabel(lbl);
+			//			}
 
-						listBoxUIElemtents.RemoveAt(i);
-						listBoxUIElemtents.Insert(i, lbl);
+			//			listBoxUIElemtents.RemoveAt(i);
+			//			listBoxUIElemtents.Insert(i, lbl);
 
-					}
-				}
+			//		}
+			//	}
 			}
 
 			simpleModeFileListBox.Items.Refresh();
@@ -752,8 +754,16 @@ namespace LeHandUI
 		{
 			//add a filename and ruleset
 			FileData[] emptyfiledata = new FileData[1];
-			string newFileName = "New file " + totaladdedfiles.ToString();
-			SimpleFileManager.ChangeFile(newFileName, emptyfiledata);
+			while (true)
+			{
+				string newFileName = "New file " + totaladdedfiles.ToString();
+				if (!SimpleFileManager.CheckName(newFileName))
+				{
+					SimpleFileManager.ChangeFile(newFileName, emptyfiledata);
+					break;
+				}
+				else totaladdedfiles++;
+			}
 			totaladdedfiles++;
 
 			refreshFiles();

@@ -540,7 +540,7 @@ namespace LeHandUI
 			Focusable = true;
 
 			StartupValues val = LHregistry.GetStartupValues();
-			SimpleMode.LastFileOpened = val.LastSimpleFileSelected;
+			//SimpleMode.LastFileOpened = val.LastSimpleFileSelected;
 			textEditor.FontSize = val.StartFontSize;
 			textEditor.Text = "function Start()\n	print(\"preview\")\nend\n\n\n\n\n\n\n\n";
 			LoadFileFromId(val.StartupFileId);
