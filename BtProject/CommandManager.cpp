@@ -434,51 +434,65 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				}
 				else if (command._Equal("device"))
 				{
-					std::string arg2 = args[1];
-					waiting = false;
-					/*if (std::cin.peek() == 10)
-						std::cout << "specify action: discover connect list\n";
-					std::cin >> arg2;*/
-					if (arg2._Equal("discover"))
-					{
-						int ndev = service.Discover(&devices);
-						deviceLen = ndev;
+					std::string arg2;
+					if (args.size() < 2) {
+						std::cout << "Argument(s) invalid or missing, aborted action\n";
 					}
+					else {
+						arg2 = args[1];
+						waiting = false;
+						/*if (std::cin.peek() == 10)
+							std::cout << "specify action: discover connect list\n";
+						std::cin >> arg2;*/
+						if (arg2._Equal("discover"))
+						{
+							int ndev = service.Discover(&devices);
+							if (ndev == -1)
+								std::cout << "No Bluetooth radios found, are you sure Bluetooth is enabled?\n";
+							deviceLen = ndev;
+						}
 
-					else if (arg2._Equal("connect"))
-					{
-						if (devices == nullptr || devices->valid == false)
+						else if (arg2._Equal("connect"))
 						{
-							std::cout << "no devices available\n";
+							
+							if (devices == nullptr || devices->valid == false)
+							{
+								std::cout << "no devices available\n";
+							}
+							else if (args.size() < 3)
+							{
+								std::cout << "Argument(s) invalid or missing, aborted action\n";
+
+							}
+							else
+							{
+								if (deviceLen == 1) {
+									service.Connect(*devices);
+								}
+								else {
+									int arg3 = std::stoi(args[2]);
+									/*if (std::cin.peek() == 10)
+										std::cout << "device: ";
+									std::cin >> arg3;*/
+									if (arg3 < deviceLen + 1)
+										service.Connect(*(devices + arg3));
+									else
+										std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
+								}
+							}
 						}
-						else
+						else if (arg2._Equal("test"))
 						{
-							if (deviceLen == 1) {
-								service.Connect(*devices);
-							}
-							else {
-								int arg3 = std::stoi(args[2]);
-								/*if (std::cin.peek() == 10)
-									std::cout << "device: ";
-								std::cin >> arg3;*/
-								if (arg3 < deviceLen + 1)
-									service.Connect(*(devices + arg3));
-								else
-									std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
-							}
+							service.LatencyTest();
 						}
-					}
-					else if (arg2._Equal("test"))
-					{
-						service.LatencyTest();
-					}
-					else if (arg2._Equal("list") || arg2._Equal("ls"))
-					{
-						//to do
-						std::cout << "Not yet implemented\n";
-					}
-					else if (arg2._Equal("auto")) {
-						int ret = service.LatestConnect();
+						else if (arg2._Equal("list") || arg2._Equal("ls"))
+						{
+							//to do
+							std::cout << "Not yet implemented\n";
+						}
+						else if (arg2._Equal("auto")) {
+							int ret = service.LatestConnect();
+						}
 					}
 				}
 				else if (command._Equal("start"))
