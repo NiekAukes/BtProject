@@ -34,6 +34,16 @@ public:
 	static BTService* requestservice;
 	static bool running;
 	void start(std::string filename, BTService* service);
+
+	static bool CheckLuaScript(std::string filename) {
+		lua_State* L = luaL_newstate();
+		luaL_openlibs(L);
+
+		bool ret = CheckLua(L, luaL_loadfile(L, filename.c_str()));
+		//delete L;
+
+		return ret;
+	}
 };
 
 template <typename T, typename U>
@@ -81,7 +91,6 @@ static int lua_RecvVal(lua_State* L/*, short* val*/) {
 	}
 	return 1;
 }
-
 
 
 

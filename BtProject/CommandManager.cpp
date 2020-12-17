@@ -524,7 +524,8 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 						save.put(0x00); save.put(0x01);
 					}
 					save.close();
-#else std::cout << "Obsolete command";
+#else 
+				std::cout << "Obsolete command";
 #endif
 				}
 				else if (command._Equal("load")) {
@@ -549,9 +550,17 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 #ifdef Obsolete
 							loadbtdfile(arg1);
 #else 
-							Keysender::LuaFile = full;
+							
 #endif
 						}
+						Keysender::LuaFile = full;
+
+						//check if lua file actually works
+						if (LuaFTF::CheckLuaScript(full)) {
+							//valid!
+							std::cout << "Loaded file, execute with 'start' command\n";
+						}
+
 					}
 				}
 				//else if (command._Equal("pipe")) {
