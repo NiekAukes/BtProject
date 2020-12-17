@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,6 +39,8 @@ namespace LeHandUI
 		public List<FileData> CurrentLoadedFileData = new List<FileData>();
 
 		Storyboard st;
+
+		FileSystemWatcher FSW = null;
 
 		static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
 		static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
@@ -136,46 +139,64 @@ namespace LeHandUI
 				listboxTextBox.Margin = new Thickness(0, 3, 0, 3);
 				listBoxUIElemtents.Add(listboxTextBox);
 
+				FSW = new FileSystemWatcher(MainWindow.Directory + "Files");
+
+				FSW.NotifyFilter = NotifyFilters.LastAccess
+								 | NotifyFilters.LastWrite
+								 | NotifyFilters.FileName
+								 | NotifyFilters.DirectoryName;
+
+				FSW.Changed += FSW_Changed;
+				FSW.Deleted += FSW_Changed;
+				FSW.Created += FSW_Changed;
+				FSW.Renamed += FSW_Changed;
+
+				FSW.EnableRaisingEvents = true;
 
 
-				
+				//	if (listboxTextBox != null || listboxLabel != null)
+				//	{
 
-                //	if (listboxTextBox != null || listboxLabel != null)
-                //	{
+				//		if (listBoxUIElemtents[i] != null || (string)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
+				//		{
+				//			continue;
+				//		}
+				//		else
+				//		{
+				//			Label lbl = new Label();
+				//			lbl.Name = "txtbx " + i.ToString();
+				//			lbl.Content = fileNames[i];
 
-                //		if (listBoxUIElemtents[i] != null || (string)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
-                //		{
-                //			continue;
-                //		}
-                //		else
-                //		{
-                //			Label lbl = new Label();
-                //			lbl.Name = "txtbx " + i.ToString();
-                //			lbl.Content = fileNames[i];
+				//			if (currentOpenedFile == i)
+				//			{
+				//				StyleOpenedLabel(lbl);
+				//			}
 
-                //			if (currentOpenedFile == i)
-                //			{
-                //				StyleOpenedLabel(lbl);
-                //			}
+				//			else
+				//			{
+				//				StyleNonSelectedLabel(lbl);
+				//			}
 
-                //			else
-                //			{
-                //				StyleNonSelectedLabel(lbl);
-                //			}
+				//			listBoxUIElemtents.RemoveAt(i);
+				//			listBoxUIElemtents.Insert(i, lbl);
 
-                //			listBoxUIElemtents.RemoveAt(i);
-                //			listBoxUIElemtents.Insert(i, lbl);
-
-                //		}
-                //	}
-            }
+				//		}
+				//	}
+			}
 
 			simpleModeFileListBox.Items.Refresh();
 		}
 
-		#region LoadnSave
-		#region ASCII dictionary of all the buttons that can be pressed
-		/*			 Button_MLD  = 0x0002     left button down
+        private void FSW_Changed(object sender, FileSystemEventArgs e)
+        {
+			Application.Current.Dispatcher.Invoke((Action)delegate {
+				refreshFiles();
+			});
+        }
+
+        #region LoadnSave
+        #region ASCII dictionary of all the buttons that can be pressed
+        /*			 Button_MLD  = 0x0002     left button down
 					Button_MLU = 0x0004     left button up
 				   Button_MRD = 0x0008     right button down
 				  Button_MRU = 0x0010     right button up
@@ -196,7 +217,7 @@ namespace LeHandUI
                 -MouseWheel Up
                 -MouseWheel Down
          */
-		Dictionary<string, int> ascii_table = new Dictionary<string, int>()
+        Dictionary<string, int> ascii_table = new Dictionary<string, int>()
 		{
 			//MouseButtons
 			{"left button down"     , 0x0002},
