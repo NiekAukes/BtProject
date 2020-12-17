@@ -124,59 +124,51 @@ namespace LeHandUI
 
 			for (int i = 0; i < fileNames.Length; i++)
 			{
-				TextBox listboxTextBox = null;
+				TextBox listboxTextBox = new TextBox();
 				Label listboxLabel = new Label();
 				listboxLabel.Content = fileNames[i];
-				listBoxUIElemtents.Add(listboxLabel);
+				listboxTextBox.Text = fileNames[i];
+				//listboxTextBox.IsReadOnly = false;
+				listboxTextBox.Background = new SolidColorBrush(Colors.Transparent);
+				listboxTextBox.Foreground = System.Windows.Media.Brushes.White;
+				listboxTextBox.IsHitTestVisible = false;
+				listboxTextBox.BorderBrush = System.Windows.Media.Brushes.Transparent;
+				listboxTextBox.Margin = new Thickness(0, 3, 0, 3);
+				listBoxUIElemtents.Add(listboxTextBox);
 
-				//while (listBoxUIElemtents.Count < fileNames.Length) //to make the length of both arrays identical (well not arrays, a list and an array but fuck it)
-				//{
-				//	Label newemptylabel = new Label();
-				//	listBoxUIElemtents.Add(newemptylabel);
-				//}
 
-				//if (listBoxUIElemtents[i] != null)
-				//{
-				//	try
-				//	{
-				//		listboxLabel = (Label)listBoxUIElemtents[i];
-				//	}
-				//	catch (Exception e)
-				//	{
-				//		listboxTextBox = (TextBox)listBoxUIElemtents[i];
-				//		Debug.WriteLine("Caught exception (file is textbox, not label): " + e);
-				//	}
-				//}
 
-			//	if (listboxTextBox != null || listboxLabel != null)
-			//	{
+				
 
-			//		if (listBoxUIElemtents[i] != null || (string)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
-			//		{
-			//			continue;
-			//		}
-			//		else
-			//		{
-			//			Label lbl = new Label();
-			//			lbl.Name = "txtbx " + i.ToString();
-			//			lbl.Content = fileNames[i];
+                //	if (listboxTextBox != null || listboxLabel != null)
+                //	{
 
-			//			if (currentOpenedFile == i)
-			//			{
-			//				StyleOpenedLabel(lbl);
-			//			}
+                //		if (listBoxUIElemtents[i] != null || (string)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
+                //		{
+                //			continue;
+                //		}
+                //		else
+                //		{
+                //			Label lbl = new Label();
+                //			lbl.Name = "txtbx " + i.ToString();
+                //			lbl.Content = fileNames[i];
 
-			//			else
-			//			{
-			//				StyleNonSelectedLabel(lbl);
-			//			}
+                //			if (currentOpenedFile == i)
+                //			{
+                //				StyleOpenedLabel(lbl);
+                //			}
 
-			//			listBoxUIElemtents.RemoveAt(i);
-			//			listBoxUIElemtents.Insert(i, lbl);
+                //			else
+                //			{
+                //				StyleNonSelectedLabel(lbl);
+                //			}
 
-			//		}
-			//	}
-			}
+                //			listBoxUIElemtents.RemoveAt(i);
+                //			listBoxUIElemtents.Insert(i, lbl);
+
+                //		}
+                //	}
+            }
 
 			simpleModeFileListBox.Items.Refresh();
 		}
@@ -632,7 +624,7 @@ namespace LeHandUI
 
 				//simpleModeParameterEditor[] smpe = 
 
-				SimpleFileManager.ChangeFile((string)((Label)(simpleModeFileListBox.SelectedItem)).Content, dat);
+				SimpleFileManager.ChangeFile((string)((TextBox)(simpleModeFileListBox.SelectedItem)).Text, dat);
 			}
 
 			//fix the rest lazy piece of shit douwe
