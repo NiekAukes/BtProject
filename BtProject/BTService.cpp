@@ -87,6 +87,11 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 		BLUETOOTH_FIND_RADIO_PARAMS bltFrp;
 		bltFrp.dwSize = sizeof(bltFrp);
 		HBLUETOOTH_RADIO_FIND hBltRf = BluetoothFindFirstRadio(&bltFrp, &Radio);
+
+		if (hBltRf == NULL) {
+			return -1;
+		}
+
 		BOOL hasNext;
 		int RadioAmount = 0;
 		do {
@@ -127,7 +132,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 						size_t* s = new size_t(249);
 						wcstombs_s(s, str, (bltDis + DeviceAmount - 1)->szName, 248);
 						delete s;
-						std::cout << DeviceAmount << ": " << str << "  |  ";
+						std::cout << DeviceAmount - 1 << ": " << str << "  |  ";
 						std::cout/* << std::hex*/ << (bltDis + DeviceAmount - 1)->Address.ullLong <<'\n';
 
 						//register device to BTService

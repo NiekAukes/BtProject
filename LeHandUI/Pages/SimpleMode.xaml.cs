@@ -432,7 +432,6 @@ namespace LeHandUI
         {
 			if (!fAlreadySaving)
 			{
-
 				fAlreadySaving = true;
 				CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
 				//Clear stackpanel van parametershit
@@ -791,13 +790,18 @@ namespace LeHandUI
 			//Moet een usercontrol invoegen (simplemodeparametereditor.xaml) aan de stackpanel in simplemode
 			//moet naam geven denk ik
 
-			await FadePopup(saveErrorPopup);
+			//await FadePopup(saveErrorPopup);
 			List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
 
 			int selectedIndex = simpleModeFileListBox.SelectedIndex; //loopen door de filedata en alles in parameter editor ui zetten
 			if (selectedIndex != -1)
 			{
-				SimpleFileManager.GetFileData(selectedIndex);
+				IList<FileData> information = SimpleFileManager.GetFileData(selectedIndex);
+				for(int i = 0; i < information.Count; i++)
+                {
+					simpleModeParameterEditor newEditor = new simpleModeParameterEditor();
+					
+                }
 			}
 
 
