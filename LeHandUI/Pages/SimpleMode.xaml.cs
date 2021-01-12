@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -80,6 +81,7 @@ namespace LeHandUI
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
 			addRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
 			removeRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
+			StartButtonImage.Source = ImageSourceFromBitmap(Properties.Resources.StartScript64x64);
 
 			simpleModeFileListBox.ItemsSource = listBoxUIElemtents;
 
@@ -139,7 +141,7 @@ namespace LeHandUI
 				listboxTextBox.Margin = new Thickness(0, 3, 0, 3);
 				listBoxUIElemtents.Add(listboxTextBox);
 
-				FSW = new FileSystemWatcher(MainWindow.Directory + "Files");
+				FSW = new FileSystemWatcher(MainWindow.Directory + "\\Files");
 
 				FSW.NotifyFilter = NotifyFilters.LastAccess
 								 | NotifyFilters.LastWrite
@@ -844,5 +846,22 @@ namespace LeHandUI
 		{
 			SaveChanges();
 		}
-	}
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+			//Parse all the SMPE's into lua
+			List<FileData> FD = new List<FileData>(SimpleFileManager.GetFileData(0));
+			FD.Add(new FileData(0, 12, 26, 0, 4, 3));
+			string parsed = LuaParser.Parse(FD.ConvertAll(x => x.toLogic()).ToList());
+
+			//put the code into a file and run it
+			parsed = SimpleFileManager.ChangeParsedFile(parsed);
+
+			Communicator.load(parsed);
+			Communicator.start();
+			//start monitoring
+			Startwindow sw = new Startwindow();
+			sw.Show();
+		}
+    }
 }

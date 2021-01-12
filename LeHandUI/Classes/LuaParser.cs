@@ -80,12 +80,12 @@ namespace LeHandUI
             "LF", "RF", "MF", "IF", "Th", "AX", "AY", "AZ", "RY"
         };
         //parses Logic into Lua
-        public static string Parse(Logic[] logics)
+        public static string Parse(IList<Logic> logics)
         {
             int nestvalue = 0;
             string s = "LeHand = require \"LeHand\"\nUpdate = function ()\n";
             nestvalue++;
-            for (int i = 0; i < logics.Length; i++)
+            for (int i = 0; i < logics.Count; i++)
             {
                 Logic l = logics[i];
                 for (int j = 0; j < nestvalue; j++) { s += "\t"; }
