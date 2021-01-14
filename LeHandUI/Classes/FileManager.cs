@@ -189,6 +189,20 @@ namespace LeHandUI
             stream.Close();
         }
 
+        public static string ChangeParsedFile(string code)
+        {
+            FileStream stream = null;
+            if (File.Exists(MainWindow.Directory + "\\Files\\Parse.lua"))
+                File.Delete(MainWindow.Directory + "\\Files\\Parse.lua");
+            stream = File.Create(MainWindow.Directory + "\\Files\\Parse.lua");
+            StreamWriter streamWriter = new StreamWriter(stream);
+            streamWriter.WriteLine(code);
+            streamWriter.Close();
+            stream.Close();
+
+            return MainWindow.Directory + "\\Files\\Parse.lua";
+        }
+
         public static void ChangeName(string name, string newName)
         {
             if (File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh")){

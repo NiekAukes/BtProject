@@ -41,7 +41,7 @@ bool active = false;
 float read_inf;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600); //was 9600
   pinMode(duim,INPUT);
   pinMode(5, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);

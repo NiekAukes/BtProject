@@ -71,7 +71,14 @@
                     Click="removeRuleButton_Click">
                 <Image x:Name="removeRuleImage"/>
             </Button>
+
         </DockPanel>
+        <Button x:Name="StartButton" Style="{StaticResource TranspButton}" HorizontalAlignment="Right" Margin="0,0,20,0"
+                    Click="StartButton_Click" 
+                    Grid.Column="3" Grid.Row="1" >
+            <Image x:Name="StartButtonImage"/>
+        </Button>
+
         <Border BorderBrush="#f2f2f2" BorderThickness="1" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3">
             <ListBox x:Name="parameterPanel" 
                  Background="Transparent" FlowDirection="LeftToRight">
