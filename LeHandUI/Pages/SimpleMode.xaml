@@ -73,10 +73,10 @@
             </Button>
         </DockPanel>
         <Border BorderBrush="#f2f2f2" BorderThickness="1" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3">
-            <StackPanel x:Name="parameterPanel" 
+            <ListBox x:Name="parameterPanel" 
                  Background="Transparent" FlowDirection="LeftToRight">
                 <local:simpleModeParameterEditor Style="{StaticResource parameterStyle}"/>
-            </StackPanel>
+            </ListBox>
         </Border>
 
     </Grid>

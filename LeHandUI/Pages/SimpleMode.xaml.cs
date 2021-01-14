@@ -53,6 +53,7 @@ namespace LeHandUI
 		static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
 
 		bool fAlreadySaving = false;
+		int lastSelected = -1;
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -82,7 +83,7 @@ namespace LeHandUI
 			removeRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
 
 			simpleModeFileListBox.ItemsSource = listBoxUIElemtents;
-
+            simpleModeFileListBox.SelectionChanged += SimpleModeFileListBox_SelectionChanged;
 			st = new Storyboard();
 			/* //DATA FOR TEST FILES
 			FileData[] data = new FileData[6];
@@ -94,15 +95,28 @@ namespace LeHandUI
 			//INITIALIZE THE TEXTBOXARRAY, adds all textboxes of files to the textBoxes array so that we can check for not changed files and shit
 			simpleModeFileListBox.HorizontalAlignment = HorizontalAlignment.Stretch;
 
-			for (int i = 0; i < fileNames.Length; i++)
-			{
-				Label lbl = new Label();
-				StyleNonSelectedLabel(lbl);
-				lbl.Content = fileNames[i];
+			//for (int i = 0; i < fileNames.Length; i++)
+			//{
+			//	TextBox lbl = new TextBox();
+			//	StyleNonSelectedLabel(lbl);
+			//	lbl.Text = fileNames[i];
 
 
-				listBoxUIElemtents.Add(lbl);
-			}
+			//	listBoxUIElemtents.Add(lbl);
+			//}
+			FSW = new FileSystemWatcher(MainWindow.Directory + "Files");
+
+			FSW.NotifyFilter = NotifyFilters.LastAccess
+							 | NotifyFilters.LastWrite
+							 | NotifyFilters.FileName
+							 | NotifyFilters.DirectoryName;
+
+			FSW.Changed += FSW_Changed;
+			FSW.Deleted += FSW_Changed;
+			FSW.Created += FSW_Changed;
+			FSW.Renamed += FSW_Changed;
+
+			FSW.EnableRaisingEvents = true;
 
 			refreshFiles();
 
@@ -111,9 +125,11 @@ namespace LeHandUI
 			//IDK WHAT THIS DOES, BUT I HAVE COMMENTED IT
 
 		}
-		#endregion
 
-		private string prevname = "something wrong";
+        
+        #endregion
+
+        private string prevname = "something wrong";
 
 
 		public void refreshFiles()
@@ -139,19 +155,7 @@ namespace LeHandUI
 				listboxTextBox.Margin = new Thickness(0, 3, 0, 3);
 				listBoxUIElemtents.Add(listboxTextBox);
 
-				FSW = new FileSystemWatcher(MainWindow.Directory + "Files");
-
-				FSW.NotifyFilter = NotifyFilters.LastAccess
-								 | NotifyFilters.LastWrite
-								 | NotifyFilters.FileName
-								 | NotifyFilters.DirectoryName;
-
-				FSW.Changed += FSW_Changed;
-				FSW.Deleted += FSW_Changed;
-				FSW.Created += FSW_Changed;
-				FSW.Renamed += FSW_Changed;
-
-				FSW.EnableRaisingEvents = true;
+				
 
 
 				//	if (listboxTextBox != null || listboxLabel != null)
@@ -191,6 +195,7 @@ namespace LeHandUI
         {
 			Application.Current.Dispatcher.Invoke((Action)delegate {
 				refreshFiles();
+				Debug.WriteLine(e.ChangeType);
 			});
         }
 
@@ -448,12 +453,12 @@ namespace LeHandUI
 				fAlreadySaving = true;
 				CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
 				//Clear stackpanel van parametershit
-				parameterPanel.Children.Clear();
+				parameterPanel.Items.Clear();
 				for (int i = 0; i < CurrentLoadedFileData.Count; i++)
 				{
 					simpleModeParameterEditor parEdit = CurrentLoadedFileData[i].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
 
-					parameterPanel.Children.Add(parEdit);
+					parameterPanel.Items.Add(parEdit);
 				}
 				fAlreadySaving = false;
 			}
@@ -485,7 +490,7 @@ namespace LeHandUI
 			saveErrorPopup.IsOpen = false;
         }
 
-        public void SaveChanges()
+        public void SaveChanges(string filename)
         {
 			//pak alle instellingen van parametereditor xaml user interfaces
 			//gooi ze in een filedata list
@@ -495,9 +500,9 @@ namespace LeHandUI
 			{
 				fAlreadySaving = true;
 				List<FileData> savedData = new List<FileData>();
-				for (int i = 0; i < parameterPanel.Children.Count; i++)
+				for (int i = 0; i < parameterPanel.Items.Count; i++)
 				{
-					simpleModeParameterEditor currEditor = (simpleModeParameterEditor)parameterPanel.Children[i];
+					simpleModeParameterEditor currEditor = (simpleModeParameterEditor)parameterPanel.Items[i];
 					FileData newFileData = new FileData();
 					newFileData.variable = (byte)currEditor.varChooser.SelectedIndex;
 					newFileData.beginRange = currEditor.lowerSlider.Value;
@@ -509,7 +514,7 @@ namespace LeHandUI
 						case 0:
 							try
 							{
-								newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text];//(char)currEditor.KeyPressChooser.Text;
+								newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text.ToUpper()];//(char)currEditor.KeyPressChooser.Text;
 
 							}
 							catch (KeyNotFoundException)
@@ -538,13 +543,16 @@ namespace LeHandUI
 					savedData.Add(newFileData);
 				}
 				fAlreadySaving = false;
+
+				//save the files
+				SimpleFileManager.ChangeFile(filename, savedData);
 			}
         }
         #endregion
 
         #region StyleFunctions
 
-        public void StyleNonSelectedLabel(Label lbl)
+        public void StyleNonSelectedLabel(TextBox lbl)
         {
 			lbl.Focusable = true;
 
@@ -557,6 +565,7 @@ namespace LeHandUI
 
 			lbl.LostKeyboardFocus	+= Lbl_LostKeyboardFocus;
 			lbl.PreviewMouseLeftButtonUp	+= LblMouseUp;
+			lbl.MouseLeftButtonUp += LblMouseUp;
             lbl.MouseEnter			+= Lbl_MouseEnter;
 			lbl.MouseLeave			+= Lbl_MouseLeave;
 
@@ -564,7 +573,7 @@ namespace LeHandUI
 
 		}
 
-		public void styleMouseOverLabel(Label lbl)
+		public void styleMouseOverLabel(TextBox lbl)
         {
 			lbl.Cursor = Cursors.Hand;
 
@@ -580,13 +589,13 @@ namespace LeHandUI
 
 		}
 
-		public void StyleSelectedLabel(Label lbl)
+		public void StyleSelectedLabel(TextBox lbl)
         {
 			lbl.Cursor = Cursors.Hand;
 			if (lbl == simpleModeFileListBox.SelectedItem)
 			{
-				lbl.Background = white;
-				lbl.Foreground = black;
+				lbl.Background = transparent;
+				lbl.Foreground = white;
 				lbl.BorderThickness = new Thickness(0);
 				lbl.BorderBrush = white;
 			}
@@ -611,7 +620,7 @@ namespace LeHandUI
             {
 				if(simpleModeFileListBox.Items[i] != simpleModeFileListBox.SelectedItem)
                 {
-					StyleNonSelectedLabel((Label)(simpleModeFileListBox.Items[i]));
+					StyleNonSelectedLabel((TextBox)(simpleModeFileListBox.Items[i]));
                 }
             }
 		}
@@ -669,7 +678,7 @@ namespace LeHandUI
 
 		private void Lbl_MouseEnter(object sender, MouseEventArgs e) //voor style
         {
-			Label lbl = (Label)sender;
+			TextBox lbl = (TextBox)sender;
 
 			if (lbl != simpleModeFileListBox.SelectedItem)
 			{
@@ -683,21 +692,27 @@ namespace LeHandUI
 
 			if (sender != simpleModeFileListBox.SelectedItem)
 			{
-				Label lbl = (Label)sender;
-				StyleNonSelectedLabel(lbl);
+				
+				StyleNonSelectedLabel((TextBox)sender);
 			}
 
 		}
 
-		public Label prevlbl = null;
+		public TextBox prevlbl = null;
 		private async void LblMouseUp(object sender, MouseEventArgs e)
 		{
 			
-			Label lbl = (Label)sender;
+			TextBox lbl = (TextBox)sender;
 			
 			simpleModeFileListBox.SelectedItem = lbl;
 			
 			if (lbl != prevlbl) {
+				if (prevlbl != null)
+				{
+					StyleNonSelectedLabel(prevlbl);
+
+					SaveChanges(lbl.Text);
+				}
 				StyleSelectedLabel(lbl);
 
 				//skips loading or saving unless cooldown of 100ms is finished.
@@ -705,35 +720,57 @@ namespace LeHandUI
 				LoadFile(simpleModeFileListBox.SelectedIndex);
 					
 			}
-			if (prevlbl != null)
-            {
-				StyleNonSelectedLabel(prevlbl);
-
-				SaveChanges();
-			}
+			
 			prevlbl = lbl;
 
 			//Open the file:
 		}
+		private void SimpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TextBox lbl = (TextBox)simpleModeFileListBox.SelectedItem;
 
+			simpleModeFileListBox.SelectedItem = lbl;
+
+			
+
+			if (lbl != prevlbl && lbl != null)
+			{
+				if (prevlbl != null)
+				{
+					StyleNonSelectedLabel(prevlbl);
+
+					SaveChanges(prevlbl.Text);
+				}
+				lastSelected = simpleModeFileListBox.SelectedIndex;
+				StyleSelectedLabel(lbl);
+
+				//skips loading or saving unless cooldown of 100ms is finished.
+
+				LoadFile(lastSelected);
+
+				prevlbl = lbl;
+			}
+			
+
+		}
 		private void LabelOrTxtboxLostFocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
 		{
-			Label lbl = (Label)sender;
+			TextBox lbl = (TextBox)sender;
 
 			if (lbl != simpleModeFileListBox.SelectedItem) //werkt dit? geen flauw idee, vast wel
 			{
 				StyleNonSelectedLabel(lbl);
 			}
 
-			if (((string)(lbl.Content)).Length > 1)
+			if (((string)(lbl.Text)).Length > 1)
 			{
-				SimpleFileManager.ChangeName(prevname, (string)lbl.Content);
+				SimpleFileManager.ChangeName(prevname, (string)lbl.Text);
 				refreshFiles();
 			}
 
 			else
 			{
-				lbl.Content = prevname;
+				lbl.Text = prevname;
 
 				int index = simpleModeFileListBox.Items.IndexOf(sender);
 				listBoxUIElemtents.RemoveAt(index);
@@ -785,10 +822,11 @@ namespace LeHandUI
 		}
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
 		{
-			int selectedItemIndex = simpleModeFileListBox.SelectedIndex;
+			int selectedItemIndex = lastSelected;
 			if (selectedItemIndex != -1)
 			{
 				SimpleFileManager.DeleteFile(selectedItemIndex);
+				prevlbl = null;
 			}
 			refreshFiles();
 		}
@@ -804,17 +842,18 @@ namespace LeHandUI
 			//moet naam geven denk ik
 
 			//await FadePopup(saveErrorPopup);
-			List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
+			//List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
 
-			int selectedIndex = simpleModeFileListBox.SelectedIndex; //loopen door de filedata en alles in parameter editor ui zetten
+			int selectedIndex = lastSelected; //loopen door de filedata en alles in parameter editor ui zetten
 			if (selectedIndex != -1)
 			{
-				IList<FileData> information = SimpleFileManager.GetFileData(selectedIndex);
-				for(int i = 0; i < information.Count; i++)
-                {
-					simpleModeParameterEditor newEditor = new simpleModeParameterEditor();
-					
-                }
+				//IList<FileData> information = SimpleFileManager.GetFileData(selectedIndex);
+				//for(int i = 0; i < information.Count; i++)
+				//            {
+				//	simpleModeParameterEditor newEditor = new simpleModeParameterEditor();
+
+				//            }
+				parameterPanel.Items.Add(new simpleModeParameterEditor());
 			}
 
 
@@ -842,7 +881,6 @@ namespace LeHandUI
 
 		private void simpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			SaveChanges();
 		}
 	}
 }

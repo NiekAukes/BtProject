@@ -32,8 +32,8 @@ namespace LeHandUI
         {
             simpleModeParameterEditor ret = new simpleModeParameterEditor();
             ret.varChooser.SelectedIndex = variable;
-            ret.upperSlider.Value = endRange;
-            ret.lowerSlider.Value = endRange;
+            ret.UpperValue = endRange;
+            ret.LowerValue = beginRange;
             ret.actionChooser.SelectedIndex = actionId;
             ByteConverter bc = new ByteConverter();
             switch(actionId)
@@ -55,6 +55,7 @@ namespace LeHandUI
 
 
             }
+            ret.initializeVars(this);
             return ret;
         }
         public Logic toLogic()
@@ -125,7 +126,7 @@ namespace LeHandUI
                 //read the name before proceeding
                 if (reader.BaseStream.Length <= 0)
                 {
-                    return null;
+                    return new FileData[0];
                 }
                 string name = reader.ReadString();
                 //read all other data
@@ -175,8 +176,6 @@ namespace LeHandUI
             streamWriter.Write(name + "\0");
             for (int i = 0; i < fileData.Count; i++)
             {
-                byte[] bb = BitConverter.GetBytes(fileData[i].beginRange);
-                double d = BitConverter.ToDouble(bb, 0);
                 streamWriter.Write(fileData[i].variable);
                 streamWriter.Write(fileData[i].beginRange);
                 streamWriter.Write(fileData[i].endRange);

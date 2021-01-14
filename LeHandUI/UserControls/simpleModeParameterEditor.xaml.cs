@@ -139,16 +139,18 @@ namespace LeHandUI
             lowerSlider.IsMoveToPointEnabled = false;               upperSlider.IsMoveToPointEnabled = false;
 
 
-            lowerSlider.Value = 20;
-            upperSlider.Value = 80;
+            //lowerSlider.Value = 20;
+            //upperSlider.Value = 80;
 
         }
 
         
         public void initializeVars(FileData data)
         {
-            lowerSlider.Value = data.beginRange * 100;
-            upperSlider.Value = data.endRange * 100;
+            lowerSlider.Value = data.beginRange;
+            LowerValue = data.beginRange;
+            upperSlider.Value = data.endRange;
+            UpperValue = data.endRange;
             varChooser.SelectedIndex = data.variable;
             actionChooser.SelectedIndex = data.actionId;
         }
