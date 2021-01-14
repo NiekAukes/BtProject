@@ -35,12 +35,30 @@ namespace LeHandUI
             MousePressInput.Opacity = 0; MousePressInput.IsEnabled = false;
             MouseMoveInput.Opacity = 0; MouseMoveInput.IsEnabled = false;
 
+            Bluetooth bluetooth = new Bluetooth();
+
 
             varChooser.ItemsSource = LuaParser.varnames;
             ActiveControl = KeyPressInput;
+
+            KeyPressChooser.TextChanged += KeyPressChooser_TextChanged;
         }
 
-        
+
+        private void KeyPressChooser_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Border target = KeyPressChooserBorder;
+            if (CheckAsciiTable(((TextBox)sender).Text.ToUpper().Trim(new char[] { '\u007f', '\0' })))
+            {
+                target.BorderBrush = Brushes.Green;
+            }
+            else
+            {
+                target.BorderBrush = Brushes.Red;
+            }
+        }
+
+
 
         #region Callbacks
         private static object LowerValueCoerceValueCallback(DependencyObject target, object valueObject)
@@ -153,6 +171,10 @@ namespace LeHandUI
             UpperValue = data.endRange;
             varChooser.SelectedIndex = data.variable;
             actionChooser.SelectedIndex = data.actionId;
+        }
+        public bool CheckAsciiTable(string s)
+        {
+            return SimpleMode.ascii_table.ContainsKey(s);
         }
         public Logic ParseToLogic()
         {

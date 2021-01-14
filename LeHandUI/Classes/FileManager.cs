@@ -9,6 +9,7 @@ using System.Windows;
 using Microsoft.TeamFoundation.Common;
 using System.Runtime.CompilerServices;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace LeHandUI
 {
@@ -39,7 +40,10 @@ namespace LeHandUI
             switch(actionId)
             {
                 case 0:
-                    ret.KeyPressChooser.Text = ((char)arg1).ToString();
+                    //ret.KeyPressChooser.Text = ((char)arg1).ToString();
+                    int comp = (int)arg1;
+                    var myKey = SimpleMode.ascii_table.FirstOrDefault(x => x.Value == comp).Key;
+                    ret.KeyPressChooser.Text = myKey;
                     break;
                 //still todo
 
@@ -116,51 +120,59 @@ namespace LeHandUI
         }
         public static IList<FileData> GetFileData(string path)
         {
-            FileStream stream;
-            if (File.Exists(path))
+            try
             {
-                //open the file
-                stream = File.OpenRead(path);
-                BinaryReader reader = new BinaryReader(stream);
-
-                //read the name before proceeding
-                if (reader.BaseStream.Length <= 0)
+                FileStream stream;
+                if (File.Exists(path))
                 {
-                    return new FileData[0];
+                    //open the file
+                    stream = File.OpenRead(path);
+                    BinaryReader reader = new BinaryReader(stream);
+
+                    //read the name before proceeding
+                    if (reader.BaseStream.Length <= 0)
+                    {
+                        return new FileData[0];
+                    }
+                    string name = reader.ReadString();
+                    //read all other data
+
+                    FileData[] ret = new FileData[reader.BaseStream.Length / 34];
+
+                    //fill in the filedata
+
+                    //int bytesread = 0;
+                    for (int i = 0; i < Math.Floor(reader.BaseStream.Length / 34.001f); i++)
+                    {
+                        //variable
+                        ret[i].variable = reader.ReadByte();
+
+                        //beginrange
+                        ret[i].beginRange = reader.ReadDouble();
+
+                        //endrange
+                        ret[i].endRange = reader.ReadDouble();
+
+                        //action
+                        ret[i].actionId = reader.ReadByte();
+
+                        //arg1
+                        ret[i].arg1 = reader.ReadInt64();
+
+                        //arg2
+                        ret[i].arg2 = reader.ReadInt64();
+                    }
+
+                    //close the stream
+                    reader.Close();
+                    stream.Close();
+                    return ret;
                 }
-                string name = reader.ReadString();
-                //read all other data
-
-                FileData[] ret = new FileData[reader.BaseStream.Length / 34];
-
-                //fill in the filedata
-
-                //int bytesread = 0;
-                for (int i = 0; i < Math.Floor(reader.BaseStream.Length / 34.001f); i++) 
-                {
-                    //variable
-                    ret[i].variable = reader.ReadByte();
-
-                    //beginrange
-                    ret[i].beginRange = reader.ReadDouble();
-
-                    //endrange
-                    ret[i].endRange = reader.ReadDouble();
-
-                    //action
-                    ret[i].actionId = reader.ReadByte();
-
-                    //arg1
-                    ret[i].arg1 = reader.ReadInt64();
-
-                    //arg2
-                    ret[i].arg2 = reader.ReadInt64();
-                }
-
-                //close the stream
-                reader.Close();
-                stream.Close();
-                return ret;
+            }
+            catch(Exception e)
+            {
+                //file could not be processed
+                Debug.WriteLine("Wrong file: " + e.Message);
             }
             return null;
         }
@@ -192,15 +204,15 @@ namespace LeHandUI
         public static string ChangeParsedFile(string code)
         {
             FileStream stream = null;
-            if (File.Exists(MainWindow.Directory + "\\Files\\Parse.lua"))
-                File.Delete(MainWindow.Directory + "\\Files\\Parse.lua");
-            stream = File.Create(MainWindow.Directory + "\\Files\\Parse.lua");
+            if (File.Exists(MainWindow.Directory + "\\Parse.lua"))
+                File.Delete(MainWindow.Directory + "\\Parse.lua");
+            stream = File.Create(MainWindow.Directory + "\\Parse.lua");
             StreamWriter streamWriter = new StreamWriter(stream);
             streamWriter.WriteLine(code);
             streamWriter.Close();
             stream.Close();
 
-            return MainWindow.Directory + "\\Files\\Parse.lua";
+            return MainWindow.Directory + "\\Parse.lua";
         }
 
         public static void ChangeName(string name, string newName)

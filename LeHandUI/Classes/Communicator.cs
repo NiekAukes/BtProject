@@ -13,6 +13,7 @@ using WPFCustomMessageBox;
 using System.Windows;
 
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace LeHandUI
 {
@@ -91,6 +92,10 @@ namespace LeHandUI
             S_OK,
             S_Error
         }
+        public static void BluetoothConnect(Int64 adress)
+        {
+            Registry.SetValue("HKEY_CURRENT_USER\\Software\\LeHand", "LastAdress", adress, RegistryValueKind.QWord);
+        }
         private static void WriteCommand(string command)
         {
             command += "\n";
@@ -144,7 +149,6 @@ namespace LeHandUI
 			DataPacket ret = new DataPacket();
             while (Active)
             {
-
 
                 if (datlen != 0)
                 {

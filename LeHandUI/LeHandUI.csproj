@@ -52,6 +52,15 @@
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
+    <Reference Include="InTheHand, Version=10.2018.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\InTheHand.Pontoon.10.2018.3.19\lib\portable-net45+netcore45+wpa81+wp8\InTheHand.dll</HintPath>
+    </Reference>
+    <Reference Include="InTheHand.Devices.Bluetooth, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Network.Bluetooth.4.0.1803.22\lib\net35\InTheHand.Devices.Bluetooth.dll</HintPath>
+    </Reference>
+    <Reference Include="InTheHand.Net.Personal, Version=3.5.605.0, Culture=neutral, PublicKeyToken=ea38caa273134499, processorArchitecture=MSIL">
+      <HintPath>..\packages\32feet.NET.3.5.0.0\lib\net\InTheHand.Net.Personal.dll</HintPath>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
@@ -266,6 +275,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Bluetooth.cs" />
     <Compile Include="Classes\FileManager.cs" />
     <Compile Include="Classes\LHregistry.cs" />
     <Compile Include="Classes\LuaParser.cs" />

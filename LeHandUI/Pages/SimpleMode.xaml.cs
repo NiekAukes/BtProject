@@ -157,51 +157,22 @@ namespace LeHandUI
 				listboxTextBox.Margin = new Thickness(0, 3, 0, 3);
 				listBoxUIElemtents.Add(listboxTextBox);
 
-				FSW = new FileSystemWatcher(MainWindow.Directory + "\\Files");
-
-				FSW.NotifyFilter = NotifyFilters.LastAccess
-								 | NotifyFilters.LastWrite
-								 | NotifyFilters.FileName
-								 | NotifyFilters.DirectoryName;
-
-				FSW.Changed += FSW_Changed;
-				FSW.Deleted += FSW_Changed;
-				FSW.Created += FSW_Changed;
-				FSW.Renamed += FSW_Changed;
-
-				FSW.EnableRaisingEvents = true;
-
-
-				//	if (listboxTextBox != null || listboxLabel != null)
-				//	{
-
-				//		if (listBoxUIElemtents[i] != null || (string)((Label)(listBoxUIElemtents[i])).Content == fileNames[i])
-				//		{
-				//			continue;
-				//		}
-				//		else
-				//		{
-				//			Label lbl = new Label();
-				//			lbl.Name = "txtbx " + i.ToString();
-				//			lbl.Content = fileNames[i];
-
-				//			if (currentOpenedFile == i)
-				//			{
-				//				StyleOpenedLabel(lbl);
-				//			}
-
-				//			else
-				//			{
-				//				StyleNonSelectedLabel(lbl);
-				//			}
-
-				//			listBoxUIElemtents.RemoveAt(i);
-				//			listBoxUIElemtents.Insert(i, lbl);
-
-				//		}
-				//	}
 			}
 
+
+			//FSW = new FileSystemWatcher(MainWindow.Directory + "\\Files");
+
+			//FSW.NotifyFilter = NotifyFilters.LastAccess
+			//				 | NotifyFilters.LastWrite
+			//				 | NotifyFilters.FileName
+			//				 | NotifyFilters.DirectoryName;
+
+			//FSW.Changed += FSW_Changed;
+			//FSW.Deleted += FSW_Changed;
+			//FSW.Created += FSW_Changed;
+			//FSW.Renamed += FSW_Changed;
+
+			//FSW.EnableRaisingEvents = true;
 			simpleModeFileListBox.Items.Refresh();
 		}
 
@@ -236,30 +207,8 @@ namespace LeHandUI
                 -MouseWheel Up
                 -MouseWheel Down
          */
-        Dictionary<string, int> ascii_table = new Dictionary<string, int>()
+        public static Dictionary<string, int> ascii_table = new Dictionary<string, int>()
 		{
-			//MouseButtons
-			{"left button down"     , 0x0002},
-			{"LBD"					, 0x0002},
-			{"left button up"       , 0x0004},
-			{"LBU"					, 0x0004},
-			{"right button down"    , 0x0008},
-			{"RBD"					, 0x0008},
-			{"right button up"      , 0x0010},
-			{"RBU"					, 0x0010},
-			{"middle button down"   , 0x0020},
-			{"MBD"					, 0x0020},
-			{"middle button up"     , 0x0040},
-			{"MBU"					, 0x0040},
-			{"x button down"        , 0x0080},
-			{"XBD"					, 0x0080},
-			{"x button up"          , 0x0100},
-			{"XBU"					, 0x0100},
-			{"wheel button rolled 1", 0x0100},
-			{"WBR1"					, 0x0100},
-			{"wheel button rolled 2", 0x0100},
-			{"WBR2"					, 0x0100},
-
 			
 			/* KeyButtons
 			 *  Char Octal Dec Hex Description
@@ -360,10 +309,10 @@ namespace LeHandUI
 					~	176	126	7e	Tilde (approximate)
 					DEL	177	127	7f	Delete (rubout), cross-hatch box
 			 */
+			{"SPACE",32},
+			{"SPACEBAR",32},
+			{"SPATIE",32},
 			{" ", 32},//ik gebruik de decimale values
-			{"Spacebar",32},
-			{"Space",32},
-			{"Spatie",32},
 			{"!",33},
 			{"#",35},
 			{"$",36},
@@ -455,7 +404,7 @@ namespace LeHandUI
 			{"}",125},
 			{"~",126 },
 			{"DEL",127 },
-			{"Delete",127 }
+			{"DELETE",127 }
 			
 		};
 
@@ -465,7 +414,10 @@ namespace LeHandUI
 			if (!fAlreadySaving)
 			{
 				fAlreadySaving = true;
-				CurrentLoadedFileData = new List<FileData>(SimpleFileManager.GetFileData(selectedindex));
+				IEnumerable<FileData> data = SimpleFileManager.GetFileData(selectedindex);
+				if (data == null)
+					return;
+				CurrentLoadedFileData = new List<FileData>(data);
 				//Clear stackpanel van parametershit
 				parameterPanel.Items.Clear();
 				for (int i = 0; i < CurrentLoadedFileData.Count; i++)
@@ -504,6 +456,8 @@ namespace LeHandUI
 			saveErrorPopup.IsOpen = false;
         }
 
+		
+
         public void SaveChanges(string filename)
         {
 			//pak alle instellingen van parametereditor xaml user interfaces
@@ -528,7 +482,7 @@ namespace LeHandUI
 						case 0:
 							try
 							{
-								newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text.ToUpper()];//(char)currEditor.KeyPressChooser.Text;
+								newFileData.arg1 = ascii_table[currEditor.KeyPressChooser.Text.ToUpper().Trim(new char[] { '\u007f', '\0' } )];//(char)currEditor.KeyPressChooser.Text;
 
 							}
 							catch (KeyNotFoundException)
