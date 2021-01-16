@@ -1,25 +1,18 @@
-﻿using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Common;
-using Microsoft.VisualStudio.Services.Common.CommandLine;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
 using Cursors = System.Windows.Input.Cursors;
 using Label = System.Windows.Controls.Label;
@@ -32,29 +25,19 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace LeHandUI
 {
-	public partial class SimpleMode : System.Windows.Controls.UserControl
+    public partial class SimpleMode : UserControl
 	{
 		public static string[] fileNames = SimpleFileManager.FileNames();
 		public static List<UIElement> listBoxUIElemtents = new List<UIElement>();
 
 		public List<FileData> CurrentLoadedFileData = new List<FileData>();
 
-		Storyboard st;
-
 		FileSystemWatcher FSW = null;
 
-		static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
-		static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
-		static SolidColorBrush almostTransparentWhite = new SolidColorBrush(Color.FromArgb(80, 242, 242, 242));
-		static SolidColorBrush halfTransparentWhite = new SolidColorBrush(Color.FromArgb(140, 242, 242, 242));
-		static SolidColorBrush white = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-		static SolidColorBrush black = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-		static SolidColorBrush dark_blue = new SolidColorBrush(Color.FromArgb(255, 40, 120, 200));
-		static SolidColorBrush light_blue = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
-		static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
+		
 
 		bool fAlreadySaving = false;
-		int lastSelected = -1;
+		int lastSelectedFileIndex = -1;
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
 		//If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -86,27 +69,9 @@ namespace LeHandUI
 
 			simpleModeFileListBox.ItemsSource = listBoxUIElemtents;
             simpleModeFileListBox.SelectionChanged += SimpleModeFileListBox_SelectionChanged;
-			st = new Storyboard();
-			/* //DATA FOR TEST FILES
-			FileData[] data = new FileData[6];
-			FileData[] newdata = new FileData[1];
-			newdata[0] = new FileData(0, 0.2, 0.8, 0, 30, 0);
-			SimpleFileManager.ChangeFile("kiekoek", newdata);
-			SimpleFileManager.ChangeFile("halloe", newdata);*/
 
-			//INITIALIZE THE TEXTBOXARRAY, adds all textboxes of files to the textBoxes array so that we can check for not changed files and shit
-			simpleModeFileListBox.HorizontalAlignment = HorizontalAlignment.Stretch;
-
-			//for (int i = 0; i < fileNames.Length; i++)
-			//{
-			//	TextBox lbl = new TextBox();
-			//	StyleNonSelectedLabel(lbl);
-			//	lbl.Text = fileNames[i];
-
-
-			//	listBoxUIElemtents.Add(lbl);
-			//}
-			FSW = new FileSystemWatcher(MainWindow.Directory + "Files");
+			#region File System Watcher Code
+			FSW = new FileSystemWatcher(MainWindow.Directory + "\\Files");
 
 			FSW.NotifyFilter = NotifyFilters.LastAccess
 							 | NotifyFilters.LastWrite
@@ -119,13 +84,9 @@ namespace LeHandUI
 			FSW.Renamed += FSW_Changed;
 
 			FSW.EnableRaisingEvents = true;
+            # endregion
 
-			refreshFiles();
-
-			//getfiledata returns null, pls fix volvo
-			//FileData dat = SimpleFileManager.GetFileData(0)[0];
-			//IDK WHAT THIS DOES, BUT I HAVE COMMENTED IT
-
+            refreshFiles();
 		}
 
         
@@ -430,33 +391,6 @@ namespace LeHandUI
 			}
 
         }
-		public async Task FadePopup(Popup Popup = null)
-        {
-			saveErrorPopup.IsOpen = true;
-
-			var myDoubleAnimation = new DoubleAnimation();
-			myDoubleAnimation.From = 0.0;
-			myDoubleAnimation.To = 1.0;
-
-			myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
-
-			myDoubleAnimation.AutoReverse = true ;
-
-			st.Children.Add(myDoubleAnimation);
-			Storyboard.SetTargetName(myDoubleAnimation, saveErrorPopup.Name);
-			Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(OpacityProperty));
-
-			st.Begin(saveErrorPopup);
-
-            st.Completed += Storyboard_Completed;
-		}
-
-        private void Storyboard_Completed(object sender, EventArgs e)
-        {
-			saveErrorPopup.IsOpen = false;
-        }
-
-		
 
         public void SaveChanges(string filename)
         {
@@ -709,12 +643,12 @@ namespace LeHandUI
 
 					SaveChanges(prevlbl.Text);
 				}
-				lastSelected = simpleModeFileListBox.SelectedIndex;
+				lastSelectedFileIndex = simpleModeFileListBox.SelectedIndex;
 				StyleSelectedLabel(lbl);
 
 				//skips loading or saving unless cooldown of 100ms is finished.
 
-				LoadFile(lastSelected);
+				LoadFile(lastSelectedFileIndex);
 
 				prevlbl = lbl;
 			}
@@ -766,34 +700,43 @@ namespace LeHandUI
 		#endregion
 
 		#region Button Handlers
-
-		public int totaladdedfiles = 0;
+		public int fileIndexCount = 0;
         private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
 			//add a filename and ruleset
 			FileData[] emptyfiledata = new FileData[1];
+
+			/*
 			while (true)
 			{
-				string newFileName = "New file " + totaladdedfiles.ToString();
-				if (!SimpleFileManager.CheckName(newFileName))
+				string newFileName = "New file " + fileIndexCount.ToString();
+				if (!SimpleFileManager.FileExists(newFileName))
 				{
 					SimpleFileManager.ChangeFile(newFileName, emptyfiledata);
 					break;
 				}
-				else totaladdedfiles++;
+				else fileIndexCount++;
 			}
-			totaladdedfiles++;
+			fileIndexCount++;*/
+
+			//while New File x already exists, increase the x until it does not already exist.
+			while(SimpleFileManager.FileExists("New File " + fileIndexCount.ToString()))
+            {
+				fileIndexCount++;
+            }
+			SimpleFileManager.ChangeFile("New File " + fileIndexCount.ToString(), emptyfiledata);
+			fileIndexCount++;
 
 			refreshFiles();
 			saveCurrentFile();
 			simpleModeFileListBox.Focus();
 		}
+
 		private void removeFileButton_Click(object sender, RoutedEventArgs e)
 		{
-			int selectedItemIndex = lastSelected;
-			if (selectedItemIndex != -1)
+			if (lastSelectedFileIndex != -1)
 			{
-				SimpleFileManager.DeleteFile(selectedItemIndex);
+				SimpleFileManager.DeleteFile(lastSelectedFileIndex);
 				prevlbl = null;
 			}
 			refreshFiles();
@@ -812,8 +755,8 @@ namespace LeHandUI
 			//await FadePopup(saveErrorPopup);
 			//List <simpleModeParameterEditor> parameterEditorList = new List<simpleModeParameterEditor>();
 
-			int selectedIndex = lastSelected; //loopen door de filedata en alles in parameter editor ui zetten
-			if (selectedIndex != -1)
+			 //loopen door de filedata en alles in parameter editor ui zetten
+			if (lastSelectedFileIndex != -1)
 			{
 				//IList<FileData> information = SimpleFileManager.GetFileData(selectedIndex);
 				//for(int i = 0; i < information.Count; i++)
@@ -823,15 +766,35 @@ namespace LeHandUI
 				//            }
 				parameterPanel.Items.Add(new simpleModeParameterEditor());
 			}
-
-
-			saveCurrentFile();
 		}
 		private void removeRuleButton_Click(object sender, RoutedEventArgs e)
 		{
-			//remove the shit above
+			//verwijder geselecteerde parameterPanel
 
+
+			//saveCurrentFile(); is not needed due to the program already saving the file when another file is clicked.
+		}
+
+		private void StartButton_Click(object sender, RoutedEventArgs e)
+		{
+			//Parse all the SMPE's into lua
+			List<FileData> FD = new List<FileData>(SimpleFileManager.GetFileData(0));
+			FD.Add(new FileData(0, 12, 26, 0, 4, 3));
+			string parsed = LuaParser.Parse(FD.ConvertAll(x => x.toLogic()).ToList());
+
+			//put the code into a file and run it
+			parsed = SimpleFileManager.ChangeParsedFile(parsed);
+			Communicator.load(parsed);
+			Communicator.start();
+
+			//start monitoring
+			Startwindow sw = new Startwindow();
+			sw.Show();
+		}
+		private void simpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventHandler e)
+		{
 			saveCurrentFile();
+
 		}
 		#endregion
 
@@ -841,31 +804,17 @@ namespace LeHandUI
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		private void simpleModeFileListBox_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			saveCurrentFile();
+		#region ColourBrushes
+		public static SolidColorBrush transparent = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
+		public static SolidColorBrush off_white = new SolidColorBrush(Color.FromArgb(255, 242, 242, 242));
+		public static SolidColorBrush almostTransparentWhite = new SolidColorBrush(Color.FromArgb(80, 242, 242, 242));
+		public static SolidColorBrush halfTransparentWhite = new SolidColorBrush(Color.FromArgb(140, 242, 242, 242));
+		public static SolidColorBrush white = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+		public static SolidColorBrush black = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+		public static SolidColorBrush dark_blue = new SolidColorBrush(Color.FromArgb(255, 40, 120, 200));
+		public static SolidColorBrush light_blue = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
+		public static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
+		#endregion
+	}
 
-		}
-
-		private void simpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-		}
-
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-			//Parse all the SMPE's into lua
-			List<FileData> FD = new List<FileData>(SimpleFileManager.GetFileData(0));
-			FD.Add(new FileData(0, 12, 26, 0, 4, 3));
-			string parsed = LuaParser.Parse(FD.ConvertAll(x => x.toLogic()).ToList());
-
-			//put the code into a file and run it
-			parsed = SimpleFileManager.ChangeParsedFile(parsed);
-
-			Communicator.load(parsed);
-			Communicator.start();
-			//start monitoring
-			Startwindow sw = new Startwindow();
-			sw.Show();
-		}
-    }
 }

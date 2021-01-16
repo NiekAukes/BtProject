@@ -33,8 +33,8 @@ namespace LeHandUI
         {
             simpleModeParameterEditor ret = new simpleModeParameterEditor();
             ret.varChooser.SelectedIndex = variable;
-            ret.UpperValue = endRange;
-            ret.LowerValue = beginRange;
+            //ret.UpperValue = endRange;
+            //ret.LowerValue = beginRange;
             ret.actionChooser.SelectedIndex = actionId;
             ByteConverter bc = new ByteConverter();
             switch(actionId)
@@ -90,7 +90,7 @@ namespace LeHandUI
     }
     class SimpleFileManager
     {
-        public static bool CheckName(string name)
+        public static bool FileExists(string name)
         {
             return File.Exists(MainWindow.Directory + "\\Files\\" + name + ".lh");
         }

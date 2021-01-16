@@ -17,7 +17,6 @@
         <Style x:Name="parameterStyle" x:Key="parameterStyle" TargetType="UserControl">
             <Setter Property="Height" Value="auto"/>
             <Setter Property="Width" Value="auto"/>
-            <Setter Property="MaxHeight" Value="70"/>
             <Setter Property="Margin" Value="10,10,10,0"/>
         </Style>
         

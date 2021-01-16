@@ -16,16 +16,7 @@ namespace LeHandUI
     {
         public DockPanel ActiveControl = null;
         private int width;
-        public int MouseMouseWidth {
-
-            get
-            {
-                return width;
-            }
-            set
-            {
-                width = value;
-            }
+        public int MouseMouseWidth {get { return width; } set { width = value; }
         }
         public simpleModeParameterEditor()
         {
@@ -66,7 +57,7 @@ namespace LeHandUI
             simpleModeParameterEditor targetSlider = (simpleModeParameterEditor)target;
             double value = (double)valueObject;
 
-            return Math.Min(value, targetSlider.UpperValue);
+            return Math.Min(value, targetSlider.upperSlider.Value);
         }
 
         private static object UpperValueCoerceValueCallback(DependencyObject target, object valueObject)
@@ -74,10 +65,11 @@ namespace LeHandUI
             simpleModeParameterEditor targetSlider = (simpleModeParameterEditor)target;
             double value = (double)valueObject;
 
-            return Math.Max(value, targetSlider.LowerValue);
+            return Math.Max(value, targetSlider.lowerSlider.Value);
         }
         #endregion
         #region dependecyProperties
+        /*
         public static readonly DependencyProperty MinimumProperty =
     DependencyProperty.Register("Minimum", typeof(double), typeof(simpleModeParameterEditor), new UIPropertyMetadata(0d));
         public static readonly DependencyProperty LowerValueProperty =
@@ -93,10 +85,10 @@ namespace LeHandUI
         public static readonly DependencyProperty TickPlacementProperty =
             DependencyProperty.Register("TickPlacement", typeof(TickPlacement), typeof(simpleModeParameterEditor), new UIPropertyMetadata(TickPlacement.None));
         public static readonly DependencyProperty TicksProperty =
-            DependencyProperty.Register("Ticks", typeof(DoubleCollection), typeof(simpleModeParameterEditor), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Ticks", typeof(DoubleCollection), typeof(simpleModeParameterEditor), new UIPropertyMetadata(null));*/
         #endregion
         #region Value classes
-        public double Minimum
+        /*public double Minimum
         {
             get { return (double)GetValue(MinimumProperty); }
             set { SetValue(MinimumProperty, value); }
@@ -142,7 +134,7 @@ namespace LeHandUI
         {
             get { return (DoubleCollection)GetValue(TicksProperty); }
             set { SetValue(TicksProperty, value); }
-        }
+        }*/
         #endregion
 
         private void control_loaded(object sender, RoutedEventArgs e)
@@ -157,18 +149,15 @@ namespace LeHandUI
             lowerSlider.IsMoveToPointEnabled = false;               upperSlider.IsMoveToPointEnabled = false;
 
 
-            //lowerSlider.Value = 20;
-            //upperSlider.Value = 80;
-
         }
 
         
         public void initializeVars(FileData data)
         {
             lowerSlider.Value = data.beginRange;
-            LowerValue = data.beginRange;
+            //LowerValue = data.beginRange;
             upperSlider.Value = data.endRange;
-            UpperValue = data.endRange;
+            //UpperValue = data.endRange;
             varChooser.SelectedIndex = data.variable;
             actionChooser.SelectedIndex = data.actionId;
         }
@@ -204,23 +193,18 @@ namespace LeHandUI
         }
 
         #region Handlers for textboxes and comboboxes and shit
-        private void lowerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
-        }
-
         private void valueofsliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            double lowerval = lowerSlider.Value; double upperval = upperSlider.Value;
-            if (lowerval >= upperval)
+
+            double lowerval = lowerSlider == null ? 0 : lowerSlider.Value; double upperval = upperSlider == null ? 0 : upperSlider.Value;
+            if (lowerval >= upperval && upperSlider != null)
             {
                 upperSlider.Value++;
             }
-            if (upperval <= lowerval)
+            if (upperval <= lowerval && lowerSlider != null)
             {
                 lowerSlider.Value--;
             }
-
         }
 
         private void actionChooser_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -263,8 +247,12 @@ namespace LeHandUI
                 if (!int.TryParse(((TextBox)sender).Text, out result))
                 {
                     e.Handled = true;
-                    ((TextBox)sender).Text = "NO NUMBERS!";
+                    //((TextBox)sender).Text = "NO NUMBERS!";
+                    _ = ((TextBox)sender).Name == MouseMoveBox1.Name ? MouseMoveBorder1.BorderBrush = Brushes.Red : MouseMoveBorder2.BorderBrush = Brushes.Red;
                 }
+                else
+                    _ = ((TextBox)sender).Name == MouseMoveBox1.Name ? MouseMoveBorder1.BorderBrush = Brushes.Green : MouseMoveBorder2.BorderBrush = Brushes.Green;
+
             }
         }
         #endregion

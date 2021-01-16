@@ -7,7 +7,7 @@
              mc:Ignorable="d" Foreground="#FFF2F2F2" Background="Transparent"
              FontFamily="Futura Lt BT" FontSize="16" BorderBrush="#F2F2F2" BorderThickness="1"
              d:DesignHeight="70" d:DesignWidth="550" Loaded="control_loaded"
-             Height="70" Width="550">
+             Height="70">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
@@ -42,13 +42,12 @@
             
             
             <Slider x:Name="lowerSlider" OverridesDefaultStyle="false" Grid.Row="1" Grid.Column="3" Margin="10,5,10,0" Panel.ZIndex="0" Opacity="2"
-                Minimum="{Binding ElementName=LeHandUI, Path=Minimum}" ToolTip="{Binding ElementName=lowerSlider, Path=Value, StringFormat='P2'}"
-                Maximum="{Binding ElementName=LeHandUI, Path=Maximum}"
-                 Value="{Binding ElementName=LeHandUI, Path=LowerValue, Mode=TwoWay}"
-                IsSnapToTickEnabled="{Binding ElementName=LeHandUI, Path=IsSnapToTickEnabled}"
-                TickFrequency="{Binding ElementName=LeHandUI, Path=TickFrequency}"
+                Minimum="0" ToolTip="{Binding ElementName=lowerSlider, Path=Value, StringFormat='P2'}"
+                Maximum="100"
+                 Value="20"
+                IsSnapToTickEnabled="True"
+                TickFrequency="2"
                 TickPlacement="BottomRight" ValueChanged="valueofsliderChanged"
-                Ticks="{Binding ElementName=LeHandUI, Path=Ticks}"
                 >
                 <Slider.Resources>
                     <SolidColorBrush x:Key="SliderSelectionBackground" Color="#212121" />
@@ -80,13 +79,13 @@
         <Slider x:Name="upperSlider" Grid.Row="1" Grid.Column="3" Margin="10,5,10,0" Panel.ZIndex="0"
                 Foreground="#F2F2F2" BorderBrush="Transparent" BorderThickness="0"  Template="{StaticResource horizontalSlider}"
           VerticalAlignment="Center" ToolTip="{Binding ElementName=upperSlider, Path=Value}"
-          Minimum="{Binding ElementName=LeHandUI, Path=Minimum}"
-          Maximum="{Binding ElementName=LeHandUI, Path=Maximum}"
-          Value="{Binding ElementName=LeHandUI, Path=UpperValue, Mode=TwoWay}"
-          IsSnapToTickEnabled="{Binding ElementName=LeHandUI, Path=IsSnapToTickEnabled}"
-          TickFrequency="{Binding ElementName=LeHandUI, Path=TickFrequency}"
+          Minimum="0"
+          Maximum="100"
+          Value="100"
+          IsSnapToTickEnabled="True"
+          TickFrequency="2"
           TickPlacement="BottomRight" ValueChanged="valueofsliderChanged"
-          Ticks="{Binding ElementName=LeHandUI, Path=Ticks}">
+          >
             <Slider.Background>
                 <SolidColorBrush Color="Transparent" Opacity="0"/>
             </Slider.Background>
@@ -178,10 +177,16 @@
             <Viewbox>
                 <TextBlock Text="Muisklik:" HorizontalAlignment="Left"/>
             </Viewbox>
-            <DockPanel>
-                <TextBox Width="{Binding }" x:Name="MouseMoveBox1" Padding="5,0,5,0" HorizontalAlignment="Center" Text="xDirection" TextChanged="MouseMoveBox_TextChanged"/>
-                <TextBox x:Name="MouseMoveBox2" Padding="5,0,5,0" HorizontalAlignment="Center" Text="yDirection" TextChanged="MouseMoveBox_TextChanged"/>
-            </DockPanel>
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="MouseMoveBorder1" BorderThickness="3" Margin="0,0,10,0">
+                    <TextBox Width="{Binding }" x:Name="MouseMoveBox1" Padding="5,0,5,0" HorizontalAlignment="Center" Text="xDirection" 
+                         TextChanged="MouseMoveBox_TextChanged" BorderThickness="0"/>
+                </Border>
+                <Border x:Name="MouseMoveBorder2" BorderThickness="3" Margin="10,0,0,0">
+                <TextBox x:Name="MouseMoveBox2" Padding="5,0,5,0" HorizontalAlignment="Center" Text="yDirection" 
+                         TextChanged="MouseMoveBox_TextChanged" BorderThickness="0"/>
+                </Border>
+            </StackPanel>
         </DockPanel>
         <DockPanel x:Name="nulpanel"></DockPanel>
             
