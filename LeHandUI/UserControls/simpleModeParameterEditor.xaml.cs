@@ -26,10 +26,6 @@ namespace LeHandUI
             MousePressInput.Opacity = 0; MousePressInput.IsEnabled = false;
             MouseMoveInput.Opacity = 0; MouseMoveInput.IsEnabled = false;
 
-            //Waarom staat hier new Bluetooth?
-            //Bluetooth bluetooth = new Bluetooth();
-
-
             varChooser.ItemsSource = LuaParser.varnames;
             ActiveControl = KeyPressInput;
 

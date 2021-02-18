@@ -72,7 +72,7 @@
 
         <Border BorderBrush="#f2f2f2" BorderThickness="1" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="3">
             <ListBox x:Name="parameterPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                 Background="Transparent" FlowDirection="LeftToRight">
+                 Background="Transparent" >
                 <local:simpleModeParameterEditor Style="{StaticResource parameterStyle}" HorizontalAlignment="Stretch" Margin="0" Width="auto"/>
             </ListBox>
         </Border>

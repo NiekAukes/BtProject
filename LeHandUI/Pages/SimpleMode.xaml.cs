@@ -383,9 +383,8 @@ namespace LeHandUI
 				parameterPanel.Items.Clear();
 				for (int i = 0; i < CurrentLoadedFileData.Count; i++)
 				{
-
-					//DEZE FUNCTIE DUURT 10 seconden?
 					simpleModeParameterEditor parEdit = CurrentLoadedFileData[i].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
+                    Grid.SetColumn(parEdit, 3);
 
 					parameterPanel.Items.Add(parEdit);
 				}
@@ -439,9 +438,9 @@ namespace LeHandUI
 							//die longs werken voor geen kut
 							long ret = 0, ret2 = 0;
 							if (long.TryParse(currEditor.MouseMoveBox1.Text, out ret))
-								newFileData.arg1 = (long)ret;
+								newFileData.arg1 = ret;
 							if (long.TryParse(currEditor.MouseMoveBox2.Text, out ret2))
-								newFileData.arg2 = (long)ret2;
+								newFileData.arg2 = ret2;
 
 							break;
 						case 3:
@@ -536,7 +535,7 @@ namespace LeHandUI
 
 		#endregion
 
-		#region saveFileFunc!MOET NOG SPUL GEBEUREN AUKES
+		#region saveFileFunc!
 		private void SimpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			TextBox lbl = (TextBox)simpleModeFileListBox.SelectedItem;
@@ -768,10 +767,13 @@ namespace LeHandUI
 				parameterPanel.Items.Add(new simpleModeParameterEditor());
 			}
 		}
+
+		void doNothing() { }
 		private void removeRuleButton_Click(object sender, RoutedEventArgs e)
 		{
 			//verwijder geselecteerde parameterPanel
-
+			if(parameterPanel.SelectedIndex != -1)
+				parameterPanel.Items.RemoveAt(parameterPanel.SelectedIndex);
 
 			//saveCurrentFile(); is not needed due to the program already saving the file when another file is clicked.
 		}

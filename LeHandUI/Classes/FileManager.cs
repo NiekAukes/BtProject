@@ -52,8 +52,8 @@ namespace LeHandUI
                     ret.MousePressChooser.SelectedIndex = (int)arg1;
                     break;
                 case 2:
-                    ret.MouseMoveBox1.Text = BitConverter.Int64BitsToDouble(arg1).ToString();
-                    ret.MouseMoveBox2.Text = BitConverter.Int64BitsToDouble(arg2).ToString();
+                    ret.MouseMoveBox1.Text = arg1.ToString();
+                    ret.MouseMoveBox2.Text = arg2.ToString();
                     break;
                 case 3:
                     break;
