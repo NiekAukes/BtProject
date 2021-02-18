@@ -383,6 +383,8 @@ namespace LeHandUI
 				parameterPanel.Items.Clear();
 				for (int i = 0; i < CurrentLoadedFileData.Count; i++)
 				{
+
+					//DEZE FUNCTIE DUURT 10 seconden?
 					simpleModeParameterEditor parEdit = CurrentLoadedFileData[i].toSMPE();//for alle filedata in de file, maak nieuwe parametereditor.xaml en vul alles in de parametereditor xaml in
 
 					parameterPanel.Items.Add(parEdit);
@@ -432,10 +434,15 @@ namespace LeHandUI
 							break;
 
 						case 2: //mousemove (insert arg1 and arg2 with mouse1 and mouse2
-							
+
 							//CONVERTS STRINGS INTO LONGS, typing a character into the textbox is prevented in the textbox handlers.
-							newFileData.arg1 = long.Parse(currEditor.MouseMoveBox1.Text);
-                            
+							//die longs werken voor geen kut
+							long ret = 0, ret2 = 0;
+							if (long.TryParse(currEditor.MouseMoveBox1.Text, out ret))
+								newFileData.arg1 = (long)ret;
+							if (long.TryParse(currEditor.MouseMoveBox2.Text, out ret2))
+								newFileData.arg2 = (long)ret2;
+
 							break;
 						case 3:
 							//do nothing because the program exit does not require any arguments
@@ -527,10 +534,32 @@ namespace LeHandUI
             }
 		}
 
-        #endregion
+		#endregion
 
-        #region saveFileFunc!MOET NOG SPUL GEBEUREN AUKES
-        public void saveCurrentFile(string name)
+		#region saveFileFunc!MOET NOG SPUL GEBEUREN AUKES
+		private void SimpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TextBox lbl = (TextBox)simpleModeFileListBox.SelectedItem;
+
+			if (lbl != prevlbl && lbl != null)
+			{
+				if (prevlbl != null)
+				{
+					StyleNonSelectedLabel(prevlbl);
+
+					SaveChanges(prevlbl.Text);
+				}
+				lastSelectedFileIndex = simpleModeFileListBox.SelectedIndex;
+				StyleSelectedLabel(lbl);
+
+				LoadFile(lastSelectedFileIndex);
+
+				prevlbl = lbl;
+			}
+
+
+		}
+		public void saveCurrentFile(string name)
 		{
 			//get all rules from current file
 			int selectedIndex = simpleModeFileListBox.SelectedIndex;
@@ -548,8 +577,7 @@ namespace LeHandUI
 		public void saveCurrentFile()
 		{
 			//get all rules from current file
-			int selectedIndex = simpleModeFileListBox.SelectedIndex;
-			if (selectedIndex != -1)
+			if (simpleModeFileListBox.SelectedIndex != -1)
 			{
 				//IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
 				IList<FileData> dat = new List<FileData>();
@@ -627,34 +655,7 @@ namespace LeHandUI
 
 			//Open the file:
 		}
-		private void SimpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			TextBox lbl = (TextBox)simpleModeFileListBox.SelectedItem;
-
-			simpleModeFileListBox.SelectedItem = lbl;
-
-			
-
-			if (lbl != prevlbl && lbl != null)
-			{
-				if (prevlbl != null)
-				{
-					StyleNonSelectedLabel(prevlbl);
-
-					SaveChanges(prevlbl.Text);
-				}
-				lastSelectedFileIndex = simpleModeFileListBox.SelectedIndex;
-				StyleSelectedLabel(lbl);
-
-				//skips loading or saving unless cooldown of 100ms is finished.
-
-				LoadFile(lastSelectedFileIndex);
-
-				prevlbl = lbl;
-			}
-			
-
-		}
+		
 		private void LabelOrTxtboxLostFocus(object sender) //if the text is altered in the textbox, replace the name in the filemanager with the textbox
 		{
 			TextBox lbl = (TextBox)sender;
@@ -791,7 +792,7 @@ namespace LeHandUI
 			Startwindow sw = new Startwindow();
 			sw.Show();
 		}
-		private void simpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventHandler e)
+		private void SimpleModeFileListBox_SelectionChanged(object sender, SelectionChangedEventHandler e)
 		{
 			saveCurrentFile();
 

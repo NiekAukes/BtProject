@@ -31,6 +31,7 @@ namespace LeHandUI
         }
         public simpleModeParameterEditor toSMPE()
         {
+            //de New Simplemodeparametereditor duurt 10 SECONDEN wtf
             simpleModeParameterEditor ret = new simpleModeParameterEditor();
             ret.varChooser.SelectedIndex = variable;
             //ret.UpperValue = endRange;
