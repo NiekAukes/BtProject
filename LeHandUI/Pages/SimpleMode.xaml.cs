@@ -116,6 +116,7 @@ namespace LeHandUI
 				listboxTextBox.IsHitTestVisible = false;
 				listboxTextBox.BorderBrush = System.Windows.Media.Brushes.Transparent;
 				listboxTextBox.Margin = new Thickness(0, 3, 0, 3);
+
 				listBoxUIElemtents.Add(listboxTextBox);
 
 			}
@@ -591,6 +592,28 @@ namespace LeHandUI
 		}
 		#endregion
 
+		#region changeFileName with simplefilemodelistbox
+		private void simpleModeFileListBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			//Label selectedLabel = (Label)simpleModeFileListBox.SelectedItem;
+			UIElement selElement = listBoxUIElemtents[simpleModeFileListBox.SelectedIndex];
+			Type typeOfUIElement = selElement.GetType();
+			
+			if(typeOfUIElement == typeof(TextBox))
+            {
+				TextBox selTxtBx = (TextBox)selElement;
+				selTxtBx.Focus(); selTxtBx.IsEnabled = true; selTxtBx.IsReadOnly = false;
+				
+                selTxtBx.LostFocus += SelTxtBx_LostFocus;
+            }
+		}
+
+        private void SelTxtBx_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //make it non editable again
+        }
+        #endregion
+
         #region Label/txtbox Handlers
         private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
@@ -696,7 +719,9 @@ namespace LeHandUI
 				dosumShit(sender);
 			}*/
 		}
+
 		
+
 		#endregion
 
 		#region Button Handlers
@@ -817,7 +842,9 @@ namespace LeHandUI
 		public static SolidColorBrush dark_blue = new SolidColorBrush(Color.FromArgb(255, 40, 120, 200));
 		public static SolidColorBrush light_blue = new SolidColorBrush(Color.FromArgb(225, 110, 130, 255));
 		public static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
-		#endregion
-	}
+        #endregion
+
+        
+    }
 
 }

@@ -47,7 +47,34 @@
         <ListBox x:Name="simpleModeFileListBox" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Padding="5"
                  Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch"
                  SelectedItem="{Binding SelectedIdInListBox,Mode=OneWayToSource}" Focusable="True"
-                 SelectionChanged="SimpleModeFileListBox_SelectionChanged">
+                 SelectionChanged="SimpleModeFileListBox_SelectionChanged"
+                 MouseRightButtonUp="simpleModeFileListBox_MouseRightButtonUp">
+            <!--
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Command="Cut">
+                                    <TextBlock Text="slfkjsdk"/>
+                                </MenuItem>
+                                <MenuItem Command="Copy">
+                                    <TextBlock Text="slfkjsdk"/>
+
+                                </MenuItem>
+                                <MenuItem Command="Paste">
+                                    <TextBlock Text="slfkjsdk"/>
+
+                                </MenuItem>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Content" Value="{Binding Path=EventName}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+                -->
+            
         </ListBox>
 
         <GridSplitter Grid.Column="2" Grid.Row="0" Grid.RowSpan="1000" 

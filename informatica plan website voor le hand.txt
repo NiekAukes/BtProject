@@ -1,0 +1,20 @@
+website informatica manier presenteren:
+
+-doel is inzicht geven wat je aan het doen bent
+-hoe zijn we er gekomen
+-ontwikkelproces!
+
+presentatie promotie ding
+uit de programmeurstaal stappen en in mensenwoorden stoppen
+
+klant vertellen wat te doen
+
+
+Wat is Le Hand
+
+Le Hand is een combinatieproject. Het bestaat uit een controller die op de hand wordt
+bevestigd en de software ervoor. (foto hand controller)
+
+Het doel van dit project is om te zien of ons groepje in staat is om een apparaat te bouwen die kan
+communiceren met een computer en met een zelfgemaakt programma.
+

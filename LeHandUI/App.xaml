@@ -5,7 +5,8 @@
              StartupUri="Pages/MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
-        
+
+       
         
         <Style x:Key="itemcontainerstyle" TargetType="ComboBoxItem">
             <Setter Property="Background" Value="#F2F2F2"/>
