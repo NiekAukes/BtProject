@@ -60,9 +60,10 @@ namespace LeHandUI
 		public SimpleMode()
 		{
 			InitializeComponent();
-
+			
 			addFileImage.Source = ImageSourceFromBitmap(Properties.Resources.AddFile64x64);
 			removeFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RemoveFile64x64);
+			renameFileImage.Source = ImageSourceFromBitmap(Properties.Resources.RenameFile64x64);
 			addRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.PALE_GREEN_AddIcon64x64);
 			removeRuleImage.Source = ImageSourceFromBitmap(Properties.Resources.WASHED_OUT_RED_DeleteIcon64x64);
 			StartButtonImage.Source = ImageSourceFromBitmap(Properties.Resources.StartScript64x64);
@@ -555,6 +556,7 @@ namespace LeHandUI
 				LoadFile(lastSelectedFileIndex);
 
 				prevlbl = lbl;
+
 			}
 
 
@@ -582,7 +584,6 @@ namespace LeHandUI
 				//IList<FileData> currentFileData = SimpleFileManager.GetFileData(selectedIndex);
 				IList<FileData> dat = new List<FileData>();
 
-				//simpleModeParameterEditor[] smpe = 
 
 				SimpleFileManager.ChangeFile((string)((TextBox)(simpleModeFileListBox.SelectedItem)).Text, dat);
 			}
@@ -591,28 +592,6 @@ namespace LeHandUI
 
 		}
 		#endregion
-
-		#region changeFileName with simplefilemodelistbox
-		private void simpleModeFileListBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-		{
-			//Label selectedLabel = (Label)simpleModeFileListBox.SelectedItem;
-			UIElement selElement = listBoxUIElemtents[simpleModeFileListBox.SelectedIndex];
-			Type typeOfUIElement = selElement.GetType();
-			
-			if(typeOfUIElement == typeof(TextBox))
-            {
-				TextBox selTxtBx = (TextBox)selElement;
-				selTxtBx.Focus(); selTxtBx.IsEnabled = true; selTxtBx.IsReadOnly = false;
-				
-                selTxtBx.LostFocus += SelTxtBx_LostFocus;
-            }
-		}
-
-        private void SelTxtBx_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //make it non editable again
-        }
-        #endregion
 
         #region Label/txtbox Handlers
         private void Txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -705,26 +684,42 @@ namespace LeHandUI
 
 		#endregion
 
-		#region ListBox Handlers
-
-		public static int LastFileOpened = 0xFFFF;
-        private void onTextChanged(object sender, TextChangedEventArgs e)
+		#region Button Handlers
+		string txtbxname;
+		private void RenameFileButton_Click(object sender, RoutedEventArgs e)
 		{
-			/*TextBox listitem = (TextBox)sender;
-			int index = simpleModeFileListBox.SelectedIndex;
-			if (index != -1)
+			int indextobechanged;
+			if (simpleModeFileListBox.SelectedIndex == -1)
 			{
-				SimpleFileManager.ChangeName(fileNames[index], listitem.Content);
-				refreshFiles();
-				dosumShit(sender);
-			}*/
+				if (lastSelectedFileIndex == -1)
+					return;
+				else
+					indextobechanged = lastSelectedFileIndex;
+			}
+            else
+            {
+				indextobechanged = simpleModeFileListBox.SelectedIndex;
+            }
+			UIElement selElement = listBoxUIElemtents[indextobechanged];
+			Type typeOfUIElement = selElement.GetType();
+
+			if (typeOfUIElement == typeof(TextBox))
+			{
+				TextBox selTxtBx = (TextBox)selElement;
+				txtbxname = selTxtBx.Text;
+				selTxtBx.Focus(); selTxtBx.IsEnabled = true; selTxtBx.IsReadOnly = false;
+
+				selTxtBx.LostFocus += SelTxtBx_LostFocus;
+			}
+		}
+		private void SelTxtBx_LostFocus(object sender, RoutedEventArgs e)
+		{
+			//make it non editable again
+			TextBox SelTxtBx = (TextBox)sender; SelTxtBx.IsEnabled = false; SelTxtBx.IsReadOnly = true;
+			SimpleFileManager.ChangeName(txtbxname, SelTxtBx.Text);
+
 		}
 
-		
-
-		#endregion
-
-		#region Button Handlers
 		public int fileIndexCount = 0;
         private void addFileButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -844,7 +839,7 @@ namespace LeHandUI
 		public static SolidColorBrush vague_purple = new SolidColorBrush(Color.FromArgb(180, 160, 110, 255)); //nice purple
         #endregion
 
-        
+
     }
 
 }

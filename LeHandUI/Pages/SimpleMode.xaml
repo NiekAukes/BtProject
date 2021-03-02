@@ -38,6 +38,11 @@
                     Click="removeFileButton_Click">
                 <Image x:Name="removeFileImage"/>
             </Button>
+
+            <Button x:Name="renameFileButton" Style="{StaticResource TranspButton}"
+                    Click="RenameFileButton_Click">
+                <Image x:Name="renameFileImage"/>
+            </Button>
         </DockPanel>
 
         <!--<Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"
@@ -47,33 +52,24 @@
         <ListBox x:Name="simpleModeFileListBox" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Padding="5"
                  Background="Transparent" Foreground="#FFF2F2F2" FontSize="16" HorizontalAlignment="Stretch"
                  SelectedItem="{Binding SelectedIdInListBox,Mode=OneWayToSource}" Focusable="True"
-                 SelectionChanged="SimpleModeFileListBox_SelectionChanged"
-                 MouseRightButtonUp="simpleModeFileListBox_MouseRightButtonUp">
-            <!--
-            <ListBox.ItemContainerStyle>
+                 SelectionChanged="SimpleModeFileListBox_SelectionChanged">
+            
+           <!-- <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
+                    <Setter Property="Height" Value="auto"/>
+                    <Setter Property="Width" Value="auto"/>
                     <Setter Property="ContextMenu">
                         <Setter.Value>
                             <ContextMenu>
-                                <MenuItem Command="Cut">
-                                    <TextBlock Text="slfkjsdk"/>
-                                </MenuItem>
-                                <MenuItem Command="Copy">
-                                    <TextBlock Text="slfkjsdk"/>
-
-                                </MenuItem>
-                                <MenuItem Command="Paste">
-                                    <TextBlock Text="slfkjsdk"/>
-
-                                </MenuItem>
+                                <ContextMenu.Items>
+                                    <MenuItem x:Name="renameFileCMD" 
+                                              MouseDown="renameFileCMD_MouseDown"/>
+                                </ContextMenu.Items>
                             </ContextMenu>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="Content" Value="{Binding Path=EventName}"/>
                 </Style>
-            </ListBox.ItemContainerStyle>
-            
-                -->
+            </ListBox.ItemContainerStyle> -->
             
         </ListBox>
 

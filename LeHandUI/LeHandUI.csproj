@@ -447,6 +447,9 @@
   <ItemGroup>
     <Resource Include="Resources\LEHANDICO.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons\icon64\RenameFile64x64.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

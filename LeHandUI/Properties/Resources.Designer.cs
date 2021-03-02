@@ -203,6 +203,16 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RenameFile64x64 {
+            get {
+                object obj = ResourceManager.GetObject("RenameFile64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SaveScript16x16 {
             get {
                 object obj = ResourceManager.GetObject("SaveScript16x16", resourceCulture);
