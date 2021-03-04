@@ -127,7 +127,7 @@
                 <TextBlock Text="Toets:" HorizontalAlignment="Left" Padding="0,0,5,0" Background="Transparent" Foreground="#FFF2F2F2"/>
             </Viewbox>
             <Border x:Name="KeyPressChooserBorder" BorderThickness="3" >
-            <TextBox x:Name="KeyPressChooser" Padding="2,4,0,2" BorderThickness="0"
+            <TextBox x:Name="KeyPressChooser" VerticalAlignment="Center"  Padding="2,0,0,2" BorderThickness="0"
                      ToolTip="Alle mogelijke toetsen: A t/m Z, F1 t/m F12, Enter, Backspace, Shift, Escape, ArrowUp, ArrowDown, ArrowLeft, ArrowRight">
                      <!--Bijv. Enter, Backspace, K--></TextBox>
             </Border>

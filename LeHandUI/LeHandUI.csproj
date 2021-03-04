@@ -275,6 +275,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\ASCII_table.cs" />
     <Compile Include="Classes\Bluetooth.cs" />
     <Compile Include="Classes\FileManager.cs" />
     <Compile Include="Classes\LHregistry.cs" />

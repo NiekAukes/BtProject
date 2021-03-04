@@ -160,7 +160,7 @@ namespace LeHandUI
         }
         public bool CheckAsciiTable(string s)
         {
-            return SimpleMode.ascii_table.ContainsKey(s);
+            return ASCII_table.ascii_table.ContainsKey(s);
         }
         public Logic ParseToLogic()
         {
