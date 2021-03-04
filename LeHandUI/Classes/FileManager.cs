@@ -43,7 +43,7 @@ namespace LeHandUI
                 case 0:
                     //ret.KeyPressChooser.Text = ((char)arg1).ToString();
                     int comp = (int)arg1;
-                    var myKey = SimpleMode.ascii_table.FirstOrDefault(x => x.Value == comp).Key;
+                    var myKey = ASCII_table.ascii_table.FirstOrDefault(x => x.Value == comp).Key;
                     ret.KeyPressChooser.Text = myKey;
                     break;
                 //still todo
@@ -229,13 +229,10 @@ namespace LeHandUI
                     MessageBox.Show("File" + name + "corrupted, cannot change filename");
                     return;
                 }
-
-                DeleteFile(name);
-
                 
                 ChangeFile(newName, fileDataOfOriginal);
 
-                
+                DeleteFile(name);
             }
         }
 
