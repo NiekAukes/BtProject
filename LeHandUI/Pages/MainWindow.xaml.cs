@@ -238,7 +238,7 @@ namespace LeHandUI
 			inst = this;
 			InitializeComponent();
 			FileManager.LoadAllFiles();
-			
+			Bluetooth bt = new Bluetooth();
 			//Logic[] logics =
 			//	{
 			//		new Logic(1, 0.2, 0.4, new Kpress('k')),

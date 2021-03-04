@@ -14,14 +14,19 @@ namespace LeHandUI
     {
         public Bluetooth()
         {
-            List<BluetoothDeviceInfo> bluetoothDevices = GetBluetoothClients();
+            SearchDevices();
+        }
+
+        public async Task SearchDevices()
+        {
+            List<BluetoothDeviceInfo> bluetoothDevices = await GetBluetoothClients();
             foreach (var device in bluetoothDevices)
             {
                 Debug.WriteLine(device.DeviceName);
             }
         }
 
-        public List<BluetoothDeviceInfo> GetBluetoothClients()
+        public async Task<List<BluetoothDeviceInfo>> GetBluetoothClients()
         {
             BluetoothClient client = new BluetoothClient();
             //client.BeginDiscoverDevices(10, false, false, true, true, null, null);

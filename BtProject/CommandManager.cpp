@@ -494,6 +494,9 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 						else if (arg2._Equal("auto")) {
 							int ret = service.LatestConnect();
 						}
+						else if (arg2._Equal("direct")) {
+
+						}
 					}
 				}
 				else if (command._Equal("start"))
