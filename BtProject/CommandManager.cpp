@@ -204,7 +204,8 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 		//set title
 		SetConsoleTitleW(L"LeHand");
 
-		
+		int i = 15 + 6;
+
 		//setup pipes
 		std::fstream fileStream;
 		fileStream.open(TEXT("\\\\.\\pipe\\LeHandData"));
