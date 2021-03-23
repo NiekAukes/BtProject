@@ -14,6 +14,10 @@ namespace LeHandUI
     {
         public Bluetooth()
         {
+            devices();
+        }
+        public async void devices()
+        {
             SearchDevices();
         }
 
