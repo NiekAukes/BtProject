@@ -191,9 +191,13 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 		-Code 4: Connecting failed
 		-Code 5: Socket binding failed
 	*/
+
+	//int BTService::DirectConnect()
+
 	int BTService::Connect(DeviceDetails dd)
 	{
 		DWORD dwResult;
+
 		if (!dd.paired) {
 			std::cout << "attempting to connect to device\n";
 			HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;

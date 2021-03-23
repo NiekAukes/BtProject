@@ -495,7 +495,20 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 							int ret = service.LatestConnect();
 						}
 						else if (arg2._Equal("direct")) {
+							//directly connect to mac address
+							if (args.size() < 3)
+							{
+								std::cout << "Argument(s) invalid or missing, aborted action\n";
+							}
+							else
+							{
+								int arg3 = std::stoi(args[2]);
+								if (arg3 < deviceLen + 1)
+									service.Connect(*(devices + arg3));
+								else
+									std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
 
+							}
 						}
 					}
 				}
