@@ -241,7 +241,7 @@ namespace LeHandUI
             int result;
             
             if (((TextBox)sender).Text != null) {
-                if (!int.TryParse(((TextBox)sender).Text, out result))
+                if (!int.TryParse(((TextBox)sender).Text, out result) || ((TextBox)sender).Text == "")
                 {
                     e.Handled = true;
                     _ = ((TextBox)sender).Name == MouseMoveBox1.Name ? MouseMoveBorder1.BorderBrush = Brushes.Red : MouseMoveBorder2.BorderBrush = Brushes.Red;
