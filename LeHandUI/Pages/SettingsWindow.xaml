@@ -26,7 +26,7 @@
         <TextBlock Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="1"/>
         <DataGrid Style="{StaticResource dataGridStyle}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="BTGrid" 
-                  AutoGenerateColumns="False" IsReadOnly="True">
+                  AutoGenerateColumns="False" IsReadOnly="True" >
             
             <DataGrid.Columns >
                 <DataGridTextColumn Binding="{Binding Path=Name}" Width="*"/>

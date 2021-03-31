@@ -24,11 +24,7 @@ namespace LeHandUI.Pages
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
     
-    public class DeviceDetails
-    {
-        public string Name { get; set; }
-        public string Adress { get; set; }
-    }
+    
     public partial class SettingsWindow : Window
     {
         #region ImageSourceFromBitmap_func
@@ -53,21 +49,25 @@ namespace LeHandUI.Pages
             InitializeComponent();
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshBTDevices64x64);
 
-            BTGrid.ItemsSource = list;
+            BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
         }
         ObservableCollection<DeviceDetails> list = new ObservableCollection<DeviceDetails>();
         List<BluetoothDeviceInfo> bluetoothDeviceInfo = null;
         
         private async void button_Refresh_Click(object sender, RoutedEventArgs e)
         {
-            Task<List<BluetoothDeviceInfo>> task = Task.Run(MainWindow.BTService.SearchDevices);
-            task.ContinueWith(OnSearchCompleted);
+            await Task.Run(MainWindow.BTService.SearchDevices);
 
         }
         
         private async void OnSearchCompleted(Task<List<BluetoothDeviceInfo>> obj)
         {
             List<BluetoothDeviceInfo> results = await obj;
+            if (results == null)
+            {
+                MessageBox.Show("Failed to discover Bluetooth devices, \nIs Bluetooth turned on?", "Can't find Devices", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             App.Current.Dispatcher.Invoke((Action)delegate
             {
                 list.Clear();

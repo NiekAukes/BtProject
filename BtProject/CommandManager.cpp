@@ -166,6 +166,19 @@ void datgen(BTService* service, Keysender* keysend) {
 		delete[] sdat;
 	}
 }
+
+void printstr(const char* string) {
+	WriteFile(Keysender::inst->errorpipe, "\x0010", 1, &Keysender::inst->dwdataread, NULL);
+	WriteFile(Keysender::inst->errorpipe, string, strlen(string), &Keysender::inst->dwdataread, NULL);
+
+	std::cout << string; 
+}
+void printlab(const char* string) {
+	WriteFile(Keysender::inst->errorpipe, "\x0011", 1, &Keysender::inst->dwdataread, NULL);
+	WriteFile(Keysender::inst->errorpipe, string, strlen(string), &Keysender::inst->dwdataread, NULL);
+	std::cout << string;
+}
+
 int findinstr(const char* string, char c) {
 	//waiting = false;
 	if (*string == '\0')
