@@ -502,9 +502,15 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 							}
 							else
 							{
-								int arg3 = std::stoi(args[2]);
-								if (arg3 < deviceLen + 1)
-									service.Connect(*(devices + arg3));
+								ULONGLONG arg3 = std::stoll(args[2]);
+								if (arg3 != 0) {
+									DeviceDetails dd;
+									dd.address = arg3;
+									dd.name = "custom";
+									dd.paired = true;
+									dd.valid = true;
+									service.Connect(dd);
+								}
 								else
 									std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
 

@@ -9,6 +9,7 @@
              FontFamily="Futura Lt BT" Foreground="#F2F2F2"
              Background="#2a2a2c"
              d:DesignHeight="580" d:DesignWidth="760">
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -44,7 +45,6 @@
                 <Image x:Name="renameFileImage"/>
             </Button>
         </DockPanel>
-
         <!--<Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Content="Apply Name" FontSize="15" Click="ApplyNameListBoxItem" Foreground="#F2F2F2"
                 Style="{StaticResource TranspButton}" Height="auto" Width="auto" Panel.ZIndex="1000"/>-->
