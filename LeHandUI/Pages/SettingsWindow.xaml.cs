@@ -46,7 +46,7 @@ namespace LeHandUI
         }
         #endregion
 
-        Storyboard story = new Storyboard();
+        public Storyboard story = new Storyboard();
         public SettingsWindow()
         {
             InitializeComponent();
@@ -57,7 +57,7 @@ namespace LeHandUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //A five-second long during animation in which the rotation time is 1.5sec
-            story.Duration = new Duration(TimeSpan.FromSeconds(5.0));
+            /*story.Duration = new Duration(TimeSpan.FromSeconds(100)); //new Duration(TimeSpan.FromSeconds(5.0));
             DoubleAnimation rotateAnimation = new DoubleAnimation()
             {
                 From = 0,
@@ -65,16 +65,15 @@ namespace LeHandUI
                 Duration = new Duration(TimeSpan.FromSeconds(1.5))
             };
             Storyboard.SetTarget(refreshButtonImage, rotateAnimation);
-            Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+            Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RenderTransform.Angle)")); //
 
-            story.Children.Add(rotateAnimation);
+            story.Children.Add(rotateAnimation);*/
 
         }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
             Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
             Communicator.device.directConnect(addr);
-            BeginStoryboard(story);
         }
 
         #region Bluetooth stuff
@@ -85,6 +84,9 @@ namespace LeHandUI
         {
             await Task.Run(MainWindow.BTService.SearchDevices);
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
+
+            story.Begin();
+
         }
         private async void OnSearchCompleted(Task<List<BluetoothDeviceInfo>> obj)
         {

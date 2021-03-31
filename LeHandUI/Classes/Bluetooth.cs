@@ -67,7 +67,16 @@ namespace LeHandUI
 
         private void LocalComponent_DiscoverDevicesComplete(object sender, DiscoverDevicesEventArgs e)
         {
-            throw new NotImplementedException();
+            for(int i = 0; i < App.Current.Windows.Count; i++)
+            {
+                if (App.Current.Windows[i].Name == "SettingsWindow")
+                {
+                    SettingsWindow settingswind = (SettingsWindow)App.Current.Windows[i];
+
+                    settingswind.story.Stop();
+                    continue;
+                }
+            }
         }
 
         private void LocalComponent_DiscoverDevicesProgress(object sender, DiscoverDevicesEventArgs e)
