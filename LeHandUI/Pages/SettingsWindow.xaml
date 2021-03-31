@@ -11,6 +11,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
@@ -24,13 +25,24 @@
 
         <TextBlock Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="1"/>
-
-        <DataGrid Grid.Column="0" Grid.Row="2" x:Name="BTGrid">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Name}"/>
-                <DataGridTextColumn Binding="{Binding Path=Adress}"/>
+        <DataGrid Style="{StaticResource dataGridStyle}" Grid.Column="0" Grid.Row="2" x:Name="BTGrid" OverridesDefaultStyle="True" Background="Transparent">
+            
+            <DataGrid.Columns >
+                <DataGridTextColumn Binding="{Binding Path=Name}" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Path=Adress}" Width="*"/>
             </DataGrid.Columns>
+            
+            
+            <DataGrid.Items>
+                
+                <TextBlock Text="Pipo de Clown"/>
+            </DataGrid.Items>
         </DataGrid>
+        <Button x:Name="button_Refresh" Click="button_Refresh_Click" Style="{StaticResource TranspButton}"
+                Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="99999">
+            <Image x:Name="refreshButtonImage"/>
+        </Button>
+
         <Button x:Name="button_Connect" Grid.Row="3" Click="button_Connect_Click"/>
     </Grid>
 </Window>
