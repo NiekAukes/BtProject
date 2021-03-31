@@ -280,6 +280,9 @@
     <Compile Include="Classes\FileManager.cs" />
     <Compile Include="Classes\LHregistry.cs" />
     <Compile Include="Classes\LuaParser.cs" />
+    <Compile Include="Pages\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SimpleMode.xaml.cs">
       <DependentUpon>SimpleMode.xaml</DependentUpon>
     </Compile>
@@ -308,6 +311,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SimpleMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -450,6 +457,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icons\icon64\RenameFile64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons\icon64\Settings64x64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

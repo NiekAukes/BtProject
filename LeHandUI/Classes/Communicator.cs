@@ -17,8 +17,6 @@ using Microsoft.Win32;
 
 namespace LeHandUI
 {
-
-
     public class StreamString
     {
         private Stream ioStream;
@@ -29,6 +27,7 @@ namespace LeHandUI
             this.ioStream = ioStream;
             streamEncoding = new UnicodeEncoding();
         }
+
 
         public string ReadString()
         {
@@ -323,8 +322,6 @@ namespace LeHandUI
             }
             //process = new Process();
 
-
-
             //Thread.Sleep(3000);
             //process.BeginOutputReadLine();
             int pid = process.Id;
@@ -337,6 +334,7 @@ namespace LeHandUI
             //byte[] r = Encoding.ASCII.GetBytes("help\n");
             //inputStream.Write(r, 0, r.Length);
             WriteCommand("help");
+            
             //errorStream.Connect();
 
             //WriteCommand("device discover");
@@ -369,7 +367,14 @@ namespace LeHandUI
             {
                 return status.S_OK;
             }
+
+            public static status directConnect(ulong adress)
+            {
+                WriteCommand("device direct " + adress);
+                return status.S_OK;
+            }
         }
+
         public static status start()
         {
             WriteCommand("start");

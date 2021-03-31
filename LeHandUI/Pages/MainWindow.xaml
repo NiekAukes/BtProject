@@ -33,8 +33,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="53*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="10"/>
@@ -83,6 +83,13 @@
                 <TextBox Text="Advanced" Style="{StaticResource MenuText}"/>
             </Button>
         </DockPanel>
+        <!--SETTINGS BUTTON-->
+        <Button Style="{StaticResource TranspButton}" Height="25" Width="25" Margin="0,0,10,0"
+                HorizontalAlignment="Center" x:Name="settingsButton" 
+                Grid.Row="1" Grid.Column="11" Grid.RowSpan="2" VerticalAlignment="Top"
+                Click="settingsButton_Load">
+            <Image x:Name="settingsImage"/>
+        </Button>
 
         <DockPanel  Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="12"
             Height="auto" x:Name="ViewSwitcher" Margin="0,0,10,0">
