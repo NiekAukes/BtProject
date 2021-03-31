@@ -21,14 +21,15 @@ namespace LeHandUI
             await Task.Run(SearchDevices);
         }
 
-        public async Task SearchDevices()
+        public async Task<List<BluetoothDeviceInfo>> SearchDevices()
         {
             List<BluetoothDeviceInfo> bluetoothDevices = await GetBluetoothClients();
             foreach (var device in bluetoothDevices)
             {
-                Int64 address = device.DeviceAddress.ToInt64();
+                //Int64 address = device.DeviceAddress.ToInt64();
                 Debug.WriteLine(device.DeviceName);
             }
+            return bluetoothDevices;
         }
 
         public async Task<List<BluetoothDeviceInfo>> GetBluetoothClients()

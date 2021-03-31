@@ -26,7 +26,7 @@ namespace LeHandUI
 		public static Brush greyedOutColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(30, 40, 40, 40));
 		public static Brush FocusedColour = new SolidColorBrush(System.Windows.Media.Color.FromArgb(30,242,242,242));
 
-		Bluetooth bb = new Bluetooth();
+		public static Bluetooth BTService = new Bluetooth();
 
 		#region ImageSourceFromBitmap_func
 		//Dit is mijn mooie gekopieerde stackoverflow code
