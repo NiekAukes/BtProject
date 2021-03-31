@@ -130,6 +130,7 @@ void CommandManager::doData(BTService service, Keysender* keysend, std::string* 
 					while (!waiting) {}
 					cmd->append(s);
 					std::this_thread::sleep_for(std::chrono::milliseconds(20));
+					
 				}
 			}
 
@@ -170,12 +171,15 @@ void datgen(BTService* service, Keysender* keysend) {
 void printstr(const char* string) {
 	WriteFile(Keysender::inst->errorpipe, "\x0010", 1, &Keysender::inst->dwdataread, NULL);
 	WriteFile(Keysender::inst->errorpipe, string, strlen(string), &Keysender::inst->dwdataread, NULL);
+	WriteFile(Keysender::inst->errorpipe, "\n", 1, &Keysender::inst->dwdataread, NULL);
 
 	std::cout << string; 
 }
 void printlab(const char* string) {
 	WriteFile(Keysender::inst->errorpipe, "\x0011", 1, &Keysender::inst->dwdataread, NULL);
 	WriteFile(Keysender::inst->errorpipe, string, strlen(string), &Keysender::inst->dwdataread, NULL);
+	WriteFile(Keysender::inst->errorpipe, "\n", 1, &Keysender::inst->dwdataread, NULL);
+	
 	std::cout << string;
 }
 
@@ -242,6 +246,8 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 
 		std::thread datathread(doData, service, keysend, &wait);
 		std::thread inputthread(inputasync, &wait);
+
+		printstr("starting command manager");
 		while (1)
 		{
 			args.clear();
@@ -251,8 +257,11 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				std::this_thread::sleep_for(std::chrono::milliseconds(20));
 				command.append(wait);
 				wait.clear();
+
+				printstr("waiting");
 			}
 			waiting = false;
+
 
 			
 			std::string end;

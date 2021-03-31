@@ -274,9 +274,59 @@ namespace LeHandUI
                 //readres = dataStream.BeginRead(buf, 0, 1024, null, null);
 
                 //Thread.Sleep(10);
+
+                //errorstream
+                
             }
         }
+        
+        public static void ReadErrStream()
+        {
+            string errbuf = "";
+            StreamReader reader = new StreamReader(errorStream);
+            while (Active)
+            {
+                //errorstream
+                errbuf = reader.ReadLine();
+                if (errbuf[0] == '\x10')
+                {
+                    //this is a log
+                    for (int i = 1; i < errbuf.Length; i++)
+                    {
+                        if (errbuf[i] == '\0')
+                        {
+                            SettingsWindow.log += "\n\n";
+                            if (errbuf[i + 1] == '\0')
+                                break; //EOF
+                        }
+                        SettingsWindow.log += errbuf[i];
+
+                    }
+                }
+                else if (errbuf[0] == '\x11')
+                {
+                    //command
+                }
+                else
+                {
+                    //just append
+                    for (int i = 0; i < errbuf.Length; i++)
+                    {
+                        if (errbuf[i] == '\0')
+                        {
+                            SettingsWindow.log += "\n\n";
+                            if (errbuf[i + 1] == '\0')
+                                break; //EOF
+                        }
+                        SettingsWindow.log += errbuf[i];
+
+                    }
+                }
+            }
+        }
+
         static Thread distribution = null;
+        static Thread errorthread = null;
 		public static void Init()
         {
             bool startnewProcess = true;
@@ -331,6 +381,7 @@ namespace LeHandUI
 
             dataStream.Connect();
             inputStream.Connect();
+            errorStream.Connect();
             //byte[] r = Encoding.ASCII.GetBytes("help\n");
             //inputStream.Write(r, 0, r.Length);
             WriteCommand("help");
@@ -340,8 +391,12 @@ namespace LeHandUI
             //WriteCommand("device discover");
 
             readres = dataStream.BeginRead(buf, 0, 1024, null, null);
+            
             distribution = new Thread(new ThreadStart(DistributeData));
+            errorthread = new Thread(ReadErrStream);
+
             distribution.Start();
+            errorthread.Start();
             return;
         }
 

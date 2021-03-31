@@ -24,7 +24,7 @@ namespace LeHandUI
         //public Bluetooth()
         //{
         //}
-        public List<BluetoothDeviceInfo> latestsearch = null;
+        public List<BluetoothDeviceInfo> latestsearch = new List<BluetoothDeviceInfo>();
         
         public ObservableCollection<DeviceDetails> observableCollection = new ObservableCollection<DeviceDetails>();
         public async void RefreshDevices()
@@ -54,6 +54,7 @@ namespace LeHandUI
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
                     observableCollection.Clear();
+                    latestsearch.Clear();
                 });
             }
             localComponent = new BluetoothComponent(client);
@@ -67,7 +68,6 @@ namespace LeHandUI
 
         private void LocalComponent_DiscoverDevicesComplete(object sender, DiscoverDevicesEventArgs e)
         {
-            throw new NotImplementedException();
         }
 
         private void LocalComponent_DiscoverDevicesProgress(object sender, DiscoverDevicesEventArgs e)
@@ -82,6 +82,7 @@ namespace LeHandUI
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
                     observableCollection.Add(dd);
+                    latestsearch.Add(dev);
                 });
             }
         }

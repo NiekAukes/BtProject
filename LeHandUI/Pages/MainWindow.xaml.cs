@@ -53,6 +53,7 @@ namespace LeHandUI
 		void OnWindowLoaded(object sender, EventArgs e)
 		{
 			Communicator.Init();
+			BTService.RefreshDevices();
 		}
 		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b)
 		{

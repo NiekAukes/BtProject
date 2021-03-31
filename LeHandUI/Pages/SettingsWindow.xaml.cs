@@ -52,6 +52,8 @@ namespace LeHandUI
             
         }
 
+        public static string log { get; set; }
+
         ObservableCollection<DeviceDetails> list = new ObservableCollection<DeviceDetails>();
         List<BluetoothDeviceInfo> bluetoothDeviceInfo = null;
         
@@ -76,8 +78,8 @@ namespace LeHandUI
             foreach (var Result in results)
             {
                 DeviceDetails dd = new DeviceDetails {
-                    Name = Result.DeviceName, 
-                    Adress = Result.DeviceAddress.ToString() 
+                    Name = Result.DeviceName,
+                    Adress = Result.DeviceAddress.ToString()
                 };
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
@@ -89,13 +91,13 @@ namespace LeHandUI
         }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
-            Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
+            Int64 addr = MainWindow.BTService.latestsearch[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
             Communicator.device.directConnect(addr);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
         }
     }
 }
