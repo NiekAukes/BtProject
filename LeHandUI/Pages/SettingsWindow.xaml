@@ -32,8 +32,10 @@
                     <Button x:Name="button_Refresh" Click="button_Refresh_Click" Style="{StaticResource TranspButton}"
                         HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="99999"
                             Height="20" Width="20" Margin="10,0,0,0">
-                        <Image x:Name="refreshButtonImage"/>
-                    </Button>
+                            <Image x:Name="refreshButtonImage" Style="{StaticResource spinner}">
+                                
+                            </Image>
+                        </Button>
                     </DockPanel>
                 </Expander.Header>
                 
