@@ -464,6 +464,12 @@
   <ItemGroup>
     <None Include="Resources\Icons\icon64\RefreshBTDevices64x64.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons\icon64\darkblueRefreshBTDevices64x64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icons\icon64\whiteRefreshBTDevices64x64.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

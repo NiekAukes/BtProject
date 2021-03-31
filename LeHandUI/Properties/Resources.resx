@@ -136,6 +136,9 @@
   <data name="BTIconNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\BTIconNew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="darkblueRefreshBTDevices64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\icon64\darkblueRefreshBTDevices64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeleteIcon16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\icon16\DeleteIcon16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -186,5 +189,8 @@
   </data>
   <data name="WASHED_OUT_RED_DeleteIcon64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\icon64\WASHED_OUT_RED_DeleteIcon64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="whiteRefreshBTDevices64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\icon64\whiteRefreshBTDevices64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

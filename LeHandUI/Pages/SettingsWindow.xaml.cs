@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 using InTheHand.Net.Sockets;
 using LeHandUI;
 
-namespace LeHandUI.Pages
+namespace LeHandUI
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
@@ -47,7 +47,7 @@ namespace LeHandUI.Pages
         public SettingsWindow()
         {
             InitializeComponent();
-            refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshBTDevices64x64);
+            refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
 
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
         }
