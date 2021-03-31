@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeHandUI.Pages"
-        mc:Ignorable="d" Background="#2A2A2C" FontSize="25"
+        mc:Ignorable="d" Background="#2A2A2C" FontSize="15"
          MinHeight="100" MinWidth="80"
-        Title="SettingsWindow" Height="500" Width="300" 
+        Title="SettingsWindow" Height="400" Width="600" 
         FontFamily="Futura Lt BT" Foreground="#F2F2F2">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,7 +25,7 @@
 
         <TextBlock Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="1"/>
-        <DataGrid Style="{StaticResource dataGridStyle}" Grid.Column="0" Grid.Row="2" x:Name="BTGrid" 
+        <DataGrid Style="{StaticResource dataGridStyle}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="BTGrid" 
                   AutoGenerateColumns="False" IsReadOnly="True">
             
             <DataGrid.Columns >
@@ -35,10 +35,11 @@
             
         </DataGrid>
         <Button x:Name="button_Refresh" Click="button_Refresh_Click" Style="{StaticResource TranspButton}"
-                Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="99999">
+                Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="99999">
             <Image x:Name="refreshButtonImage"/>
         </Button>
 
-        <Button x:Name="button_Connect" Grid.Row="3" Click="button_Connect_Click"/>
+        <Button x:Name="button_Connect" Grid.Row="3" Grid.ColumnSpan="2" Click="button_Connect_Click"
+                Content="Connect to device" FontSize="25" Margin="20,10,20,10"/>
     </Grid>
 </Window>
