@@ -52,7 +52,7 @@ namespace LeHandUI
             InitializeComponent();
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
 
-            BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
+            
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -84,7 +84,7 @@ namespace LeHandUI
         private async void button_Refresh_Click(object sender, RoutedEventArgs e)
         {
             await Task.Run(MainWindow.BTService.SearchDevices);
-
+            BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
         }
         private async void OnSearchCompleted(Task<List<BluetoothDeviceInfo>> obj)
         {

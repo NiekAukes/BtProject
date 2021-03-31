@@ -37,6 +37,7 @@ namespace LeHandUI
             await GetBluetoothClients();
         }
 
+        public BluetoothComponent localComponent = null;
         public async Task GetBluetoothClients()
         {
             BluetoothClient client = new BluetoothClient();
@@ -47,10 +48,26 @@ namespace LeHandUI
                 return;
             }
             //client.BeginDiscoverDevices(10, false, false, true, true, null, null);
-            BluetoothComponent localComponent = new BluetoothComponent(client);
+            if (localComponent != null)
+            {
+                localComponent.Dispose();
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    observableCollection.Clear();
+                });
+            }
+            localComponent = new BluetoothComponent(client);
             localComponent.DiscoverDevicesProgress += LocalComponent_DiscoverDevicesProgress;
+            localComponent.DiscoverDevicesComplete += LocalComponent_DiscoverDevicesComplete;
+            localComponent.DiscoverDevicesAsync(255, false, false, true, false, null);
+
             return;
             //return null;
+        }
+
+        private void LocalComponent_DiscoverDevicesComplete(object sender, DiscoverDevicesEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void LocalComponent_DiscoverDevicesProgress(object sender, DiscoverDevicesEventArgs e)
