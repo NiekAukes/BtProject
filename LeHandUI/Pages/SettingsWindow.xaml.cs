@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using InTheHand.Net.Sockets;
 using LeHandUI;
+using System.Windows.Media.Animation;
 
 namespace LeHandUI
 {
@@ -44,6 +45,8 @@ namespace LeHandUI
             finally { DeleteObject(handle); }
         }
         #endregion
+
+        Storyboard story = new Storyboard();
         public SettingsWindow()
         {
             InitializeComponent();
@@ -51,6 +54,30 @@ namespace LeHandUI
 
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //A five-second long during animation in which the rotation time is 1.5sec
+            story.Duration = new Duration(TimeSpan.FromSeconds(5.0));
+            DoubleAnimation rotateAnimation = new DoubleAnimation()
+            {
+                From = 0,
+                To = 360,
+                Duration = new Duration(TimeSpan.FromSeconds(1.5))
+            };
+            Storyboard.SetTarget(refreshButtonImage, rotateAnimation);
+            Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+
+            story.Children.Add(rotateAnimation);
+
+        }
+        private void button_Connect_Click(object sender, RoutedEventArgs e)
+        {
+            Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
+            Communicator.device.directConnect(addr);
+            BeginStoryboard(story);
+        }
+
+        #region Bluetooth stuff
         ObservableCollection<DeviceDetails> list = new ObservableCollection<DeviceDetails>();
         List<BluetoothDeviceInfo> bluetoothDeviceInfo = null;
         
@@ -59,7 +86,6 @@ namespace LeHandUI
             await Task.Run(MainWindow.BTService.SearchDevices);
 
         }
-        
         private async void OnSearchCompleted(Task<List<BluetoothDeviceInfo>> obj)
         {
             List<BluetoothDeviceInfo> results = await obj;
@@ -86,11 +112,10 @@ namespace LeHandUI
             }
             bluetoothDeviceInfo = results;
         }
-        private void button_Connect_Click(object sender, RoutedEventArgs e)
-        {
-            Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
-            Communicator.device.directConnect(addr);
-        }
+        #endregion
 
+        
+
+        
     }
 }
