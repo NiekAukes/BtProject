@@ -52,14 +52,12 @@ namespace LeHandUI.Pages
         {
             InitializeComponent();
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshBTDevices64x64);
-            
-        ObservableCollection<DeviceDetails> list = new ObservableCollection<DeviceDetails>();
-        List<BluetoothDeviceInfo> bluetoothDeviceInfo = null;
-        public SettingsWindow()
-        {
-            InitializeComponent();
+
             BTGrid.ItemsSource = list;
         }
+        ObservableCollection<DeviceDetails> list = new ObservableCollection<DeviceDetails>();
+        List<BluetoothDeviceInfo> bluetoothDeviceInfo = null;
+        
         private async void button_Refresh_Click(object sender, RoutedEventArgs e)
         {
             Task<List<BluetoothDeviceInfo>> task = Task.Run(MainWindow.BTService.SearchDevices);
@@ -93,9 +91,5 @@ namespace LeHandUI.Pages
             button_Refresh_Click(sender, e);
         }
 
-        private void button_Refresh_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
