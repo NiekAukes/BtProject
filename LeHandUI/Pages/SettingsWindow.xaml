@@ -8,22 +8,24 @@
          MinHeight="100" MinWidth="80"
         Title="SettingsWindow" Height="400" Width="600" 
         FontFamily="Futura Lt BT" Foreground="#F2F2F2">
+    <ScrollViewer>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <!--#1: Lijst met Bluetooth 
             #2: -->
 
-        <TextBlock Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
+        <TextBlock FontSize="30" Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="1"/>
         <DataGrid Style="{StaticResource dataGridStyle}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="BTGrid" 
                   AutoGenerateColumns="False" IsReadOnly="True">
@@ -41,5 +43,10 @@
 
         <Button x:Name="button_Connect" Grid.Row="3" Grid.ColumnSpan="2" Click="button_Connect_Click"
                 Content="Connect to device" FontSize="25" Margin="20,10,20,10"/>
+        <!--BLUETOOTH LOG AREA-->
+            <TextBlock Text="Log" Style="{StaticResource TitleText}" FontSize="25" TextAlignment="Center" VerticalAlignment="Center"
+                       HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="4"/>
+            <TextBox IsReadOnly="True" x:Name="BTLog" Grid.Row="5"/>
     </Grid>
+    </ScrollViewer>
 </Window>
