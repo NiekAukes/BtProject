@@ -246,7 +246,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 			}
 			
 		}
-
+		
 		WSADATA wsadat;
 		WSAQUERYSETW wsaqs;
 		ZeroMemory(&wsadat, sizeof(wsadat));
@@ -277,7 +277,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 			SOCKADDR_BTH sAddrBth;
 			ZeroMemory(&sAddrBth, sizeof(SOCKADDR_BTH));
 			sAddrBth.addressFamily = AF_BTH;
-			sAddrBth.btAddr = dd.inheritData.Address.ullLong;
+			sAddrBth.btAddr = dd.address;//dd.inheritData.Address.ullLong;
 			sAddrBth.serviceClassId = (GUID)SerialPortServiceClass_UUID;
 			sAddrBth.port = 0;
 			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH)); //this needs to be changed

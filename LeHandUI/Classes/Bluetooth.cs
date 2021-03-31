@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using InTheHand;
 using InTheHand.Devices;
@@ -10,15 +11,14 @@ using InTheHand.Net.Sockets;
 
 namespace LeHandUI
 {
-    class Bluetooth
+    public class Bluetooth
     {
-        public Bluetooth()
+        //public Bluetooth()
+        //{
+        //}
+        public async void RefreshDevices()
         {
-            devices();
-        }
-        public async void devices()
-        {
-            SearchDevices();
+            await Task.Run(SearchDevices);
         }
 
         public async Task SearchDevices()
@@ -26,6 +26,7 @@ namespace LeHandUI
             List<BluetoothDeviceInfo> bluetoothDevices = await GetBluetoothClients();
             foreach (var device in bluetoothDevices)
             {
+                Int64 address = device.DeviceAddress.ToInt64();
                 Debug.WriteLine(device.DeviceName);
             }
         }
