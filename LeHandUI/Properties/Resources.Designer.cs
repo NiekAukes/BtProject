@@ -123,6 +123,16 @@ namespace LeHandUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap darkblueRefreshBTDevices64x64 {
+            get {
+                object obj = ResourceManager.GetObject("darkblueRefreshBTDevices64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeleteIcon16x16 {
             get {
                 object obj = ResourceManager.GetObject("DeleteIcon16x16", resourceCulture);
@@ -285,6 +295,16 @@ namespace LeHandUI.Properties {
         internal static System.Drawing.Bitmap WASHED_OUT_RED_DeleteIcon64x64 {
             get {
                 object obj = ResourceManager.GetObject("WASHED_OUT_RED_DeleteIcon64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap whiteRefreshBTDevices64x64 {
+            get {
+                object obj = ResourceManager.GetObject("whiteRefreshBTDevices64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

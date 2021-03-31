@@ -1,5 +1,4 @@
-﻿using LeHandUI.Pages;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;

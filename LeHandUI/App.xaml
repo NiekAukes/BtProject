@@ -5,13 +5,16 @@
              StartupUri="Pages/MainWindow.xaml"
              Exit="Application_Exit">
     <Application.Resources>
-        <Style x:Name="dataGridStyle" x:Key="dataGridStyle" TargetType="DataGrid">
-            <Style.Resources>
-                <Style TargetType="DataGridCell">
-                    </Style>
-            </Style.Resources>
+        <Style TargetType="DataGridColumnHeader" x:Name="datagridcolumnheaderstyle" x:Key="datagridcolumnheaderstyle">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Futura Lt BT"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-        
+        <Style TargetType="DataGrid" x:Key="DataGridStyle">
+        </Style>
+
+       
+
         <Style x:Key="menuItemStyle" x:Name="menuItemStyle" TargetType="MenuItem">
         </Style>
         

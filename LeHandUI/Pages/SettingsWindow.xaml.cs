@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 using InTheHand.Net.Sockets;
 using LeHandUI;
 
-namespace LeHandUI.Pages
+namespace LeHandUI
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
@@ -51,7 +51,7 @@ namespace LeHandUI.Pages
         public SettingsWindow()
         {
             InitializeComponent();
-            refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.RefreshBTDevices64x64);
+            refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
 
             BTGrid.ItemsSource = list;
         }
@@ -61,7 +61,7 @@ namespace LeHandUI.Pages
         private async void button_Refresh_Click(object sender, RoutedEventArgs e)
         {
             Task<List<BluetoothDeviceInfo>> task = Task.Run(MainWindow.BTService.SearchDevices);
-            task.ContinueWith(OnSearchCompleted);
+            await task.ContinueWith(OnSearchCompleted);
 
         }
         
