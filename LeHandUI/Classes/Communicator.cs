@@ -368,7 +368,7 @@ namespace LeHandUI
                 return status.S_OK;
             }
 
-            public static status directConnect(ulong adress)
+            public static status directConnect(Int64 adress)
             {
                 WriteCommand("device direct " + adress);
                 return status.S_OK;

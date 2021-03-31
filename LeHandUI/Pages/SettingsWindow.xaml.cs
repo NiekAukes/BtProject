@@ -88,7 +88,8 @@ namespace LeHandUI.Pages
         }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
-            button_Refresh_Click(sender, e);
+            Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
+            Communicator.device.directConnect(addr);
         }
 
     }
