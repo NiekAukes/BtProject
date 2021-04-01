@@ -27,7 +27,7 @@ namespace LeHandUI
     /// </summary>
     
     
-    public partial class SettingsWindow : Window
+    public partial class SettingsWindow : Window, INotifyPropertyChanged
     {
         #region ImageSourceFromBitmap_func
         //Dit is mijn mooie gekopieerde stackoverflow code
@@ -78,6 +78,7 @@ namespace LeHandUI
     
              */
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
+            BTLog.Text = "";
         }
         static string _name2 = "";
         public static string log {
@@ -87,7 +88,11 @@ namespace LeHandUI
                 if (value != _name2)
                 {
                     _name2 = value;
-                    inst.OnPropertyChanged("log");
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        inst.BTLog.Text = value;
+                        inst.BTLog.ScrollToEnd();
+                    });
                 }
             }
         }

@@ -77,7 +77,7 @@
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="4"/>
                 </Expander.Header>
                 <TextBox IsReadOnly="True" x:Name="BTLog" Grid.Row="4" Background="Transparent"
-                         Text="{Binding Path=log}"/>
+                             Foreground="White" Height="200" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
             </Expander>
 
         </Grid>

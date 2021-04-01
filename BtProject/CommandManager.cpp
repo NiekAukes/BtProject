@@ -258,7 +258,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				command.append(wait);
 				wait.clear();
 
-				printstr("waiting");
+				
 			}
 			waiting = false;
 
@@ -451,7 +451,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					}
 				}
 #else
-					std::cout << "out of date, use Lua instead\n";
+					printstr("out of date, use Lua instead\n");
 #endif
 
 				}
@@ -459,7 +459,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				{
 					std::string arg2;
 					if (args.size() < 2) {
-						std::cout << "Argument(s) invalid or missing, aborted action\n";
+						printstr("Argument(s) invalid or missing, aborted action\n");
 					}
 					else {
 						arg2 = args[1];
@@ -471,7 +471,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 						{
 							int ndev = service.Discover(&devices);
 							if (ndev == -1)
-								std::cout << "No Bluetooth radios found, are you sure Bluetooth is enabled?\n";
+								printstr("No Bluetooth radios found, are you sure Bluetooth is enabled?\n");
 							deviceLen = ndev;
 						}
 
@@ -480,11 +480,11 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 							
 							if (devices == nullptr || devices->valid == false)
 							{
-								std::cout << "no devices available\n";
+								printstr("no devices available\n");
 							}
 							else if (args.size() < 3)
 							{
-								std::cout << "Argument(s) invalid or missing, aborted action\n";
+								printstr("Argument(s) invalid or missing, aborted action\n");
 
 							}
 							else
@@ -500,7 +500,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 									if (arg3 < deviceLen + 1)
 										service.Connect(*(devices + arg3));
 									else
-										std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
+										printstr("connect failed: ERROR_INVALID_ARGUMENT\n");
 								}
 							}
 						}
@@ -511,7 +511,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 						else if (arg2._Equal("list") || arg2._Equal("ls"))
 						{
 							//to do
-							std::cout << "Not yet implemented\n";
+							printstr("Not yet implemented\n");
 						}
 						else if (arg2._Equal("auto")) {
 							int ret = service.LatestConnect();
@@ -520,7 +520,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 							//directly connect to mac address
 							if (args.size() < 3)
 							{
-								std::cout << "Argument(s) invalid or missing, aborted action\n";
+								printstr("Argument(s) invalid or missing, aborted action\n");
 							}
 							else
 							{
@@ -534,7 +534,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 									service.Connect(dd);
 								}
 								else
-									std::cout << "connect failed: ERROR_INVALID_ARGUMENT\n";
+									printstr("connect failed: ERROR_INVALID_ARGUMENT\n");
 
 							}
 						}
@@ -548,7 +548,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					//datagen = new std::thread(datgen, &service, keysend);
 
 					//std::this_thread::sleep_for(std::chrono::microseconds(500));
-					std::cout << "commandline active\n";
+					printstr("commandline active\n");
 				}
 
 				else if (command._Equal("save")) {
@@ -584,7 +584,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					}
 					save.close();
 #else 
-				std::cout << "Obsolete command";
+				printstr("Obsolete command");
 #endif
 				}
 				else if (command._Equal("load")) {
@@ -617,7 +617,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 						//check if lua file actually works
 						if (LuaFTF::CheckLuaScript(full)) {
 							//valid!
-							std::cout << "Loaded file, execute with 'start' command\n";
+							printstr("Loaded file, execute with 'start' command\n");
 						}
 
 					}
@@ -666,7 +666,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				}
 			}
 			else return;
-			std::cout << "\n";
+			printstr("\n");
 			command = end;
 		}
 	}
