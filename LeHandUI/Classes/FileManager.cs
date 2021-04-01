@@ -97,7 +97,7 @@ namespace LeHandUI
         }
         public static string[] FileNames()
         {
-            if (MainWindow.Directory == null)
+            if (MainWindow.Directory == null || !Directory.Exists(MainWindow.Directory + "Files"))
             {
                 System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory);
                 Registry.CurrentUser.OpenSubKey("Software\\LeHand", true).SetValue("Dir", AppDomain.CurrentDomain.BaseDirectory);
