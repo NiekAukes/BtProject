@@ -302,6 +302,7 @@ namespace LeHandUI
                         SettingsWindow.log += errbuf[i];
 
                     }
+                    SettingsWindow.log += '\n';
                 }
                 else if (errbuf[0] == '\x11')
                 {
@@ -321,6 +322,7 @@ namespace LeHandUI
                         SettingsWindow.log += errbuf[i];
 
                     }
+                    SettingsWindow.log += '\n';
                 }
             }
         }

@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using InTheHand.Net.Sockets;
 using LeHandUI;
 using System.Windows.Media.Animation;
+using System.ComponentModel;
 
 namespace LeHandUI
 {
@@ -45,15 +46,23 @@ namespace LeHandUI
             finally { DeleteObject(handle); }
         }
         #endregion
-
+        public static SettingsWindow inst = null;
         public Storyboard story = new Storyboard();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         public SettingsWindow()
         {
             InitializeComponent();
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
-
+            inst = this;
             
         }
+
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //A five-second long during animation in which the rotation time is 1.5sec
@@ -66,8 +75,22 @@ namespace LeHandUI
             };
             Storyboard.SetTarget(refreshButtonImage, rotateAnimation);
             Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RenderTransform.Angle)")); //
-    */
-        public static string log { get; set; }
+    
+             */
+            BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
+        }
+        static string _name2 = "";
+        public static string log {
+            get { return _name2; }
+            set
+            {
+                if (value != _name2)
+                {
+                    _name2 = value;
+                    inst.OnPropertyChanged("log");
+                }
+            }
+        }
 
             //story.Children.Add(rotateAnimation);
 
