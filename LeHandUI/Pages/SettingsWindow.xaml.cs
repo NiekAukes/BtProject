@@ -67,6 +67,7 @@ namespace LeHandUI
             Storyboard.SetTarget(refreshButtonImage, rotateAnimation);
             Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RenderTransform.Angle)")); //
     */
+        }
         public static string log { get; set; }
 
             //story.Children.Add(rotateAnimation);
