@@ -84,9 +84,9 @@
             </Button>
         </DockPanel>
         <!--SETTINGS BUTTON-->
-        <Button Style="{StaticResource TranspButton}" Height="25" Width="25" Margin="0,0,10,0"
+        <Button Style="{StaticResource TranspButton}" Height="20" Width="20" Margin="0,0,10,0"
                 HorizontalAlignment="Center" x:Name="settingsButton" 
-                Grid.Row="1" Grid.Column="11" Grid.RowSpan="2" VerticalAlignment="Top"
+                Grid.Row="1" Grid.Column="11" Grid.RowSpan="1" VerticalAlignment="Center"
                 Click="settingsButton_Load">
             <Image x:Name="settingsImage"/>
         </Button>
