@@ -305,6 +305,7 @@ namespace LeHandUI
                         SettingsWindow.log += errbuf[i];
 
                     }
+                    SettingsWindow.log += '\n';
                 }
 
                 //COMMANDS TO SWITCH THE INDICATOR LIGHT
@@ -349,6 +350,7 @@ namespace LeHandUI
                         SettingsWindow.log += errbuf[i];
 
                     }
+                    SettingsWindow.log += '\n';
                 }
             }
         }

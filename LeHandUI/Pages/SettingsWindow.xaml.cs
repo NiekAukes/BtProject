@@ -19,6 +19,7 @@ using InTheHand.Net.Sockets;
 using LeHandUI;
 using System.Windows.Media.Animation;
 using Color = System.Windows.Media.Color;
+using System.ComponentModel;
 
 namespace LeHandUI
 {
@@ -51,6 +52,13 @@ namespace LeHandUI
         public static SolidColorBrush clrstatus_Connecting = new SolidColorBrush(Color.FromArgb(255, 255, 210, 25));
         public static SolidColorBrush clrstatus_Connected = new SolidColorBrush(Color.FromArgb(255, 10, 190, 25));
 
+public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        
         public static string log { get; set; }
         public static connectionStatus status = connectionStatus.Disconnected;
         public enum connectionStatus
@@ -64,12 +72,27 @@ namespace LeHandUI
         {
             InitializeComponent();
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
+            inst = this;
             
         }
+
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
         }
-       
+        static string _name2 = "";
+        public static string log {
+            get { return _name2; }
+            set
+            {
+                if (value != _name2)
+                {
+                    _name2 = value;
+                    inst.OnPropertyChanged("log");
+                }
+            }
+        }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
             Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
