@@ -9,12 +9,12 @@
             <Setter Property="Height" Value="24" />
             <Setter Property="Image.RenderTransform">
                 <Setter.Value>
-                    <RotateTransform CenterX="12" CenterY="12" />
+                    <RotateTransform CenterX="10" CenterY="10" />
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="True">
-                    <Trigger.EnterActions>
+                <DataTrigger Binding="{Binding ElementName=button_Refresh, Path=IsPressed}" Value="True">
+                    <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation
@@ -22,11 +22,11 @@
                                         From="0"
                                         To="360"
                                         Duration="0:0:1"
-                                        RepeatBehavior="Forever" />
+                                    RepeatBehavior="0:0:4"/>
                             </Storyboard>
                         </BeginStoryboard>
-                    </Trigger.EnterActions>
-                </Trigger>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
