@@ -99,13 +99,12 @@ namespace LeHandUI
         }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
-            Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
+            Int64 addr = MainWindow.BTService.latestsearch[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
             Communicator.device.directConnect(addr);
         }
 
         #region Bluetooth stuff
         ObservableCollection<DeviceDetails> list = new ObservableCollection<DeviceDetails>();
-        List<BluetoothDeviceInfo> bluetoothDeviceInfo = null;
         
         private async void button_Refresh_Click(object sender, RoutedEventArgs e)
         {
@@ -137,7 +136,7 @@ namespace LeHandUI
                 });
                 
             }
-            bluetoothDeviceInfo = results;
+            //bluetoothDeviceInfo = results;
         }
         #endregion
 

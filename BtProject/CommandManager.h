@@ -35,6 +35,8 @@ public:
 	//static std::string command;
 	static void doData(BTService service, Keysender* keysend, std::string* cmd);
 	static void inputasync(std::string* cmd);
+	static void sendlog(const char* string);
+	static void sendcommand(const char* string);
 	std::vector<std::string> args;
 	void loadbtdfile(std::string arg1);
 	void loadluafile(std::string arg1);

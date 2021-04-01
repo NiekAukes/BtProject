@@ -1,4 +1,5 @@
 #include "BTService.h"
+#include"CommandManager.h"
 #include <fcntl.h>
 
 
@@ -21,7 +22,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 
 	int BTService::Discover(DeviceDetails** out)
 	{
-		std::cout << "discovering\n";
+		CommandManager::sendlog("discovering\n");
 
 		
 		//WSADATA wsadat;
@@ -160,7 +161,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 				if (dwError != ERROR_NO_MORE_ITEMS)
 					std::cout << dwError;
 				else //nothing to worry about
-					std::cout << "no devices found\n";
+					CommandManager::sendlog("no devices found\n");
 			}
 		}
 
@@ -199,7 +200,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 		DWORD dwResult;
 
 		if (!dd.paired) {
-			std::cout << "attempting to connect to device\n";
+			CommandManager::sendlog("attempting to connect to device\n");
 			HBLUETOOTH_AUTHENTICATION_REGISTRATION hCallbackHandle = 0;
 			dwResult = BluetoothRegisterForAuthenticationEx(
 				&dd.inheritData,
@@ -246,6 +247,8 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 			}
 			
 		}
+
+		CommandManager::sendcommand("\x13");
 		
 		WSADATA wsadat;
 		WSAQUERYSETW wsaqs;
@@ -268,7 +271,8 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 			dwResult = bind(s, (sockaddr*)&name, sizeof(SOCKADDR_BTH));
 
 			if (dwResult != 0) {
-				std::cout << "something went wrong: " << WSAGetLastError();
+				CommandManager::sendlog("something went wrong: "); 
+				CommandManager::sendlog(std::to_string(WSAGetLastError()).c_str());
 				return 5;
 			}
 
@@ -283,7 +287,8 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 			dwResult = connect(s, (sockaddr*)&sAddrBth, sizeof(SOCKADDR_BTH)); //this needs to be changed
 			if (dwResult != SOCKET_ERROR) {
 				//succeeded in connected
-				std::cout << "now connected to the device" << '\n';
+				CommandManager::sendlog("now connected to the device\n");
+				CommandManager::sendcommand("\x12");
 				
 				//set socket mode
 				SetSocketBlockingEnabled(s, false);
@@ -297,7 +302,9 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 					KEY_WRITE, 0, &hkey, &Dispos);
 
 				if (stat != ERROR_SUCCESS) {
-					std::cout << "failed to update key: " << stat;
+					CommandManager::sendlog("failed to update key: "); 
+					CommandManager::sendlog(std::to_string(stat).c_str());
+					CommandManager::sendlog(" \n");
 				}
 				else {
 					unsigned long long address = dd.inheritData.Address.ullLong;
@@ -310,13 +317,17 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 				ReceiveData(NULL, 0);
 			}
 			else {
-				std::cout << "Failed to connect: " << WSAGetLastError() << '\n';
+				CommandManager::sendlog("Failed to connect: ");
+				CommandManager::sendlog(std::to_string(WSAGetLastError()).c_str());
+				CommandManager::sendlog(" \n");
 				return 4;
 			}
 
 		}
 		else {
-			std::cout << "WSAStartUp Failed" << dwResult << '\n';
+			CommandManager::sendlog("WSAStartUp Failed");
+			CommandManager::sendlog(std::to_string(dwResult).c_str());
+			CommandManager::sendlog(" \n");
 			return 3;
 		}
 
@@ -363,7 +374,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 		while (signal == nullptr ? false : *signal) 
 		{
 			//performance
-			LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+			LARGE_INTEGER StartingTime, CheckTime, EndingTime, ElapsedMicroseconds;
 			LARGE_INTEGER Frequency;
 
 			QueryPerformanceFrequency(&Frequency);
@@ -376,6 +387,14 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 				rec = recv(s, buf, 10, 0); //receives values from bt
 				/*if (rec == -1)
 					std::cout << GetLastError();*/
+				QueryPerformanceCounter(&CheckTime);
+				ElapsedMicroseconds.QuadPart = CheckTime.QuadPart - StartingTime.QuadPart;
+				ElapsedMicroseconds.QuadPart *= 1000000;
+				ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+				if (ElapsedMicroseconds.QuadPart > 10000000LL) {
+					//disconnected/timeout
+					CommandManager::sendcommand("\x14");
+				}
 			}
 
 			for (int i = 0; i < 10; i++) { //loops through all

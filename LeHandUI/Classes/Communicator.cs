@@ -14,6 +14,7 @@ using System.Windows;
 
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using System.Windows.Media;
 
 namespace LeHandUI
 {
@@ -291,6 +292,8 @@ namespace LeHandUI
             {
                 //errorstream
                 errbuf = reader.ReadLine();
+                if (errbuf.Length < 1)
+                    continue;
                 if (errbuf[0] == '\x10')
                 {
                     //this is a log
@@ -314,7 +317,8 @@ namespace LeHandUI
                     SettingsWindow settingswind = null;
                     try
                     {
-                        settingswind = Application.Current.Windows.OfType<SettingsWindow>().FirstOrDefault();
+                        //settingswind = Application.Current.Windows.OfType<SettingsWindow>().FirstOrDefault();
+                        settingswind = SettingsWindow.inst;
                     }
                     catch(Exception e) {Debug.WriteLine("Could not find SettingsWindow, unfortunately.\n"+e); }
                     //command
@@ -322,17 +326,26 @@ namespace LeHandUI
                     {
                         case (char)0x12: //connected
                             //switch indicator to connected colour
-                            settingswind.BTstatus.Fill = clrstatus_Connected;
+                            App.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                settingswind.BTstatus.Fill = clrstatus_Connected;
+                            });
                             break;
 
                         case (char)0x13: //connecting
                             //switch indicator to connecting colour
-                            settingswind.BTstatus.Fill = clrstatus_Connecting;
+                            App.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                settingswind.BTstatus.Fill = clrstatus_Connecting;
+                            });
                             break;
 
                         case (char)0x14:
                             //switch indicator to disconnected colour
-                            settingswind.BTstatus.Fill = clrstatus_NotConnected;
+                            App.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                settingswind.BTstatus.Fill = clrstatus_NotConnected;
+                            });
                             break;
                     }
                 }

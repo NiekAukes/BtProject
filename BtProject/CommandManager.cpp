@@ -110,6 +110,8 @@ void CommandManager::inputasync(std::string* cmd) {
 	}
 }
 
+
+
 void CommandManager::doData(BTService service, Keysender* keysend, std::string* cmd) {
 	while (1) {
 		char* buf = new char[1024];
@@ -171,7 +173,7 @@ void datgen(BTService* service, Keysender* keysend) {
 void printstr(const char* string) {
 	WriteFile(Keysender::inst->errorpipe, "\x0010", 1, &Keysender::inst->dwdataread, NULL);
 	WriteFile(Keysender::inst->errorpipe, string, strlen(string), &Keysender::inst->dwdataread, NULL);
-	WriteFile(Keysender::inst->errorpipe, "\n", 1, &Keysender::inst->dwdataread, NULL);
+	//WriteFile(Keysender::inst->errorpipe, "\n", 1, &Keysender::inst->dwdataread, NULL);
 
 	std::cout << string; 
 }
@@ -181,6 +183,15 @@ void printlab(const char* string) {
 	WriteFile(Keysender::inst->errorpipe, "\n", 1, &Keysender::inst->dwdataread, NULL);
 	
 	std::cout << string;
+}
+
+void CommandManager::sendlog(const char* string)
+{
+	printstr(string);
+}
+void CommandManager::sendcommand(const char* string)
+{
+	printlab(string);
 }
 
 int findinstr(const char* string, char c) {
@@ -666,7 +677,7 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 				}
 			}
 			else return;
-			printstr("\n");
+			std::cout << "\n";
 			command = end;
 		}
 	}
