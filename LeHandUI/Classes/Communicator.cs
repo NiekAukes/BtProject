@@ -279,7 +279,10 @@ namespace LeHandUI
                 
             }
         }
-        
+
+        public static SolidColorBrush clrstatus_NotConnected = new SolidColorBrush(Color.FromArgb(255, 200, 20, 45));
+        public static SolidColorBrush clrstatus_Connecting = new SolidColorBrush(Color.FromArgb(255, 255, 210, 25));
+        public static SolidColorBrush clrstatus_Connected = new SolidColorBrush(Color.FromArgb(255, 10, 190, 25));
         public static void ReadErrStream()
         {
             string errbuf = "";
@@ -303,9 +306,34 @@ namespace LeHandUI
 
                     }
                 }
+
+                //COMMANDS TO SWITCH THE INDICATOR LIGHT
                 else if (errbuf[0] == '\x11')
                 {
+                    SettingsWindow settingswind = null;
+                    try
+                    {
+                        settingswind = Application.Current.Windows.OfType<SettingsWindow>().FirstOrDefault();
+                    }
+                    catch(Exception e) {Debug.WriteLine("Could not find SettingsWindow, unfortunately.\n"+e); }
                     //command
+                    switch (errbuf[1])
+                    {
+                        case (char)0x12: //connected
+                            //switch indicator to connected colour
+                            settingswind.BTstatus.Fill = clrstatus_Connected;
+                            break;
+
+                        case (char)0x13: //connecting
+                            //switch indicator to connecting colour
+                            settingswind.BTstatus.Fill = clrstatus_Connecting;
+                            break;
+
+                        case (char)0x14:
+                            //switch indicator to disconnected colour
+                            settingswind.BTstatus.Fill = clrstatus_NotConnected;
+                            break;
+                    }
                 }
                 else
                 {

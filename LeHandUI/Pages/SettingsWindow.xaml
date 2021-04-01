@@ -28,14 +28,19 @@
                     <DockPanel Width="auto" Grid.Column="0" Grid.Row="1">
                     <TextBlock FontSize="30" Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="1"/>
-                    
-                    <Button x:Name="button_Refresh" Click="button_Refresh_Click" Style="{StaticResource TranspButton}"
+                        
+                        <Ellipse x:Name="BTstatus" Fill="#C0162D" Height="10" Width="10" Margin="5,5,5,5"
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                        <Button x:Name="button_Refresh" Click="button_Refresh_Click" Style="{StaticResource TranspButton}"
                         HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="99999"
                             Height="20" Width="20" Margin="10,0,0,0">
                             <Image x:Name="refreshButtonImage" Style="{StaticResource spinner}">
                                 
                             </Image>
                         </Button>
+
+                        
                     </DockPanel>
                 </Expander.Header>
                 
