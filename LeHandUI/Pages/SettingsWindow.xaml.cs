@@ -99,6 +99,7 @@ namespace LeHandUI
         }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
+            //BLUETOOTHDEVICEINFO IS NULL?
             Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
             Communicator.device.directConnect(addr);
         }
