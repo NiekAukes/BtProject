@@ -47,7 +47,7 @@ namespace LeHandUI
             finally { DeleteObject(handle); }
         }
         #endregion
-
+        public static SettingsWindow inst = null;
         public static SolidColorBrush clrstatus_NotConnected = new SolidColorBrush(Color.FromArgb(255, 200, 20, 45));
         public static SolidColorBrush clrstatus_Connecting = new SolidColorBrush(Color.FromArgb(255, 255, 210, 25));
         public static SolidColorBrush clrstatus_Connected = new SolidColorBrush(Color.FromArgb(255, 10, 190, 25));
@@ -59,7 +59,7 @@ public event PropertyChangedEventHandler PropertyChanged;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
-        public static string log { get; set; }
+        public static string Log { get; set; }
         public static connectionStatus status = connectionStatus.Disconnected;
         public enum connectionStatus
         {
