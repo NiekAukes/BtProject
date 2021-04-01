@@ -320,6 +320,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 				CommandManager::sendlog("Failed to connect: ");
 				CommandManager::sendlog(std::to_string(WSAGetLastError()).c_str());
 				CommandManager::sendlog(" \n");
+				CommandManager::sendcommand("\x14");
 				return 4;
 			}
 
@@ -328,6 +329,7 @@ bool SetSocketBlockingEnabled(int fd, bool blocking)
 			CommandManager::sendlog("WSAStartUp Failed");
 			CommandManager::sendlog(std::to_string(dwResult).c_str());
 			CommandManager::sendlog(" \n");
+			CommandManager::sendcommand("\x14");
 			return 3;
 		}
 
