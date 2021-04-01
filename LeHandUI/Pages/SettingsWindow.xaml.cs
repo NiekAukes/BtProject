@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using InTheHand.Net.Sockets;
 using LeHandUI;
 using System.Windows.Media.Animation;
+using Color = System.Windows.Media.Color;
 using System.ComponentModel;
 
 namespace LeHandUI
@@ -46,14 +47,27 @@ namespace LeHandUI
             finally { DeleteObject(handle); }
         }
         #endregion
-        public static SettingsWindow inst = null;
-        public Storyboard story = new Storyboard();
-        public event PropertyChangedEventHandler PropertyChanged;
+
+        public static SolidColorBrush clrstatus_NotConnected = new SolidColorBrush(Color.FromArgb(255, 200, 20, 45));
+        public static SolidColorBrush clrstatus_Connecting = new SolidColorBrush(Color.FromArgb(255, 255, 210, 25));
+        public static SolidColorBrush clrstatus_Connected = new SolidColorBrush(Color.FromArgb(255, 10, 190, 25));
+
+public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        
+        public static string log { get; set; }
+        public static connectionStatus status = connectionStatus.Disconnected;
+        public enum connectionStatus
+        {
+            Disconnected,
+            Connecting,
+            Connected
+        }
+
         public SettingsWindow()
         {
             InitializeComponent();
@@ -65,18 +79,6 @@ namespace LeHandUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //A five-second long during animation in which the rotation time is 1.5sec
-            /*story.Duration = new Duration(TimeSpan.FromSeconds(100)); //new Duration(TimeSpan.FromSeconds(5.0));
-            DoubleAnimation rotateAnimation = new DoubleAnimation()
-            {
-                From = 0,
-                To = 360,
-                Duration = new Duration(TimeSpan.FromSeconds(1.5))
-            };
-            Storyboard.SetTarget(refreshButtonImage, rotateAnimation);
-            Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RenderTransform.Angle)")); //
-    
-             */
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
             BTLog.Text = "";
         }
@@ -96,10 +98,6 @@ namespace LeHandUI
                 }
             }
         }
-
-            //story.Children.Add(rotateAnimation);
-
-        //}
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
             Int64 addr = bluetoothDeviceInfo[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
@@ -114,8 +112,6 @@ namespace LeHandUI
         {
             await Task.Run(MainWindow.BTService.SearchDevices);
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
-
-            story.Begin();
 
         }
         private async void OnSearchCompleted(Task<List<BluetoothDeviceInfo>> obj)
@@ -146,8 +142,5 @@ namespace LeHandUI
         }
         #endregion
 
-        
-
-        
     }
 }
