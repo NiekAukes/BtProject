@@ -59,7 +59,6 @@ namespace LeHandUI
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
-        public static string log { get; set; }
         public static connectionStatus status = connectionStatus.Disconnected;
         public enum connectionStatus
         {
