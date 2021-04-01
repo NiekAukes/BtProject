@@ -7,7 +7,7 @@
         Loaded="Window_Loaded"
         mc:Ignorable="d" Background="#2A2A2C" FontSize="15"
          MinHeight="100" MinWidth="80"
-        Title="SettingsWindow" Height="400" Width="600" 
+        Title="Settings" Height="600" Width="400" 
         FontFamily="Futura Lt BT" Foreground="#F2F2F2">
     <ScrollViewer>
     <Grid>
