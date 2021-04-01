@@ -72,7 +72,7 @@ namespace LeHandUI
             InitializeComponent();
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
             inst = this;
-            
+            this.Icon = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIcon16x16);
         }
 
 

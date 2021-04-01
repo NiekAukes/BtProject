@@ -290,11 +290,12 @@ namespace LeHandUI
             StreamReader reader = new StreamReader(errorStream);
             while (Active)
             {
-                //errorstream
-                errbuf = reader.ReadLine();
+                //ERRORSTREAM, if there is no line readline becomes null,
+                //so instead of getting nullexceptionerrors just add empty string
+                errbuf = reader.ReadLine() != null ? reader.ReadLine() : "";
                 if (errbuf.Length < 1)
                     continue;
-                if (errbuf[0] == '\x10')
+                if (errbuf[0] == '\x10')//If the command is log, add string to the log
                 {
                     //this is a log
                     for (int i = 1; i < errbuf.Length; i++)
@@ -311,7 +312,7 @@ namespace LeHandUI
                     SettingsWindow.log += '\n';
                 }
 
-                //COMMANDS TO SWITCH THE INDICATOR LIGHT
+                //if the command is x11, it wants to update the indicator sphere in settings
                 else if (errbuf[0] == '\x11')
                 {
                     SettingsWindow settingswind = null;

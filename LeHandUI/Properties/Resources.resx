@@ -133,6 +133,9 @@
   <data name="AQUA_RefreshIcon64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\icon64\AQUA_RefreshIcon64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BTIcon16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\BTIcon16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BTIconNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\BTIconNew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
