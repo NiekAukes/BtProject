@@ -115,7 +115,6 @@ namespace LeHandUI
         {
             await Task.Run(MainWindow.BTService.SearchDevices);
             BTGrid.ItemsSource = MainWindow.BTService.observableCollection;
-
         }
         private async void OnSearchCompleted(Task<List<BluetoothDeviceInfo>> obj)
         {

@@ -145,7 +145,8 @@ namespace LeHandUI
                     rk.DeleteValue(names[id]);
                 }
             }
-          
+
+            AdvancedMode.Removeluasc(id);
         }
         public static string GetFile(int id)
         {

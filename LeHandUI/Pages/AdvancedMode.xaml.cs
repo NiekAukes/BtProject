@@ -111,9 +111,9 @@ namespace LeHandUI
 			label.BorderThickness = new Thickness(0);
 
 			label.GotFocus += inst.Label_GotFocus;
-			label.MouseEnter += inst.Label_MouseEnter;
-			label.MouseLeave += inst.Label_MouseLeave;
-			label.MouseDown += inst.Label_MouseDown;
+			//label.MouseEnter += inst.Label_MouseEnter;
+			//label.MouseLeave += inst.Label_MouseLeave;
+			//label.MouseDown += inst.Label_MouseDown;
 
 			if(label == inst.LuaFileView.SelectedItem)
             {
@@ -346,7 +346,7 @@ namespace LeHandUI
 				CheckPathExists = true,
 				InitialDirectory = @"Documents",
 				ShowReadOnly = true,
-				Filter = " All files(*.*) 'cuz .lua doesn't work|*.*"
+				Filter = "Lua Scripts (*.lua)|*.lua|All files (*.*)|*.*"
 			};
 
 			Nullable<bool> result = openFileExplorer.ShowDialog();
@@ -367,7 +367,12 @@ namespace LeHandUI
 
 		}
 
-		
+		public static void Removeluasc(int id)
+        {
+			inst.LuaFileView.Items.RemoveAt(id);
+
+			inst.LuaFileView.Items.Refresh();
+		}
 
 		private void RemoveLuaScript(object sender, EventArgs e)
 		{
@@ -466,6 +471,9 @@ namespace LeHandUI
 					label.Name = "TxtBox" + i.ToString();
 					label.Content = LHregistry.getSimpleName(LuaNames[i]);
 
+					if (FileManager.isFileNotSaved[i])
+						label.Content += "*";
+
 					if (currOpenedFileId == i)
 					{
 						styleOpenedFileLabel(label);
@@ -476,12 +484,18 @@ namespace LeHandUI
 					}
 					LuaFileView.Items.RemoveAt(i);
 					LuaFileView.Items.Insert(i,label);
+
+
 				}
 			}
 			LuaFileView.Items.Refresh();
 		}
 
-		
+		public void SaveTextEditor()
+        {
+			string writePath = LHregistry.GetFile(FileManager.currentFileId);
+			textEditor.Save(writePath);
+		}
 		
 		private void RunLuaScript(object sender, EventArgs e)
 		{

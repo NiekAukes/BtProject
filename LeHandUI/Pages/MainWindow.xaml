@@ -6,6 +6,7 @@
 	    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
 	    xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:LeHandUI"
+        Closing="mainWindowName_Closing"
         mc:Ignorable="d" Background="#2A2A2C" x:Name="mainWindowName"
         Title="MainWindow" Height="620" Width="800" FontSize="25"
          MinHeight="400" MinWidth="300"
