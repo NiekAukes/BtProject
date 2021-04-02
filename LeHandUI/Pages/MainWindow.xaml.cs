@@ -15,7 +15,6 @@ namespace LeHandUI
 {
 	public partial class MainWindow : Window
 	{
-		static Window settings = new SettingsWindow();
 		public static string Directory = (string)Registry.CurrentUser.OpenSubKey("Software\\LeHand").GetValue("Dir");
 
 		public static MainWindow inst = null;
@@ -84,34 +83,51 @@ namespace LeHandUI
 			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 			settingsImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.Settings64x64);
 		}
+		public bool settingsIsClosed = false;
+		
 		private void settingsButton_Load(object sender, RoutedEventArgs e)
         {
 			//Load settings panel
+			if (SettingsWindow.inst == null)
+				SettingsWindow.inst = new SettingsWindow();
 
-			if (!settings.IsActive)
-				settings.Show();
+			if (!SettingsWindow.inst.IsActive && settingsIsClosed)
+			{
+				SettingsWindow.inst = new SettingsWindow();
+				SettingsWindow.inst.Show();
+				SettingsWindow.inst.WindowState = WindowState.Normal;
+				SettingsWindow.inst.Focus();
+				settingsIsClosed = false;
+			}
 			else
-				settings.Close();
+			{
+				SettingsWindow.inst.Close();
+				settingsIsClosed = true;
+			}
         }
 
 		#region WindowsButtonHandlers, no touchy pls
 		private void MinimizeWindow(object sender, EventArgs e){
-			App.Current.MainWindow.Focus();
-			App.Current.MainWindow.WindowState = WindowState.Minimized;
+			for(int i = 0; i < App.Current.Windows.Count; i++)
+            {
+				App.Current.Windows[i].WindowState = WindowState.Minimized;
+            }
+			//App.Current.MainWindow.WindowState = WindowState.Minimized;
 		}
 		private void MaximizeWindow(object sender, EventArgs e){
-			App.Current.MainWindow.Focus();
-			if (App.Current.MainWindow.WindowState == WindowState.Maximized)
+			//App.Current.MainWindow.Focus();
+
+			if (MainWindow.inst.WindowState == WindowState.Maximized)
 			{
 				restoreButonPath.Data = Geometry.Parse("M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z");
 
 
-				App.Current.MainWindow.WindowState = WindowState.Normal;
+				MainWindow.inst.WindowState = WindowState.Normal;
 			}
-			else if (App.Current.MainWindow.WindowState == WindowState.Normal)
+			else if (MainWindow.inst.WindowState == WindowState.Normal)
 			{
 				restoreButonPath.Data = Geometry.Parse("M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5");
-				App.Current.MainWindow.WindowState = WindowState.Maximized;
+				MainWindow.inst.WindowState = WindowState.Maximized;
 			}
 		}
 		private void CloseWindow(object sender, EventArgs e){
@@ -130,7 +146,7 @@ namespace LeHandUI
 					return;
 				}
 			}
-			System.Windows.Application.Current.Shutdown();
+			Application.Current.Shutdown();
 		}
 		private void DragStart(object sender, MouseButtonEventArgs e)
 		{

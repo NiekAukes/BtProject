@@ -144,5 +144,14 @@ namespace LeHandUI
         }
         #endregion
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MainWindow.inst.settingsIsClosed = true;
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visibility = Visibility.Hidden;
+        }
     }
 }

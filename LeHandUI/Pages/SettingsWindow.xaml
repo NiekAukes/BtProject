@@ -8,7 +8,7 @@
         mc:Ignorable="d" Background="#2A2A2C" FontSize="15"
          MinHeight="100" MinWidth="80"
         Title="Settings" Height="600" Width="400" 
-        FontFamily="Futura Lt BT" Foreground="#F2F2F2">
+        FontFamily="Futura Lt BT" Foreground="#F2F2F2" Closed="Window_Closed">
     <ScrollViewer>
     <Grid>
         <Grid.ColumnDefinitions>
