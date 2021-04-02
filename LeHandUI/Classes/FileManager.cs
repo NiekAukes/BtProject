@@ -302,14 +302,26 @@ namespace LeHandUI
                 byte[] cont = new byte[files[id].Length];
                 if (files[id] != null)
                 {
-                    FileStream stream = File.OpenRead(LHregistry.GetFile(id));
-                    StreamReader reader = new StreamReader(stream);
-                    fileContents = reader.ReadToEnd();
-                    reader.Close();
-                    stream.Close();
+                    if (File.Exists(LHregistry.GetFile(id)))
+                    {
+                        FileStream stream = File.OpenRead(LHregistry.GetFile(id));
+                        StreamReader reader = new StreamReader(stream);
+                        fileContents = reader.ReadToEnd();
+                        reader.Close();
+                        stream.Close();
 
-                    
-                    isFileNotSaved[id] = false;
+
+                        isFileNotSaved[id] = false;
+                    }
+                    else
+                    {
+                        var res = MessageBox.Show("The File in question was not found, delete reference?", "File Not Found", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                        if (res == MessageBoxResult.Yes)
+                        {
+                            //delete reference
+                            Deletefile(id);
+                        }
+                    }
                 }
                 else
                 {
@@ -328,6 +340,19 @@ namespace LeHandUI
         public static void Deletefile(int fileid)
         {
             LHregistry.RemoveFile(fileid);
+        }
+
+        public static void SaveAll()
+        {
+            for (int i = 0; i < FileManager.isFileNotSaved.Length; i++)
+            {
+                if (FileManager.isFileNotSaved[i])
+                {
+                    File.WriteAllText(LHregistry.GetFile(i), FileCache[i]);
+                }
+            }
+
+            AdvancedMode.inst.SaveTextEditor();
         }
 
         public static int AddReference(string filepath)

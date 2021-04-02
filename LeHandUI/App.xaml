@@ -15,7 +15,7 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=button_Refresh, Path=IsPressed}" Value="True">
                     <DataTrigger.EnterActions>
-                        <BeginStoryboard>
+                        <BeginStoryboard x:Name="stroyboard">
                             <Storyboard>
                                 <DoubleAnimation
                                         Storyboard.TargetProperty="RenderTransform.Angle"

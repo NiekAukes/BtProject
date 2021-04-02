@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -112,9 +113,21 @@ namespace LeHandUI
 			}
 		}
 		private void CloseWindow(object sender, EventArgs e){
-			//Communicator.quit();
-			//App.LeHandExited = true;
-			//this.Close();
+			if (new List<bool>(FileManager.isFileNotSaved).Contains(true))
+			{
+				var res = MessageBox.Show("There are unsaved files, do you want to save all?", "Unsaved Files", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+
+				if (res == MessageBoxResult.Yes)
+				{
+					//save all files first
+					FileManager.SaveAll();
+				}
+				else if (res == MessageBoxResult.Cancel)
+				{
+					//cancel closing
+					return;
+				}
+			}
 			System.Windows.Application.Current.Shutdown();
 		}
 		private void DragStart(object sender, MouseButtonEventArgs e)
@@ -148,13 +161,19 @@ namespace LeHandUI
 			addElementToPanelAndRemoveOtherElement(ViewSwitcher, advancedModeChild,simpleModeChild);
 
 		}
-		#endregion
 
-		/*Stopwatch refreshTimer = new Stopwatch();
+        private void mainWindowName_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+			
+
+		}
+        #endregion
+
+        /*Stopwatch refreshTimer = new Stopwatch();
 		int SelectedItemIndex;
 		bool hasRefreshOccurredWithinSeconds = false;*/
 
-		/*
+        /*
 		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
 			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
 			SelectedItemIndex = naam.SelectedIndex;
@@ -327,6 +346,6 @@ namespace LeHandUI
 			return;
 		}
 		*/
-		
-	}
+
+    }
 }

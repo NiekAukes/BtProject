@@ -35,10 +35,13 @@ namespace LeHandUI
                 }
             }
             System.Diagnostics.Debug.WriteLine("LeHand has started :D");
+            
         }
         
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            
+
             System.Diagnostics.Debug.WriteLine("LeHand is exiting...");
             if (!LeHandExited)
                 Communicator.quit();
