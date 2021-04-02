@@ -49,6 +49,8 @@ namespace LeHandUI
             values.ShowLineNumbers = Convert.ToInt32(AdvancedMode.inst.textEditor.ShowLineNumbers);
 
             LHregistry.SetStartupValues(values);
+
+            System.Windows.Application.Current.Shutdown();
         }
 
     }

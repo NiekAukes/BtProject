@@ -90,8 +90,9 @@ void CommandManager::loadbtdfile(std::string arg1) {
 }
 
 bool waiting = false;
+bool inputthreadActive = true;
 void CommandManager::inputasync(std::string* cmd) {
-	while (1) {
+	while (inputthreadActive) {
 		if (std::cin.fail()) {
 			auto state = std::cin.rdstate();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -652,7 +653,14 @@ void CommandManager::startcommander(bool intro, std::string loadfile)
 					//CloseHandle(keysend->datapipe);
 					//CloseHandle(keysend->errorpipe);
 					//CloseHandle(keysend->inputpipe);
-					return;
+
+					inputthreadActive = false;
+
+					std::exit(0);
+
+
+					return; //end commandthread
+					
 				}
 				else if (command._Equal("help") || command._Equal("--help"))
 				{
