@@ -95,9 +95,11 @@ namespace LeHandUI
 
 		#region WindowsButtonHandlers, no touchy pls
 		private void MinimizeWindow(object sender, EventArgs e){
+			App.Current.MainWindow.Focus();
 			App.Current.MainWindow.WindowState = WindowState.Minimized;
 		}
 		private void MaximizeWindow(object sender, EventArgs e){
+			App.Current.MainWindow.Focus();
 			if (App.Current.MainWindow.WindowState == WindowState.Maximized)
 			{
 				restoreButonPath.Data = Geometry.Parse("M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z");

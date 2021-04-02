@@ -73,6 +73,8 @@ namespace LeHandUI
             refreshButtonImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.whiteRefreshBTDevices64x64);
             inst = this;
             this.Icon = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIcon16x16);
+
+            
         }
 
 
@@ -99,8 +101,11 @@ namespace LeHandUI
         }
         private void button_Connect_Click(object sender, RoutedEventArgs e)
         {
-            Int64 addr = MainWindow.BTService.latestsearch[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
-            Communicator.device.directConnect(addr);
+            if (MainWindow.BTService.latestsearch.Count > 0)
+            {
+                Int64 addr = MainWindow.BTService.latestsearch[BTGrid.SelectedIndex].DeviceAddress.ToInt64();
+                Communicator.device.directConnect(addr);
+            }
         }
 
         #region Bluetooth stuff

@@ -22,7 +22,7 @@
                                         From="360"
                                         To="0"
                                         Duration="0:0:1"
-                                    RepeatBehavior="0:0:4"/>
+                                    RepeatBehavior="0:0:10"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </DataTrigger.EnterActions>
@@ -183,21 +183,15 @@
             </Style.Setters>
         </Style>
 
-        <Style x:Key="MenuText" TargetType="TextBox">
-            <Setter Property="Foreground" Value="#F2F2F2"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Height" Value="auto"/>
-            <Setter Property="Width" Value="auto"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Style.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="4"/>
-                </Style>
-            </Style.Resources>
+        
+
+        <Style x:Key="btn_img" TargetType="Image">
+            <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        <Style x:Key="TranspButton" TargetType="Button">
+        
+            <Style x:Key="TranspButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#FFF2F2F2"/>
             <Setter Property="Margin" Value="5"/>
@@ -235,6 +229,23 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="MenuText" TargetType="TextBox">
+            <Setter Property="Foreground" Value="#F2F2F2"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Padding" Value="0,5,0,5"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="4"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+
         <Style x:Key="MenuButtons" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
@@ -244,7 +255,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Name="border" Background="{TemplateBinding Background}"
-                                BorderBrush="#F2F2F2" CornerRadius="0">
+                                BorderBrush="#F2F2F2" CornerRadius="4">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             
                         </Border>

@@ -292,79 +292,81 @@ namespace LeHandUI
             {
                 //ERRORSTREAM, if there is no line readline becomes null,
                 //so instead of getting nullexceptionerrors just add empty string
-                errbuf = reader.ReadLine() != null ? reader.ReadLine() : "";
-                if (errbuf.Length < 1)
-                    continue;
-                if (errbuf[0] == '\x10')//If the command is log, add string to the log
-                {
-                    //this is a log
-                    for (int i = 1; i < errbuf.Length; i++)
+                errbuf = reader.ReadLine();
+                if (errbuf != null) {
+                    if (errbuf.Length < 1)
+                        continue;
+                    if (errbuf[0] == '\x10')//If the command is log, add string to the log
                     {
-                        if (errbuf[i] == '\0')
+                        //this is a log
+                        for (int i = 1; i < errbuf.Length; i++)
                         {
-                            SettingsWindow.log += "\n\n";
-                            if (errbuf[i + 1] == '\0')
-                                break; //EOF
+                            if (errbuf[i] == '\0')
+                            {
+                                SettingsWindow.log += "\n\n";
+                                if (errbuf[i + 1] == '\0')
+                                    break; //EOF
+                            }
+                            SettingsWindow.log += errbuf[i];
+
                         }
-                        SettingsWindow.log += errbuf[i];
-
+                        SettingsWindow.log += '\n';
                     }
-                    SettingsWindow.log += '\n';
-                }
 
-                //if the command is x11, it wants to update the indicator sphere in settings
-                else if (errbuf[0] == '\x11')
-                {
-                    SettingsWindow settingswind = null;
-                    try
+                    //if the command is x11, it wants to update the indicator sphere in settings
+                    else if (errbuf[0] == '\x11')
                     {
-                        //settingswind = Application.Current.Windows.OfType<SettingsWindow>().FirstOrDefault();
-                        settingswind = SettingsWindow.inst;
-                    }
-                    catch(Exception e) {Debug.WriteLine("Could not find SettingsWindow, unfortunately.\n"+e); }
-                    //command
-                    switch (errbuf[1])
-                    {
-                        case (char)0x12: //connected
-                            //switch indicator to connected colour
-                            App.Current.Dispatcher.Invoke((Action)delegate
-                            {
-                                settingswind.BTstatus.Fill = clrstatus_Connected;
-                            });
-                            break;
-
-                        case (char)0x13: //connecting
-                            //switch indicator to connecting colour
-                            App.Current.Dispatcher.Invoke((Action)delegate
-                            {
-                                settingswind.BTstatus.Fill = clrstatus_Connecting;
-                            });
-                            break;
-
-                        case (char)0x14:
-                            //switch indicator to disconnected colour
-                            App.Current.Dispatcher.Invoke((Action)delegate
-                            {
-                                settingswind.BTstatus.Fill = clrstatus_NotConnected;
-                            });
-                            break;
-                    }
-                }
-                else
-                {
-                    //just append
-                    for (int i = 0; i < errbuf.Length; i++)
-                    {
-                        if (errbuf[i] == '\0')
+                        SettingsWindow settingswind = null;
+                        try
                         {
-                            SettingsWindow.log += "\n\n";
-                            if (errbuf[i + 1] == '\0')
-                                break; //EOF
+                            //settingswind = Application.Current.Windows.OfType<SettingsWindow>().FirstOrDefault();
+                            settingswind = SettingsWindow.inst;
                         }
-                        SettingsWindow.log += errbuf[i];
+                        catch (Exception e) { Debug.WriteLine("Could not find SettingsWindow, unfortunately.\n" + e); }
+                        //command
+                        switch (errbuf[1])
+                        {
+                            case (char)0x12: //connected
+                                             //switch indicator to connected colour
+                                App.Current.Dispatcher.Invoke((Action)delegate
+                                {
+                                    settingswind.BTstatus.Fill = clrstatus_Connected;
+                                });
+                                break;
 
+                            case (char)0x13: //connecting
+                                             //switch indicator to connecting colour
+                                App.Current.Dispatcher.Invoke((Action)delegate
+                                {
+                                    settingswind.BTstatus.Fill = clrstatus_Connecting;
+                                });
+                                break;
+
+                            case (char)0x14:
+                                //switch indicator to disconnected colour
+                                App.Current.Dispatcher.Invoke((Action)delegate
+                                {
+                                    settingswind.BTstatus.Fill = clrstatus_NotConnected;
+                                });
+                                break;
+                        }
                     }
-                    SettingsWindow.log += '\n';
+                    else
+                    {
+                        //just append
+                        for (int i = 0; i < errbuf.Length; i++)
+                        {
+                            if (errbuf[i] == '\0')
+                            {
+                                SettingsWindow.log += "\n\n";
+                                if (errbuf[i + 1] == '\0')
+                                    break; //EOF
+                            }
+                            SettingsWindow.log += errbuf[i];
+
+                        }
+                        SettingsWindow.log += '\n';
+                    }
                 }
             }
         }

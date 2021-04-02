@@ -34,13 +34,45 @@
 
                         <Button x:Name="button_Refresh" Click="button_Refresh_Click" Style="{StaticResource TranspButton}"
                         HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="99999"
-                            Height="20" Width="20" Margin="10,0,0,0">
-                            <Image x:Name="refreshButtonImage" Style="{StaticResource spinner}">
-                                
-                            </Image>
+                            Height="20" Width="20" Margin="10,0,0,0" Foreground="White" Background="Transparent">
+
+                            <Image x:Name="refreshButtonImage" Stretch="UniformToFill" Style="{StaticResource btn_img}"/>
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border CornerRadius="10" BorderThickness="2">
+                                        <ContentPresenter />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+
+                            <Button.RenderTransform>
+                                <RotateTransform x:Name="rotateTransf" Angle="360" CenterX="10" CenterY="10"/>
+                            </Button.RenderTransform>
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard x:Name="rotatestoryboard">
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="rotateTransf"
+                                            Storyboard.TargetProperty="(RotateTransform.Angle)"
+                                            From="360"
+                                            To="0"
+                                            Duration="0:0:1" 
+                                            RepeatBehavior="15x"        
+                                            FillBehavior="Stop"/>
+                                                <!--die was eerst 0:0:10 -->
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Button.Triggers>
                         </Button>
 
-                        
                     </DockPanel>
                 </Expander.Header>
                 

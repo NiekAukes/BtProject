@@ -41,7 +41,7 @@
         <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="15,10,0,0" HorizontalAlignment="Left">
             <Button Style="{StaticResource TranspButton}"  Click="AddReferenceScript"
                 ToolTip="Add Reference" x:Name="AddButton">
-                <Image x:Name="PlusIcon" Stretch="UniformToFill" VerticalAlignment="Bottom"/>
+                <Image Style="{StaticResource btn_img}" x:Name="PlusIcon" Stretch="UniformToFill"/>
             </Button>
             <Button Style="{StaticResource TranspButton}" Click="RemoveLuaScript"
                 x:Name="DeleteButton"
