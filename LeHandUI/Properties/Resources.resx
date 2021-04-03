@@ -190,6 +190,9 @@
   <data name="StartScript64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\icon64\StartScript64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="transpimg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\transpimg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="WASHED_OUT_RED_DeleteIcon64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\icon64\WASHED_OUT_RED_DeleteIcon64x64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

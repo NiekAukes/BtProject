@@ -18,7 +18,7 @@ namespace LeHandUI
 		public static string Directory = (string)Registry.CurrentUser.OpenSubKey("Software\\LeHand").GetValue("Dir");
 
 		public static MainWindow inst = null;
-		public static System.Windows.Controls.ListBox Listbox = null;
+		public static ListBox Listbox = null;
 
 		AdvancedMode advancedModeChild = new AdvancedMode();
 		SimpleMode simpleModeChild = new SimpleMode();

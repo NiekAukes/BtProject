@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Point = System.Windows.Point;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using MessageBox = System.Windows.MessageBox;
 
 namespace LeHandUI
 {
@@ -33,9 +34,6 @@ namespace LeHandUI
     
     public partial class SettingsWindow : Window, INotifyPropertyChanged
     {
-        Point lastclick;
-
-
         #region ImageSourceFromBitmap_func
         //Dit is mijn mooie gekopieerde stackoverflow code
         //If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -182,6 +180,7 @@ namespace LeHandUI
         private void CloseWindow(object sender, EventArgs e)
         {
             this.Close();
+            MainWindow.inst.Show();
         }
 
 
@@ -189,7 +188,19 @@ namespace LeHandUI
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            lastclick = e.Location;
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        //{
+        //    base.OnMouseLeftButtonDown(e);
+
+        //    // Begin dragging the window
+        //    this.DragMove();
+        //}
+        private void DragStart(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

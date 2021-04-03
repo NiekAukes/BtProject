@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:LeHandUI"
         Loaded="Window_Loaded"
         mc:Ignorable="d" Background="#2A2A2C" FontSize="15"
-         MinHeight="100" MinWidth="80"
-        Title="Settings" Height="600" Width="400"
+        Title="Settings" Height="600" Width="400" MinWidth="300" MinHeight="200"
         FontFamily="Futura Lt BT" Foreground="#F2F2F2" Closed="Window_Closed" WindowStyle="None"
         MouseDown="Window_MouseDown">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
+    </WindowChrome.WindowChrome>
     <ScrollViewer>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -20,18 +22,18 @@
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="24"/>
+            <RowDefinition Height="24" PreviewMouseDown="Window_MouseDown" MouseDown="Window_MouseDown"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"></StackPanel>
             <Image
-		Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left" 
-		Width="20" Height="20" x:Name="ProgramIcon" Margin="5,0,0,0" Source="/images/BTIconNew.png"
-		Panel.ZIndex="9999999" />
-
+		        VerticalAlignment="Top" HorizontalAlignment="Left" 
+		        Width="20" Height="20" x:Name="ProgramIcon" Margin="5,0,0,0" Source="/images/BTIconNew.png"
+		        Panel.ZIndex="9999999" />
+            <!--PreviewMouseDown="Window_MouseDown" -->
+            
             <Button Name="minimizeButton" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
 		    Grid.Column="2" Grid.ColumnSpan="1" RenderOptions.BitmapScalingMode="HighQuality"
 		    Style="{StaticResource TitleBarButtonStyle}"   ToolTip="Minimize Window">
