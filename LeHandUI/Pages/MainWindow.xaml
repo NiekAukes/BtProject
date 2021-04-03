@@ -43,7 +43,7 @@
 
 
         <!--Custom title bar-->
-        <Image
+        <Image Source="/images/BTIconNew.png"
 		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1"
 		Width="30" Height="30" x:Name="ProgramIcon" Margin="-15,10,0,10"
 		Panel.ZIndex="9999999" />

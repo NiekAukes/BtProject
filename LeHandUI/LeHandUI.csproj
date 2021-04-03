@@ -473,6 +473,9 @@
   <ItemGroup>
     <None Include="Resources\Icons\BTIcon16x16.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\BTIconNew.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

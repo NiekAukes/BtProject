@@ -7,23 +7,59 @@
         Loaded="Window_Loaded"
         mc:Ignorable="d" Background="#2A2A2C" FontSize="15"
          MinHeight="100" MinWidth="80"
-        Title="Settings" Height="600" Width="400" 
-        FontFamily="Futura Lt BT" Foreground="#F2F2F2" Closed="Window_Closed">
+        Title="Settings" Height="600" Width="400"
+        FontFamily="Futura Lt BT" Foreground="#F2F2F2" Closed="Window_Closed" WindowStyle="None"
+        MouseDown="Window_MouseDown">
     <ScrollViewer>
-    <Grid>
-        <Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0"/>
+            <RowDefinition Height="24"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <!--#1: Lijst met Bluetooth 
+            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"></StackPanel>
+            <Image
+		Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left" 
+		Width="20" Height="20" x:Name="ProgramIcon" Margin="5,0,0,0" Source="/images/BTIconNew.png"
+		Panel.ZIndex="9999999" />
+
+            <Button Name="minimizeButton" Click="MinimizeWindow" RenderOptions.EdgeMode="Aliased" Foreground="White"
+		    Grid.Column="2" Grid.ColumnSpan="1" RenderOptions.BitmapScalingMode="HighQuality"
+		    Style="{StaticResource TitleBarButtonStyle}"   ToolTip="Minimize Window">
+                <Path Width="30" Height="20" Data="M 6,12 H 20" Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1" />
+
+            </Button>
+            <Button Name="restoreButton" Grid.Column="3" Click="MaximizeWindow" Foreground="White"
+		Style="{StaticResource TitleBarButtonStyle}" ToolTip="Change Window Mode (Fullscreen/Windowed)"
+                     RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="HighQuality">
+                <Path x:Name="restoreButonPath" Width="30" Height="20" Data="M 6,8 H 20 V 15 H 6 Z"
+                  
+			Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1" />
+            </Button>
+            <Button Grid.Column="4" Grid.ColumnSpan="1000" Style="{StaticResource TitleBarCloseButtonStyle}" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"
+		 Name="closeButton" Click="CloseWindow" Foreground="White" Background="#FFC14C4C">
+                <Path Width="46" Height="32" Data="M 6,10 17,16 M 6,16 17,10" ToolTip="Close Settings"
+			Stroke="{Binding Path=Foreground,
+							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+			StrokeThickness="1"/>
+            </Button>
+
+            <!--#1: Lijst met Bluetooth 
             #2: Log-->
-            <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1">
+            <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0">
                 <Expander.Header>
                     <DockPanel Width="auto" Grid.Column="0" Grid.Row="1">
                     <TextBlock FontSize="30" Text="Bluetooth" Style="{StaticResource TitleText}" TextAlignment="Center" VerticalAlignment="Center"
@@ -108,7 +144,7 @@
             </Expander>
            
         <!--BLUETOOTH LOG AREA-->
-            <Expander Grid.Row="3" Grid.Column="0">
+            <Expander Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" Margin="10,0,10,0">
                 <Expander.Header>
                     <TextBlock Text="Log" Style="{StaticResource TitleText}" FontSize="30" TextAlignment="Center" VerticalAlignment="Center"
                        HorizontalAlignment="Center" Width="auto" Grid.Column="0" Grid.Row="4"/>

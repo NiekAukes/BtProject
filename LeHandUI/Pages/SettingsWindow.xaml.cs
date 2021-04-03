@@ -20,6 +20,9 @@ using LeHandUI;
 using System.Windows.Media.Animation;
 using Color = System.Windows.Media.Color;
 using System.ComponentModel;
+using System.Windows.Forms;
+using Point = System.Windows.Point;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace LeHandUI
 {
@@ -30,6 +33,9 @@ namespace LeHandUI
     
     public partial class SettingsWindow : Window, INotifyPropertyChanged
     {
+        Point lastclick;
+
+
         #region ImageSourceFromBitmap_func
         //Dit is mijn mooie gekopieerde stackoverflow code
         //If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
@@ -74,7 +80,6 @@ namespace LeHandUI
             inst = this;
             this.Icon = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIcon16x16);
 
-            
         }
 
 
@@ -153,5 +158,39 @@ namespace LeHandUI
             e.Cancel = true;
             this.Visibility = Visibility.Hidden;
         }
+
+
+
+        #region WindowsButtonHandlers, no touchy pls
+        private void MinimizeWindow(object sender, EventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+        private void MaximizeWindow(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                restoreButonPath.Data = Geometry.Parse("M 6,8 H 20 V 15 H 6 Z");//was M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z
+                this.WindowState = WindowState.Normal;
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                restoreButonPath.Data = Geometry.Parse("M 6,8 H 20 V 15 H 6 Z M 12,12 V 6 H 24 V 12 H 12");
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+        private void CloseWindow(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        #endregion
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            lastclick = e.Location;
+        }
     }
 }
+

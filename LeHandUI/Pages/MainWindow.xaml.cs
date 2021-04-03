@@ -55,10 +55,6 @@ namespace LeHandUI
 			Communicator.Init();
 			BTService.RefreshDevices();
 		}
-		private void ChangeBackground(System.Windows.Controls.Button buttontochange, int a, int r, int g, int b)
-		{
-			buttontochange.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)(a), (byte)(r), (byte)(g), (byte)(b)));
-		}
 
 		public MainWindow()
 		{
@@ -80,7 +76,6 @@ namespace LeHandUI
 			//writer.Close();
 			//stream.Close();
 
-			ProgramIcon.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.BTIconNew);
 			settingsImage.Source = ImageSourceFromBitmap(LeHandUI.Properties.Resources.Settings64x64);
 		}
 		public bool settingsIsClosed = false;
@@ -89,20 +84,25 @@ namespace LeHandUI
         {
 			//Load settings panel
 			if (SettingsWindow.inst == null)
-				SettingsWindow.inst = new SettingsWindow();
-
-			if (!SettingsWindow.inst.IsActive && settingsIsClosed)
 			{
 				SettingsWindow.inst = new SettingsWindow();
 				SettingsWindow.inst.Show();
-				SettingsWindow.inst.WindowState = WindowState.Normal;
-				SettingsWindow.inst.Focus();
-				settingsIsClosed = false;
 			}
 			else
 			{
-				SettingsWindow.inst.Close();
-				settingsIsClosed = true;
+				if (!SettingsWindow.inst.IsActive && settingsIsClosed)
+				{
+					SettingsWindow.inst = new SettingsWindow();
+					SettingsWindow.inst.Show();
+					SettingsWindow.inst.WindowState = WindowState.Normal;
+					SettingsWindow.inst.Focus();
+					settingsIsClosed = false;
+				}
+				else
+				{
+					SettingsWindow.inst.Close();
+					settingsIsClosed = true;
+				}
 			}
         }
 
@@ -187,183 +187,6 @@ namespace LeHandUI
 		}
         #endregion
 
-        /*Stopwatch refreshTimer = new Stopwatch();
-		int SelectedItemIndex;
-		bool hasRefreshOccurredWithinSeconds = false;*/
-
-        /*
-		private void LoadLuaFileFromSelectedObjectInList(object sender, EventArgs e) {
-			System.Windows.Controls.ListBox naam = (System.Windows.Controls.ListBox)(sender);
-			SelectedItemIndex = naam.SelectedIndex;
-			if (SelectedItemIndex < 0)
-				return;
-			int[] id = LHregistry.GetAllFileIds();
-			int ActualFileId = id[SelectedItemIndex];
-			FileManager.currentLoadedIndex = SelectedItemIndex;
-
-			//save old on memory
-			if (FileManager.currentFile >= 0)
-				FileManager.FileCache[FileManager.currentFile] = textEditor.Text;
-
-
-			string FileContents = FileManager.LoadFile(ActualFileId);
-			if (FileContents != null)
-			{
-				BypassTextChangedEvent = true;
-				textEditor.Text = FileContents;
-			}
-			
-		}
-		
-		private void RemoveLuaScript(object sender, EventArgs e) {
-			int idToBeRemoved = -1; //some ridiculous number, i. e. -1 just isn't possible
-
-			if (LuaFileView.SelectedIndex != -1) {
-
-				idToBeRemoved = (LuaFileView.SelectedIndex);
-				int[] allIds = LHregistry.GetAllFileIds();
-
-				if (allIds.Length > idToBeRemoved && idToBeRemoved != -1) {
-					LHregistry.RemoveFile(allIds[idToBeRemoved]);
-
-
-
-					LuaFileView.Items.RemoveAt(idToBeRemoved);
-				}
-			}
-
-			//ALWAYS REFRESH, saves some headaches, like trying to solve a nonexistent problem for two hours. Trust me, I know.
-			LuaFileView.Items.Refresh();
-			
-		}
-		
-		private void RefreshLuaScript(object sender, EventArgs e) {
-			
-			if (hasRefreshOccurredWithinSeconds == false) { //if the refresh has not occurred in x milliseconds
-				List<string> LuaNames = new List<string>(LHregistry.GetAllFilenames());
-				for (int i = 0; i < LuaNames.Count; i++)
-				{
-					LuaNames.Add(LHregistry.getSimpleName(LuaNames[i]));
-					LuaFileView.Items.Add(LuaNames[i]);
-				}
-				
-			}
-			else{}
-
-			hasRefreshOccurredWithinSeconds = true;
-		}
-		public void ChangeTextBoxText(string label, int index){
-			LuaFileView.Items.RemoveAt(index);
-			LuaFileView.Items.Insert(index, label);
-		}
-		public static void ChangeTextBoxText(System.Windows.Controls.ListBox list, string label, int index){
-			list.Items.RemoveAt(index);
-			list.Items.Insert(index, label);
-		}
-		public static void UnChangedFile(System.Windows.Controls.ListBox list)
-		{
-			int index = FileManager.currentLoadedIndex;
-			if (index > -1 && FileManager.currentFile > -1)
-			{
-				if (FileManager.isFileNotSaved[FileManager.currentFile])
-				{
-
-					FileManager.isFileNotSaved[FileManager.currentFile] = false;
-					string label = (string)(list.Items[index]);
-					label = label.Remove(label.Length - 1);
-					ChangeTextBoxText(list, label, index);
-				}
-			}
-		}
-		public bool BypassTextChangedEvent = true;
-		private void ChangedFile(object sender, EventArgs e)
-		{
-			if (!BypassTextChangedEvent)
-			{
-				int index = FileManager.currentLoadedIndex;
-				if (index > -1 && FileManager.currentFile > -1)
-				{
-					if (!FileManager.isFileNotSaved[FileManager.currentFile])
-					{
-						FileManager.isFileNotSaved[FileManager.currentFile] = true;
-						string label = (string)(LuaFileView.Items[index]) + "*";
-						ChangeTextBoxText(label, index);
-					}
-				}
-			}
-			BypassTextChangedEvent = false;
-		}
-		private void AddReferenceScript(object sender, EventArgs e) {
-			Microsoft.Win32.OpenFileDialog openFileExplorer = new Microsoft.Win32.OpenFileDialog(){
-				CheckFileExists = true,
-				CheckPathExists = true,
-				InitialDirectory = @"Documents",
-				ShowReadOnly = true,
-				Filter = " All files(*.*) 'cuz .lua doesn't work|*.*"
-			};
-
-			Nullable<bool> result = openFileExplorer.ShowDialog();
-			if (result == true){
-				string newFilePath = openFileExplorer.FileName;
-				int newFileId = FileManager.AddReference(newFilePath);
-				LuaFileView.Items.Add(LHregistry.getSimpleName(newFilePath));
-				
-			}
-
-		}
-		private void SaveScript(object sender, EventArgs e)
-		{
-			string writePath = LHregistry.GetFile(FileManager.currentFile);
-			try {
-				textEditor.Save(writePath);
-			}
-			catch (System.ArgumentException)
-			{ Debug.WriteLine("Caught Argument Exception error, propably that the file can't be empty string, so yeah..."); }
-
-			UnChangedFile(Listbox);
-			return;
-		}
-		private void RunLuaScript(object sender, EventArgs e)
-		{
-			if (FileManager.currentFile < 0)
-				return;
-			//check if files are saved
-			bool unsavedFiles = false;
-			for (int i = 0; i < FileManager.isFileNotSaved.Length; i++)
-			{
-				if (FileManager.isFileNotSaved[i]) 
-				{
-					unsavedFiles = true;
-					break;
-				}
-			}
-			if (unsavedFiles)
-			{
-				MessageBoxResult res = CustomMessageBox.ShowYesNoCancel(
-					"There are unsaved files, do you want to save all files?",
-					"Unsaved Files", 
-					"Yes", "No", "Cancel", MessageBoxImage.Exclamation
-					);
-				if (res == MessageBoxResult.Yes)
-				{
-					string writePath = LHregistry.GetFile(FileManager.currentFile);
-					textEditor.Save(writePath);
-					UnChangedFile(Listbox);
-				}
-				if (res == MessageBoxResult.Cancel)
-					return;
-
-			}
-			//load and run lua script
-			
-			Communicator.load(FileManager.files[FileManager.currentFile]);
-			Communicator.start();
-			//start monitoring
-			Startwindow sw = new Startwindow();
-			sw.Show();
-			return;
-		}
-		*/
 
     }
 }
