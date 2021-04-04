@@ -30,7 +30,7 @@
         </Grid.RowDefinitions>
             <Image
 		        VerticalAlignment="Top" HorizontalAlignment="Left" 
-		        Width="20" Height="20" x:Name="ProgramIcon" Margin="5,0,0,0" Source="/images/BTIconNew.png"
+		        Width="20" Height="20" x:Name="ProgramIcon" Margin="3,3,0,0" Source="/images/BTIconNew.png"
 		        Panel.ZIndex="9999999" />
             <!--PreviewMouseDown="Window_MouseDown" -->
             
@@ -45,7 +45,7 @@
             <Button Name="restoreButton" Grid.Column="3" Click="MaximizeWindow" Foreground="White"
 		Style="{StaticResource TitleBarButtonStyle}" ToolTip="Change Window Mode (Fullscreen/Windowed)"
                      RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="HighQuality">
-                <Path x:Name="restoreButonPath" Width="30" Height="20" Data="M 6,8 H 20 V 15 H 6 Z"
+                <Path x:Name="restoreButonPath" Width="30" Height="20" Data="M 8,8 H 19 V 15 H 8 Z"
                   
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -53,7 +53,7 @@
             </Button>
             <Button Grid.Column="4" Grid.ColumnSpan="1000" Style="{StaticResource TitleBarCloseButtonStyle}" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"
 		 Name="closeButton" Click="CloseWindow" Foreground="White" Background="#FFC14C4C">
-                <Path Width="46" Height="32" Data="M 6,10 17,16 M 6,16 17,10" ToolTip="Close Settings"
+                <Path Width="46" Height="32" Data="M 8,8 16,16 M 8,16 16,8" ToolTip="Close Settings"
 			Stroke="{Binding Path=Foreground,
 							 RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
 			StrokeThickness="1"/>
