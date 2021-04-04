@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:LeHandUI"
              StartupUri="Pages/MainWindow.xaml"
-             Exit="Application_Exit">
+             Exit="Application_Exit"
+             ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <Style x:Key="spinner" TargetType="Image">
             <Setter Property="Height" Value="24" />

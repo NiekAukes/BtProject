@@ -25,11 +25,23 @@ namespace LeHandUI
         //{
         //}
         public List<BluetoothDeviceInfo> latestsearch = new List<BluetoothDeviceInfo>();
-        
+
         public ObservableCollection<DeviceDetails> observableCollection = new ObservableCollection<DeviceDetails>();
         public async void RefreshDevices()
         {
-            await Task.Run(SearchDevices);
+            try
+            {
+                await Task.Run(SearchDevices);
+            }
+            catch (Exception e)
+            {
+                NoBTFound();
+            }
+        }
+
+        public void NoBTFound()
+        {
+
         }
 
         public async Task SearchDevices()
