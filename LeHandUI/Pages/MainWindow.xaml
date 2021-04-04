@@ -14,6 +14,7 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
     </WindowChrome.WindowChrome>
+    <!--FONTFAMILY WAS Futura Lt BT -->
     <!--COLOUR SCHEME: #212121 , #065464 ,  #34acbc ,     #85c3cf ,      #7a7d84 
                    (33,33,33),   (6,84,100),(52,172,188), (133,195,207), (122,125,132)
                  very dark blue, dark blue,    aqua,      pale aqua,     greyish-->
@@ -34,10 +35,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="53*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
@@ -45,7 +44,7 @@
         <!--Custom title bar-->
         <Image Source="/images/BTIconNew.png"
 		Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1"
-		Width="30" Height="30" x:Name="ProgramIcon" Margin="-15,10,0,10"
+		Width="25" Height="25" x:Name="ProgramIcon" Margin="-15,10,0,10"
 		Panel.ZIndex="9999999" />
 
         <Button
@@ -74,14 +73,14 @@
         <!--end of custom titlebar -->
 
         <DockPanel x:Name="MenuOptionsGrid" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
-                   Margin="10,0,0,0">
-            <Button Style="{StaticResource MenuButtons}" Width="auto" Height="auto" 
+                   Margin="0,0,0,0">
+            <Button Style="{StaticResource MenuButtons}" Width="55"
                     Margin="0,0,5,0" x:Name="SimpleButton" Click="SimpleButton_Load">
-                <TextBox Text="Simple" Style="{StaticResource MenuText}"/>
+                <TextBox Text="Simple" Style="{StaticResource MenuText}" Height="33"/>
             </Button>
-            <Button Style="{StaticResource MenuButtons}" Width="auto" Height="auto" 
+            <Button Style="{StaticResource MenuButtons}" Width="80" 
                     Margin="0,0,0,0" x:Name="AdvancedButton" Click="AdvancedButton_Load">
-                <TextBox Text="Advanced" Style="{StaticResource MenuText}"/>
+                <TextBox Text="Advanced" Style="{StaticResource MenuText}" Margin="0,0,0,0" Height="33"/>
             </Button>
         </DockPanel>
         <!--SETTINGS BUTTON-->
@@ -92,8 +91,8 @@
             <Image x:Name="settingsImage"/>
         </Button>
 
-        <DockPanel  Grid.Row="2" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="12"
-            Height="auto" x:Name="ViewSwitcher" Margin="0,0,10,0">
+        <DockPanel  Grid.Row="2" Grid.Column="0" Grid.RowSpan="1" Grid.ColumnSpan="12"
+            Height="auto" x:Name="ViewSwitcher" Margin="0,10,10,0">
         </DockPanel>
     </Grid>
 
