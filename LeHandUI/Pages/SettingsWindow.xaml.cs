@@ -168,12 +168,12 @@ namespace LeHandUI
         {
             if (this.WindowState == WindowState.Maximized)
             {
-                restoreButonPath.Data = Geometry.Parse("M 6,8 H 20 V 15 H 6 Z");//was M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z
+                restoreButonPath.Data = Geometry.Parse("M 8,8 H 19 V 15 H 8 Z");//was M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z
                 this.WindowState = WindowState.Normal;
             }
             else if (this.WindowState == WindowState.Normal)
             {
-                restoreButonPath.Data = Geometry.Parse("M 6,8 H 20 V 15 H 6 Z M 12,12 V 6 H 24 V 12 H 12");
+                restoreButonPath.Data = Geometry.Parse("M 8,8 H 19 V 15 H 8 Z M 12,12 V 6 H 24 V 12 H 12");
                 this.WindowState = WindowState.Maximized;
             }
         }
