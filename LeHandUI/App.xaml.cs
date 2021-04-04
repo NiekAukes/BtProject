@@ -55,6 +55,7 @@ namespace LeHandUI
             LHregistry.SetStartupValues(values);
 
             System.Windows.Application.Current.Shutdown();
+            Environment.Exit(0);
         }
 
     }
