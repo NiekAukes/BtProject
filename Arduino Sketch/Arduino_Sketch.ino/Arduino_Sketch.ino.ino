@@ -6,7 +6,8 @@
 //double = 8bytes 64bit |||| short = 2bytes 16bit
 
 #include <SoftwareSerial.h>
-#define pot           A0
+#define pot1          A0
+#define pot2          A1
 #define rx            0
 #define tx            1
 SoftwareSerial BTSerial(rx, tx);
@@ -29,7 +30,7 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_z         12
 
 //short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
-short reads[] = {0}; //DEBUG VERSIE
+short reads[] = {pot1,pot2}; //DEBUG VERSIE
 
 //reads wordt ook gebruikt voor header informatie
 
@@ -42,7 +43,9 @@ float read_inf;
 
 void setup() {
   Serial.begin(9600); //was 9600
-  pinMode(duim,INPUT);
+  pinMode(pot1,INPUT);
+  pinMode(pot2,INPUT);
+  
   pinMode(5, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.setTimeout(20);
@@ -82,7 +85,7 @@ void loop() {
   {
     for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
       
-      read_inf = (analogRead(pot)/1023.0);
+      read_inf = (analogRead(reads[i])/1023.0);
       //digitalWrite(LED_BUILTIN, HIGH);
       if (read_inf < 0.5)
         digitalWrite(LED_BUILTIN, HIGH);
