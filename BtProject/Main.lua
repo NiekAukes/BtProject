@@ -9,8 +9,12 @@ print("Hello LeHand")
 
 X = false
 Update = function ()
+		
+	print(val[1])
+	print(val[2])
+
     --will be executed every frame
-    if (X) then
+    --[[if (X) then
         if (val[1] < 0.5) then
             print("HIGH ".. val[1])
             X = false
@@ -19,7 +23,7 @@ Update = function ()
         if (val[1] > 0.5) then
             print("LOW ".. val[1])
             X = true
-        end
+        end]]--
 
     --X = X + 1
     
@@ -33,8 +37,8 @@ Update = function ()
             Mpress(Button_MLD)
         else
             Mpress(Button_MLU)
-        end ]]--
-    end
+        end 
+    end]]--
 
     return true	--will continue program
 end

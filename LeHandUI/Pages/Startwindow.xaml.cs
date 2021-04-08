@@ -310,22 +310,22 @@ namespace LeHandUI
             return;
         }
 
-
-        //Handlers for custom titlebar buttons
-        #region TitleBarButtonHandlers
+        #region Windows button handlers
         private void MinimizeWindow(object sender, EventArgs e)
         {
-            App.Current.MainWindow.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Minimized;
         }
         private void MaximizeWindow(object sender, EventArgs e)
         {
-            if (App.Current.MainWindow.WindowState == WindowState.Maximized)
+            if (this.WindowState == WindowState.Maximized)
             {
-                App.Current.MainWindow.WindowState = WindowState.Normal;
+                this.WindowState = WindowState.Normal;
+                restoreButtonPath.Data = Geometry.Parse("M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z");
             }
             else if (App.Current.MainWindow.WindowState == WindowState.Normal)
             {
-                App.Current.MainWindow.WindowState = WindowState.Maximized;
+                this.WindowState = WindowState.Maximized;
+                restoreButtonPath.Data = Geometry.Parse("M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5");
             }
         }
         private void CloseWindow(object sender, EventArgs e)
