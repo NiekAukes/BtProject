@@ -2,17 +2,17 @@ LeHand = require "LeHand"
 --Functions:
 ----Kpress(Character, Mode) -> registers Keypress
 ----Mpress(Button, doRelease) -> registers Mousepress
-
-
 --begin, will be executed on startup
 print("Hello LeHand")
 
 X = false
 Update = function ()
 		
-	print(val[1])
-	print(val[2])
-
+	print("1: " .. val[1])
+	print("2: " .. val[2])
+	
+	os.execute("timeout " .. tonumber(1))
+	
     --will be executed every frame
     --[[if (X) then
         if (val[1] < 0.5) then
