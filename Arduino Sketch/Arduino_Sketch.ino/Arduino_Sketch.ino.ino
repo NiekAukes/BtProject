@@ -13,7 +13,7 @@
 SoftwareSerial BTSerial(rx, tx);
 
 //different fingers
-#define duim          A0
+#define duim          2
 #define wijs_ving     3
 #define mid_ving      4
 #define ring_ving     5
@@ -29,8 +29,10 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_y         11
 #define acc_z         12
 
-//short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
-short reads[] = {pot1,pot2}; //DEBUG VERSIE
+short reads[] = {pot1,pot2,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
+short id[]    = {1,2,3,4,5,6,7,8,9,10,11};
+
+//short reads[] = {pot1,pot2}; //DEBUG VERSIE
 
 //reads wordt ook gebruikt voor header informatie
 
@@ -93,7 +95,7 @@ void loop() {
         digitalWrite(LED_BUILTIN, LOW);
       
       ////Header, information, footer print to serial
-      Serial.write((char*)&reads[i], 2);//data length
+      Serial.write((char*)&id[i], 2);//data length
       Serial.write((char*)&data_length, 2);//header
       //information
       Serial.write((char*)&read_inf,4); //size 8 = double (8 bytes)
