@@ -234,12 +234,15 @@ namespace LeHandUI
         static int charsread = 0;
         static byte[] buf = new byte[1024];
         static IAsyncResult readres;
+        
         public static void DistributeData()
         {
+            StreamReader sr = new StreamReader(dataStream);
             while (Active)
             {
                 //dataStream.EndRead(readres);
                 dataStream.Read(buf, 0, 1023);
+                string s = sr.ReadToEnd();
                 ushort[] shortbuf = new ushort[512];
                 for (int i = 0; i < 512; i++)
                 {
