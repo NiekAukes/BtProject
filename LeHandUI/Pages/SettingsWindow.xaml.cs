@@ -94,11 +94,14 @@ namespace LeHandUI
                 if (value != _name2)
                 {
                     _name2 = value;
-                    App.Current.Dispatcher.Invoke((Action)delegate
+                    if (inst != null)
                     {
-                        inst.BTLog.Text = value;
-                        inst.BTLog.ScrollToEnd();
-                    });
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            inst.BTLog.Text = value;
+                            inst.BTLog.ScrollToEnd();
+                        });
+                    }
                 }
             }
         }

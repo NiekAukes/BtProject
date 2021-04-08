@@ -12,7 +12,7 @@
 SoftwareSerial BTSerial(rx, tx);
 
 //different fingers
-#define duim          A0
+#define duim          2
 #define wijs_ving     3
 #define mid_ving      4
 #define ring_ving     5
@@ -28,8 +28,8 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_y         11
 #define acc_z         12
 
-//short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
-short reads[] = {0}; //DEBUG VERSIE
+short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
+//short reads[] = {0}; //DEBUG VERSIE
 
 //reads wordt ook gebruikt voor header informatie
 
@@ -38,7 +38,7 @@ const short footer =      0xFFFF; //'exit' code of information
 short data_arr[data_length];
 
 bool active = false;
-float read_inf;
+long read_inf;
 
 void setup() {
   Serial.begin(9600); //was 9600
