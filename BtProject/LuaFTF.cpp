@@ -14,12 +14,15 @@ void LuaFTF::start(std::string filename, BTService* service) {
 		lua_register(L, "MMove", lua_MMove);
 		lua_register(L, "RecvVal", lua_RecvVal);
 		lua_register(L, "Exit", lua_Exit);
+		lua_register(L, "Delay", lua_Delay);
 		lua_register(L, "Sys", lua_Sys);
 		if (CheckLua(L, luaL_dofile(L, filename.c_str()))) {
 			
 
 			//file loaded, now load Update and loop it. if not found, ignore it
-
+			std::vector<int> myvec;
+			myvec.size();
+			
 
 			
 		}

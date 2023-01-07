@@ -232,7 +232,7 @@ namespace LeHandUI
 		}
         //static int shortsread = 0;
         static int charsread = 0;
-        static byte[] buf = new byte[1024];
+        static byte[] buf = new byte[14];
         static IAsyncResult readres;
         
         public static void DistributeData()
@@ -241,12 +241,13 @@ namespace LeHandUI
             while (Active)
             {
                 //dataStream.EndRead(readres);
-                dataStream.Read(buf, 0, 1023);
-                string s = sr.ReadToEnd();
-                ushort[] shortbuf = new ushort[512];
-                for (int i = 0; i < 512; i++)
+                dataStream.Read(buf, 0, 14);
+                //sr.Read(buf, 0, 1024);
+                ushort[] shortbuf = new ushort[7];
+                for (int i = 0; i < 7; i++)
                 {
-                    shortbuf[i] = BitConverter.ToUInt16(buf, (i * 2) % 1023);
+                    shortbuf[i] = BitConverter.ToUInt16(buf, (i * 2) % 14);
+                    
                 }
 
                 if (Enumerable.Contains<ushort>(shortbuf, 65535))
@@ -439,7 +440,7 @@ namespace LeHandUI
 
             //WriteCommand("device discover");
 
-            readres = dataStream.BeginRead(buf, 0, 1024, null, null);
+            //readres = dataStream.BeginRead(buf, 0, 1024, null, null);
             
             distribution = new Thread(new ThreadStart(DistributeData));
             errorthread = new Thread(ReadErrStream);

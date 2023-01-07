@@ -132,8 +132,15 @@ static int lua_KPress(lua_State* L/*, char Key, int mode*/) {
 	return 0;
 }
 static int lua_MPress(lua_State* L/*, int Button, int mode*/) {
-	deb(L);
-	return 0;
+	int amount = lua_tonumber(L, 1);
+	Sleep(amount);
+	return 1;
+}
+
+static int lua_Delay(lua_State* L) {
+	const char* comm = lua_tostring(L, 1);
+	system(comm);
+	return 1;
 }
 
 static int lua_Sys(lua_State* L) {
