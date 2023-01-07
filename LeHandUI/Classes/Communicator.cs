@@ -1,20 +1,15 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Security.Principal;
+using System.Linq;
+using System.Text;
 using System.Threading;
-using System.Security.Cryptography;
-using WPFCustomMessageBox;
 using System.Windows;
-
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
 using System.Windows.Media;
+using WPFCustomMessageBox;
 
 namespace LeHandUI
 {

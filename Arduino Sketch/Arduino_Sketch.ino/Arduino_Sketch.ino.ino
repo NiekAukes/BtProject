@@ -6,7 +6,12 @@
 //double = 8bytes 64bit |||| short = 2bytes 16bit
 
 #include <SoftwareSerial.h>
-#define pot           A0
+#define potL1         A0
+#define potR1         A1
+#define potL2         A2
+#define potR2         A3
+
+
 #define rx            0
 #define tx            1
 SoftwareSerial BTSerial(rx, tx);
@@ -28,8 +33,10 @@ SoftwareSerial BTSerial(rx, tx);
 #define acc_y         11
 #define acc_z         12
 
-short reads[] = {duim,wijs_ving,mid_ving,ring_ving,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
-//short reads[] = {0}; //DEBUG VERSIE
+short reads[] = {potL1,potR1,potL2,potR2,pink,gyr_x,gyr_y,gyr_z,acc_x,acc_y,acc_z};
+short id[]    = {0,1,2,3,4,5,6,7,8,9,10,11};
+
+//short reads[] = {pot1,pot2}; //DEBUG VERSIE
 
 //reads wordt ook gebruikt voor header informatie
 
@@ -38,11 +45,16 @@ const short footer =      0xFFFF; //'exit' code of information
 short data_arr[data_length];
 
 bool active = false;
-long read_inf;
+float read_inf;
 
 void setup() {
   Serial.begin(9600); //was 9600
-  pinMode(duim,INPUT);
+  pinMode(potL1,INPUT);
+  pinMode(potR1,INPUT);
+  pinMode(potL2,INPUT);
+  pinMode(potR2,INPUT);
+  
+  
   pinMode(5, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.setTimeout(20);
@@ -80,9 +92,9 @@ void loop() {
   //Read information
   if (active) 
   {
-    for(int i = 0; i < sizeof(reads)/sizeof(int);i++){
+    for(int i = 0; i < sizeof(reads)/sizeof(short);i++){
       
-      read_inf = (analogRead(pot)/1023.0);
+      read_inf = (analogRead(reads[i]));    //was analogRead(reads[i]/1023.0
       //digitalWrite(LED_BUILTIN, HIGH);
       if (read_inf < 0.5)
         digitalWrite(LED_BUILTIN, HIGH);
@@ -90,7 +102,7 @@ void loop() {
         digitalWrite(LED_BUILTIN, LOW);
       
       ////Header, information, footer print to serial
-      Serial.write((char*)&reads[i], 2);//data length
+      Serial.write((char*)&id[i], 2);//data length
       Serial.write((char*)&data_length, 2);//header
       //information
       Serial.write((char*)&read_inf,4); //size 8 = double (8 bytes)
